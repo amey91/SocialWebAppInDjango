@@ -7,11 +7,12 @@ from test.test_imageop import MAX_LEN
     
 
 class Group(models.Model):
-    name=models.CharField(max_length=30)
+    name=models.CharField(max_length=30,blank=False)
     owner = models.ForeignKey(User,blank=False,related_name="groupowner")
     description = models.CharField(max_length=10000)
     keywords = models.CharField(max_length=900)
     datetime=models.DateTimeField(auto_now_add='true')
+    picture = models.ImageField(upload_to="group_pics", blank=True)
     
     def __unicode__(self):
         return self.name
