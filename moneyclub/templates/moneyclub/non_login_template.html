@@ -1,29 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+{% extends "moneyclub/root_template.html %}
 
+  {% block headblock %}
+    {% block title %}
     <title>Signin Template for Bootstrap</title>
-
+    {% endblock title %}
     <!-- Bootstrap core CSS -->
     <link href="../../static/dist/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="../../static/css/signin.css" rel="stylesheet">
-
+  {% endblock headblock %}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="../../assets/js/html5shiv.js"></script>
       <script src="../../assets/js/respond.min.js"></script>
     <![endif]-->
-  </head>
+    
 
-  <body>
-    {% block body %}
+  {% block bodyblock %} 
+    {% block nevbar %}   
     <div class="navbar-wrapper">
       <div class="container">
 
@@ -68,14 +63,15 @@
               </div><!--/.navbar-collapse -->
 
                
-            </ul>
-            </div>
-          </div>
-        </div>
+            
+            </div> <!-- /navbar-collapse -->
+          </div> <!-- /"container"-->
+        </div>  <!--/navbar-->
 
-      </div>
-    </div>
-
+      </div> <!-- / container -->
+    </div> <!-- /"navbar-wrapper" -->
+    {% endblock nevbar %}   
+    {% block contensblock %}
     <div class="container">
 
       <form class="form-signin">
@@ -89,10 +85,12 @@
       </form>
 
     </div> <!-- /container -->
-    {% endblock body %}
+    {% endblock contensblock %}
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-  </body>
-</html>
+    {% block footerblock %}
+    {% endblock footerblock %}
+
+    {% block endscript %}
+    {% endblock endscript %}
+  {% endblock bodyblock %}
+

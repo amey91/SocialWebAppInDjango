@@ -1,72 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+{% extends "moneyclub/login_template.html" %}
 
-    <title>Off Canvas Template for Bootstrap</title>
-
+  {% block headblock %}
+    {% block title %}
+    <title>{{user}}'s Homepage</title>
+    {% endblock title %}
     <!-- Bootstrap core CSS -->
-    <link href="../../static/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../../static/css/offcanvas.css" rel="stylesheet">
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+  {% endblock headblock %}
+  
+  
+    
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="../../assets/js/html5shiv.js"></script>
-      <script src="../../assets/js/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body>
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="newsfeed.html">Moneyclub</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <ul  class="nav navbar-nav navbar-right">
-            <form class="navbar-form navbar-left" role="search"
-                  action="#" method="post">
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search Moneyclub" name="query">
-                </div>
-                <button type="submit" class="btn btn-default">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
-             
-            </form>
-
-            
-            <li ><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
-            <li ><a href="welcome.html"><span class="glyphicon glyphicon-log-out"></span></a></li> <!-- link to signin-->
-
-        </ul>
-        </div><!-- /.nav-collapse -->
-      </div><!-- /.container -->
-    </div><!-- /.navbar -->
-
+    {% block contentsblock %}
     <div class="container">
 
       <div class="row row-offcanvas row-offcanvas-right">
         <div class="col-xs-12 col-sm-9">
          
+         {% block jumbotron%}
           <div class="jumbotron">
-            <div class="row">
+            2<div class="row">
 
 
               <div class="col-lg-5">
@@ -95,24 +51,24 @@
             </div>
 
           </div> <!-- jumbotron -->
+          {% endblock jumbotron%}
 
+          {% block post%}
           <div class="container">  
-            <div class="row">  
-            <div class="span6">  
-            <ul class="nav nav-tabs">  
-            <li class="active">  
-            <a href="#">Article</a> </li>   
-            <li><a href="#">Link</a></li>  
-            <li><a href="#">Image </a></li>   
-            <li><a href="#">Start Activity</a></li>   
-            
-            </ul>  
-            </div>  
-            </div>  
-            </div>  
+              <div class="row">  
+                <div class="span6">  
+                  <ul class="nav nav-tabs">  
+                    <li class="active">  
+                    <a href="#">Article</a> </li>   
+                    <li><a href="#">Link</a></li>  
+                    <li><a href="#">Image </a></li>   
+                    <li><a href="#">Start Activity</a></li>   
+                  
+                  </ul>  
+                </div>  
+              </div>  
 
-          
-            <div class="row">
+               <div class="row">
               
                     <div class="panel panel-default">
                         <div class="panel-body">                
@@ -125,9 +81,12 @@
                         </div>
                     </div>
                 
-          </div>
-        
+              </div>
+          </div>  
 
+          {% endblock post%}
+
+          {% block articles %}
           <div class="row">
             
               <div class="media">
@@ -145,9 +104,6 @@
                   
                
               </div><!--/media-->
-               
-
-            
           </div><!--/row-->
         
 
@@ -168,9 +124,13 @@
             
             
           </div><!--/row-->
+          {% endblock articles %}
         </div><!--/span-->
+        
 
+        
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="siderbars" role="navigation">
+          {% block sidebars %}
           <div class="well sidebar-nav">
             <ul class="nav">
              
@@ -247,23 +207,23 @@
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
+        {% endblock sidebars %}
       </div><!--/row-->
-
+      
       <hr>
 
-      <footer>
-        <p>&copy; Company 2013</p>
-      </footer>
 
     </div><!--/.container-->
-
+    {% endblock contentsblock %}
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    {% block endscript %}
     <script src="../../assets/js/jquery.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>
     <script src="offcanvas.js"></script>
-  </body>
-</html>
+    {% endblock endscript %}
+    
+
