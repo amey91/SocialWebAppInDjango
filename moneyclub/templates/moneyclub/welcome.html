@@ -1,14 +1,15 @@
-{% extends "non_login_template.html" %}
-    {% block headblock %}
+{% extends "moneyclub/non_login_template.html" %}
+
+  {% block headblock %}
       {% block title %}
         <title>Welcome to MoneyClub</title>
       {% endblock title %}
-    <!-- Bootstrap core CSS -->
-    <link href="../../static/dist/css/bootstrap.css" rel="stylesheet">
+      <!-- Bootstrap core CSS -->
+      <link href="/static/dist/css/bootstrap.css" rel="stylesheet">
 
-    <link href="../../static/css/carousel.css" rel="stylesheet">
-    <script src="../../static/js/jquery-1.10.2.min.js"></script>
-    {% endblock headblock %}
+      <link href="/static/css/carousel.css" rel="stylesheet">
+      <script src="/static/js/jquery-1.10.2.min.js"></script>
+  {% endblock headblock %}
 
     {% block contentsblock %}
     <!-- Carousel
@@ -22,17 +23,17 @@
       </ol>
       <div class="carousel-inner">
         <div class="item active">
-          <img src="../../static/image/11800666-communication-needs-and-the-business-world.jpg"  alt="First slide">
+          <img src="/static/image/11800666-communication-needs-and-the-business-world.jpg"  alt="First slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>What is MoneyClub?</h1>
               <p>Money Club is a forum for people to come together, pool resources and invest in equities. Our aim is to provide a platform for communication between people to facilitate sound financial investment decisions.</p>
-              <p><a href="./signup.html" class="btn btn-large btn-primary" href="#" role="button">Sign up today</a></p>
+              <p><a href="register" class="btn btn-large btn-primary" role="button">Sign up today</a></p>
             </div>
           </div>
         </div>
         <div class="item">
-          <img src="../../static/image/slider_433x222_model-stock-portfolio.jpg"  alt="Second slide">
+          <img src="/static/image/slider_433x222_model-stock-portfolio.jpg"  alt="Second slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>Another example headline.</h1>
@@ -42,7 +43,7 @@
           </div>
         </div>
         <div class="item">
-          <img src="../../static/image/business-discussion.jpg"  alt="Third slide">
+          <img src="/static/image/business-discussion.jpg"  alt="Third slide">
           <div class="container">
             <div class="carousel-caption">
               <h1>One more for good measure.</h1>
@@ -109,8 +110,8 @@
     
    
     {% block endscript %}
-    <script src="../../static/assets/js/jquery.js"></script>
-    <script src="../../static/dist/js/bootstrap.min.js"></script>
-    <script src="../../static/assets/js/holder.js"></script>
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+    <script src="/static/assets/js/holder.js"></script>
     {% endblock endscript %}
-
+  

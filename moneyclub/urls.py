@@ -17,5 +17,10 @@ urlpatterns = patterns('',
     #url(r'^add_comment_redirect/(?P<commentid>\d+)/$', 'grumblr.views.add_comment_redirect'),
     #url(r'^add_comment/(?P<commentid>\d+)/$', 'moneyclub.views.add_comment'),
     #url(r'^grumblquantity/(?P<uname>\w+)/$', 'grumblr.views.somebodysgrumbls'),
-       
+    url(r'^home$', 'moneyclub.views.home'),
+    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'moneyclub/welcome.html'}, name='welcome'),
+	url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
+    url(r'^register$', 'moneyclub.views.register'),
+    url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$', 'moneyclub.views.confirm_registration', name='confirm'),
+ 
 )

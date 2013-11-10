@@ -54,10 +54,30 @@ class GroupMembership(models.Model):
         return self.group
     
 class UserProfile(models.Model):
-    user=models.ForeignKey(User,blank=False,related_name="usernameformember")
+    user=models.OneToOneField(User,blank=False,related_name="profile")
     profilepicture = models.ImageField(upload_to="profile_pics", blank=True)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    birthdate = models.DateField( blank=True, null=True)
+    location = models.CharField(max_length=40,blank=True)
+    education = models.CharField(max_length=40,blank=True)
+    occupation = models.CharField(max_length=80,blank=True)
+    
+
+    def __unicode__(self):
+        return self.user.username
+
+class Member(models.Model):
+    user=models.OneToOneField(User,blank=False,related_name="member")
     total_points = models.IntegerField(default=0)
     level=models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.user.username
+
+class InterestCategory(models.Model):
+    member=models.ForeignKey(Member, related_name="categories")
+    category=models.CharField(max_length=40, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.category
