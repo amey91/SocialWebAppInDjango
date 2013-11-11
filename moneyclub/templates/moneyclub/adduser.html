@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/static/assets/ico/favicon.png">
+
+    <title>{{group_name}}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Moneyclub</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="index.html">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul  class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left" role="search"
+                  action="#" method="post">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search Moneyclub" name="query">
+                </div>
+                <button type="submit" class="btn btn-default">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+             
+            </form>
+
+            
+            <li ><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li ><a href="welcome.html"><span class="glyphicon glyphicon-log-out"></span></a></li> <!-- link to signin-->
+
+        </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
+
+    <div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+         
+          <div class="jumbotron">
+           <div class="container">
+    <div class="row">
+        <div class="col-md-6 ">
+            <h1 class="text-center login-title">Add User</h1>
+            <div class="account-wall">
+                
+                <form class="form-signin" action="/moneyclub/groups/add_members/" method="post" >
+                <input type="text" class="form-control" placeholder="Email of new user" required autofocus name="email" >
+                Select a group you own:<select name="select_group">
+ {%for item in groups%}
+  <option value="{{item.name}}">{{item.name}}</option>
+  {%endfor%}
+ 
+</select>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Add User!</button>
+
+                {%csrf_token%}
+                </form>
+            </div>
+            <small><a href="/moneyclub/groups/club_create" class="text-center new-account">Create a new Money Club</a></small>
+        </div>
+    </div>
+</div>
+            
+          </div> <!-- jumbotron -->
+
+ 
+        </div><!--/span-->
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="siderbars" role="navigation">
+          <div class="well sidebar-nav">
+            <ul class="nav">
+             
+              <table class="table table-striped table-condensed">
+                  <thead>
+                          <tr>
+                            <th></th>
+                            <th>PRICE</th>
+                            <th>CHG</th>
+                            <th>%CHG</th>
+                          </tr>
+                  </thead>   
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Dow</a></td>
+                            <td>15,580</td>
+                            <td style="color:red">-40</td>
+                            <th style="color:red">0.27%</th>
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">S&P</a></td>
+                            <td>1,760</td>
+                            <td style="color:red">-3</td>
+                            <th style="color:red">0.19%</th>
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Gold</a></td>
+                            <td>1,325</td>
+                            <td style="color:red">-24</td>
+                            <th style="color:red">1.80%</th>
+                          </tr>
+                  </tbody>
+                   <tbody>
+                          <tr>
+                            <td><a href="#">FTSE</a></td>
+                            <td>6,731</td>
+                            <td style="color:red">-47</td>
+                            <th style="color:red">0.69%</th>
+                          </tr>
+                  </tbody>
+              </table>
+              
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>Members<a href="/moneyclub/groups/add_members/{{id}}">(add members)</a></li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
+              <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Johnnie Walker</a></li>
+              
+            </ul>
+        
+
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>Events</li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>US-EU summit</a></li>
+              
+              
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>Apps</li>
+              <li class="active"><a href="#">Sharing</a></li>
+              <li><a href="#">Messages</a></li>
+              <li><a href="#">Inviting friends</a></li>
+              
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>&copy; Company 2013</p>
+      </footer>
+
+    </div><!--/.container-->
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+    <script src="offcanvas.js"></script>
+  </body>
+</html>
