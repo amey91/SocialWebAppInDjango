@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+
+    <title>Create Money Club</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/signin.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Moneyclub</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="welcome.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                
+              </ul>
+              <div class="navbar-collapse collapse">
+                <form class="navbar-form navbar-right" action="index.html">
+                  <div class="form-group">
+                    <input type="text" placeholder="Email" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" placeholder="Password" class="form-control">
+                  </div>
+                  <button type="submit" class="btn btn-success">Sign in</button>
+                </form>
+              </div><!--/.navbar-collapse -->
+
+               
+            </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container">
+    
+ 
+    <form enctype="multipart/form-data"  action="/moneyclub/groups/club_create_submit" method="post" class="form-signin">
+     <h2 class="form-signin-heading">Create a Money Club!</h2>
+        		<table>
+        		
+<tr>
+    <td>Group Name<font style="color:red">*</font>:</td>
+    <td class="grumblr-green"><input class="form-control" type="text" name="name" placeholder="Group Name"></input></td>
+</tr>
+
+<tr>
+    <td width="400">Description<font style="color:red">*</font>: <br/> <small><font style="color:green">Upto 3000 characters</font></small></td>
+    <td class="grumblr-orange"><textarea size="3000" class="form-control" type="text" name="description" placeholder="Group Description"></textarea></td>
+</tr>
+
+<tr>
+    <td>Keywords: <br/><small><font style="color:green">Comma Separated</font><br/> </small> </td>
+    <td class="grumblr-orange"><input class="form-control" type="text" name="keywords" placeholder="Keywords separated by commas""></input></td>
+</tr>
+<tr>
+	<td><label for="id_picture">Picture:</label></td>
+	<td><input id="id_picture"name="picture" type="file" /></td>
+</tr><br/>
+
+<tr>
+	<td><input type="submit" value="Submit Changes"  method=post" action="grumblr/editprofilesubmit"></td>
+	<td>{%csrf_token%}</td>
+</tr>
+{%for error in errors%}
+<tr><td colspan="2"><font style="color:red">{{error}}</font></td></tr>
+{%endfor%}
+</table>
+</form>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>
