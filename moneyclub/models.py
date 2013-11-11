@@ -24,6 +24,9 @@ class Invite(models.Model):
     theInvitedOne = models.ForeignKey(User, blank= False,related_name="onewhoisinvited")
     datetime=models.DateTimeField(auto_now_add='true')
     
+    def __unicode__(self):
+        return self.theInvitedOne.username
+    
 class Article(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
     user=models.ForeignKey(User, blank=False,related_name="articleby")
@@ -33,7 +36,7 @@ class Article(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
     
     def __unicode__(self):
-        return self.description;
+        return self.description
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")
@@ -51,33 +54,13 @@ class GroupMembership(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
-        return self.group
+        return self.group.name + "  OF " + self.user.username
     
 class UserProfile(models.Model):
-    user=models.OneToOneField(User,blank=False,related_name="profile")
+    user=models.ForeignKey(User,blank=False,related_name="usernameformember")
     profilepicture = models.ImageField(upload_to="profile_pics", blank=True)
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    birthdate = models.DateField( blank=True, null=True)
-    location = models.CharField(max_length=40,blank=True)
-    education = models.CharField(max_length=40,blank=True)
-    occupation = models.CharField(max_length=80,blank=True)
-    
-
-    def __unicode__(self):
-        return self.user.username
-
-class Member(models.Model):
-    user=models.OneToOneField(User,blank=False,related_name="member")
     total_points = models.IntegerField(default=0)
     level=models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.user.username
-
-class InterestCategory(models.Model):
-    member=models.ForeignKey(Member, related_name="categories")
-    category=models.CharField(max_length=40, blank=True, null=True)
-
-    def __unicode__(self):
-        return self.category

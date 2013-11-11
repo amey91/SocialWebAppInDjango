@@ -24,6 +24,9 @@ class Invite(models.Model):
     theInvitedOne = models.ForeignKey(User, blank= False,related_name="onewhoisinvited")
     datetime=models.DateTimeField(auto_now_add='true')
     
+    def __unicode__(self):
+        return self.theInvitedOne.username
+    
 class Article(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
     user=models.ForeignKey(User, blank=False,related_name="articleby")
@@ -33,7 +36,7 @@ class Article(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
     
     def __unicode__(self):
-        return self.description;
+        return self.description
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")
@@ -51,7 +54,7 @@ class GroupMembership(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
-        return self.group
+        return self.group.name + "  OF " + self.user.username
     
 class UserProfile(models.Model):
     user=models.ForeignKey(User,blank=False,related_name="usernameformember")

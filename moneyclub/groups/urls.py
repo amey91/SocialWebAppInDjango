@@ -4,13 +4,17 @@ from django.conf.urls import patterns, include, url
 # Typical use is a regular expression for a URL pattern, and then the
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
+    url(r'^$', 'moneyclub.groups.views.menu'),
+    url(r'^home', 'moneyclub.views.club_home'),
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
     url(r'^club_create', 'moneyclub.groups.views.club_create'),
     url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group'),
     url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
     url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
-    
-    
+    url(r'^temp/$', 'moneyclub.groups.views.temp'),
+    url(r'^view_group_members2/$', 'moneyclub.groups.views.view_group_members2'),
+    url(r'^view_group_members1/$', 'moneyclub.groups.views.view_group_members1'),
+    url(r'^block_member/(?P<id1>\d+)/(?P<id2>\d+)/$', 'moneyclub.groups.views.block_member'),
     
     
     #url(r'^profile/(?P<uname>\w+)/$', 'grumblr.profile.views.profile1'),
