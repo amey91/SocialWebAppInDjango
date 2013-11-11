@@ -4,9 +4,17 @@ from django.conf.urls import patterns, include, url
 # Typical use is a regular expression for a URL pattern, and then the
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
-    url(r'^$', 'moneyclub.views.group_home'),
-    
-    
+    url(r'^$', 'moneyclub.groups.views.menu'),
+    url(r'^home', 'moneyclub.views.club_home'),
+    url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
+    url(r'^club_create', 'moneyclub.groups.views.club_create'),
+    url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group'),
+    url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
+    url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
+    url(r'^temp/$', 'moneyclub.groups.views.temp'),
+    url(r'^view_group_members2/$', 'moneyclub.groups.views.view_group_members2'),
+    url(r'^view_group_members1/$', 'moneyclub.groups.views.view_group_members1'),
+    url(r'^block_member/(?P<id1>\d+)/(?P<id2>\d+)/$', 'moneyclub.groups.views.block_member'),
     
     
     #url(r'^profile/(?P<uname>\w+)/$', 'grumblr.profile.views.profile1'),
@@ -17,10 +25,5 @@ urlpatterns = patterns('',
     #url(r'^add_comment_redirect/(?P<commentid>\d+)/$', 'grumblr.views.add_comment_redirect'),
     #url(r'^add_comment/(?P<commentid>\d+)/$', 'moneyclub.views.add_comment'),
     #url(r'^grumblquantity/(?P<uname>\w+)/$', 'grumblr.views.somebodysgrumbls'),
-    url(r'^home$', 'moneyclub.views.home'),
-    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'moneyclub/welcome.html'}, name='welcome'),
-	url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
-    url(r'^register$', 'moneyclub.views.register'),
-    url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$', 'moneyclub.views.confirm_registration', name='confirm'),
- 
+       
 )

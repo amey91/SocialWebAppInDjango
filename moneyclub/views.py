@@ -51,4 +51,76 @@ def create_group(request):
     g = Group(name=name,owner=owner,description=description,keywords=keywords)
     g.save()
     return render(request, 'moneyclub/group_create_successful.html', {})
+
+@login_required
+def home(request):
+
+    return render(request, 'moneyclub/index.html')
+
+
+def register(request):
+    print "register called"
+    context = {}
+
+    # Just display the registration form if this is a GET request
+    if request.method == 'GET':
+        context['form'] = RegistrationForm()
+        return render(request, 'moneyclub/signup.html', context)
+
+    errors = []
+    context['errors'] = errors
+
+    # Creates a bound form from the request POST parameters and makes the 
+    # form available in the request context dictionary.
+    form = RegistrationForm(request.POST)
+    context['form'] = form
+
+    # Validates the form.
+    if not form.is_valid():
+        print 'form is not valid'
+        return render(request, 'moneyclub/signup.html', context)
+
+    # If we get here the form data was valid.  Register and login the user.
+    new_user = User.objects.create_user(username=form.cleaned_data['username'], 
+                                        password=form.cleaned_data['password1'],
+                                        email=form.cleaned_data['email'])
+    new_user.is_active = False
+    new_user.save()
+    
+    token = default_token_generator.make_token(new_user)
+
+    
+    email_body = """
+Welcome to the MoneyClub.  Please click the link below to
+verify your email address and complete the registration of your account:
+
+  http://%s%s
+""" % (request.get_host(), 
+       reverse('confirm', args=(new_user.username, token)))
+
+    send_mail(subject="Verify your email address",
+              message= email_body,
+              from_email="erzhuow@andrew.cmu.edu",
+              recipient_list=[new_user.email])
+
+    context['email'] = form.cleaned_data['email']
+    return render(request, 'moneyclub/needs-confirmation.html', context)
+
+    
+@transaction.commit_on_success
+def confirm_registration(request, username, token):
+    user = get_object_or_404(User, username=username)
+
+    # Send 404 error if token is invalid
+    if not default_token_generator.check_token(user, token):
+        raise Http404
+
+    # Otherwise token was valid, activate the user.
+    user.is_active = True
+    user.save()
+
+    member = Member(user=user)
+    member.save();
+    return render(request, 'moneyclub/confirmed.html', {})
+
     
