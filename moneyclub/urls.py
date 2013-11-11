@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     
     
     #url(r'^profile/(?P<uname>\w+)/$', 'grumblr.profile.views.profile1'),
-	#url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'grumblr/signin.html'}),
+	#url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'/moneyclub/login.html'}),
     # Route to logout a user and send them back to the login page
     #url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     #url(r'^becomefollower/(?P<uname>\w+)/$', 'grumblr.views.becomefollower1'),
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     #url(r'^add_comment/(?P<commentid>\d+)/$', 'moneyclub.views.add_comment'),
     #url(r'^grumblquantity/(?P<uname>\w+)/$', 'grumblr.views.somebodysgrumbls'),
     url(r'^home$', 'moneyclub.views.home'),
-    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'moneyclub/welcome.html'}, name='welcome'),
+    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'moneyclub/welcome.html'}, name='login'),
 	url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     url(r'^register$', 'moneyclub.views.register'),
     url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$', 'moneyclub.views.confirm_registration', name='confirm'),
