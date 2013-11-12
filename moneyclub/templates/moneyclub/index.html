@@ -1,15 +1,9 @@
 {% extends "moneyclub/login_template.html" %}
 
-  {% block headblock %}
     {% block title %}
     <title>{{user}}'s Homepage</title>
     {% endblock title %}
-    <!-- Bootstrap core CSS -->
-    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/offcanvas.css" rel="stylesheet">
-  {% endblock headblock %}
   
   
     
@@ -25,13 +19,13 @@
             <div class="row">
 
 
-              <div class="col-lg-9">
+              <div class="col-lg-12">
                   <div class="media">
                       <a class="pull-left" href="#">
-                          <img class="media-object dp img-circle" src="../../static/image/289919_1252843359020_250_330.jpg" style="width: 100px;height:100px;">
+                          <img class="media-object dp img-circle" src="{% url 'user-photo' user.id%}" style="width: 100px;height:100px;">
                       </a>
                       <div class="media-body">
-                          <h4 class="media-heading">Scrooge McDuck <small> USA/Scotland</small></h4>
+                          <h4 class="media-heading">{{user}} <small> USA/Scotland</small></h4>
                           <h5>adventurer, explorer and philanthropist at <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">McDuck & Company</a></h5>
                           <hr style="margin:8px auto">
 
@@ -43,6 +37,7 @@
                           <span class="label label-default">Finance</span>
                           <span class="label label-info">Global Trading</span>
                           <span class="label label-default">Shoe Polishing</span>
+                          <a class="btn btn-success" href="/moneyclub/groups/club_create">Create a Group</a>
                       </div>
                   </div>
 
@@ -183,7 +178,7 @@
             <ul class="nav">
               <li>Groups</li>
               <li class="active"><a href="#">Scrooge Mcduck Universe</a></li>
-              <li><a href="grouppage.html">American-Scottish Trading</a></li>
+              <li><a href="/">American-Scottish Trading</a></li>
               <li><a href="#">Billionare Philanthropists</a></li>
               
             </ul>
@@ -217,13 +212,6 @@
     {% endblock contentsblock %}
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block endscript %}
-    <script src="../../assets/js/jquery.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="offcanvas.js"></script>
-    {% endblock endscript %}
+   
     
 

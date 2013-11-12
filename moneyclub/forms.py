@@ -6,6 +6,12 @@ import hashlib
 
 from moneyclub.models import *
 
+class CreateGroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        exclude=('owner','datetime')
+        widgets={'picture' : forms.FileInput() }
+        
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length = 20,
