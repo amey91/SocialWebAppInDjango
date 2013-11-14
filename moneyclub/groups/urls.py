@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 # Typical use is a regular expression for a URL pattern, and then the
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
+    url(r'^temp', 'moneyclub.groups.views.temp'),
     url(r'^$', 'moneyclub.groups.views.menu'),
     url(r'^home', 'moneyclub.views.club_home'),
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
@@ -11,12 +12,13 @@ urlpatterns = patterns('',
     url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group'),
     url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
     url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
-    url(r'^temp/$', 'moneyclub.groups.views.temp'),
+    
     url(r'^view_group_members2/$', 'moneyclub.groups.views.view_group_members2'),
     url(r'^view_group_members1/$', 'moneyclub.groups.views.view_group_members1'),
     url(r'^block_member/(?P<id1>\d+)/(?P<id2>\d+)/$', 'moneyclub.groups.views.block_member'),
-    
-    
+    url(r'^get_group_description/(?P<id1>\d+)/$', 'moneyclub.groups.views.get_group_description'),
+    url(r'^post_article/(?P<groupID>\d+)/$', 'moneyclub.groups.views.post_article'),
+    url(r'^add_comment_on_article/(?P<groupID>\d+)/(?P<articleID>\d+)/$', 'moneyclub.groups.views.add_comment_on_article'),
     #url(r'^profile/(?P<uname>\w+)/$', 'grumblr.profile.views.profile1'),
 	#url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'grumblr/signin.html'}),
     # Route to logout a user and send them back to the login page

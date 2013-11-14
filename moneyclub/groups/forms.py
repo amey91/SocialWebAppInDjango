@@ -19,4 +19,8 @@ class UserProfileForm(forms.ModelForm):
         exclude = ('user',)
         widgets = {'picture' : forms.FileInput() }
     
-    
+class CreateArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        exclude = ('user','groupId','datetime',)
+        widgets = {'picture' : forms.FileInput() }
