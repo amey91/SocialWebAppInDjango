@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate
 from moneyclub.models import *
 from moneyclub.forms import *
 from moneyclub.groups.forms import *
+#from moneyclub.groups.models import *
 
 from django.db import transaction 
 from django.http import HttpResponse, Http404
@@ -28,13 +29,14 @@ def get_photo_group(request, id):
 
 
 def club_home(request):
+    print "club_home called"
     context = {}    
-    """name = "group 1"
+    name = "group 1"
     owner = request.user
     description = "desc"
     keywords = "key11,key2,key3"
     g = Group(name=name,owner=owner,description=description,keywords=keywords)
-    g.save()"""
+    g.save()
     
     g=Group.objects.get(id=1);
     context['group_name'] = g.name

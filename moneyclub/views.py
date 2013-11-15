@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from moneyclub.models import *
-#from moneyclub.forms import *
+from moneyclub.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, Http404
 from mimetypes import guess_type

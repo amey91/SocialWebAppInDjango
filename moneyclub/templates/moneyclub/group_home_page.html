@@ -43,36 +43,157 @@
           </div> <!-- jumbotron -->
           {% endblock jumbotron %}
           {% block post%}
-          <div class="container">  
-            <div class="row">  
-              <div class="span6">  
-                <ul class="nav nav-tabs">  
-                  <li class="active">  
-                  <a href="#">Article</a> </li>   
-                  <li><a href="#">Link</a></li>  
-                  <li><a href="#">Image </a></li>   
-                  <li><a href="#">Start Activity</a></li>   
-                
-                </ul>  
-              </div>  
-            </div>  
-          </div>  
+           <div class="container">  
+            <button class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#myModal">
+              New Post
+            </button>
 
-          
-            <div class="row">
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog">
+
+                <div class="modal-content">
+                  <div class="container">
+                    
+
+                    <div class="tabbable">
+                      <div class="modal-header">
+                    
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#pane1" data-toggle="tab">Article</a></li>
+                            <li><a href="#pane2" data-toggle="tab">Link</a></li>
+                            <li><a href="#pane3" data-toggle="tab">Image</a></li>
+                            <li><a href="#pane4" data-toggle="tab">Event</a></li>
+                        </ul>
+                 
+                      </div>
+                        
+                            
+                            <div class="tab-content">
+                              
+                              <div id="pane1" class="tab-pane active">
+                                <div class="container">
+                                  <div class="row">
               
-                    <div class="panel panel-default">
-                        <div class="panel-body">                
-                            <form accept-charset="UTF-8" action="" method="POST">
-                              <input type="text" class="form-control" placeholder="Title of the article" name="title">
-                                <textarea class="form-control counted" name="message" placeholder="Type in your text" rows="7" style="margin-bottom:10px;"></textarea>
+                                                
+                                          <form accept-charset="UTF-8" action="" method="POST">
+                                            
+                                            <input type="text" class="form-control" placeholder="Title of the article" name="title">
+                                          
+                                          
+                                              <textarea class="form-control counted" name="message" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
+                                              <div class="modal-footer">
+                                              <button class="btn btn-info" type="submit">Post New Article</button>
+                                            </div>
+                                            {%csrf_token%}
+                                          </form>
+                                    
+                              
+                                  </div> <!--/row-->
+                                </div> <!--/container-->
+                              </div>  
+                              <div id="pane2" class="tab-pane">
                                 
-                                <button class="btn btn-info" type="submit">Post New Article</button>
-                            </form>
-                        </div>
-                    </div>
-                
-          </div>
+                                  <form action="#" method="POST">
+                                    <div class="input-group ">
+                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                    <input type="text" class="form-control" placeholder="URL">
+                                     </div>
+                                    <div class="modal-footer">
+                                              <button class="btn btn-info" type="submit">Share</button>
+                                    </div>
+                                  {%csrf_token%}
+                                  </form> 
+                               
+                              </div>
+                              <div id="pane3" class="tab-pane">
+                                <form action="#" method="POST">
+                                    <div class="input-group ">
+                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                    <input type="text" class="form-control" placeholder="URL of the image">
+                                     </div>
+                                     <p> or upload from local </p>
+                                     <input type="file" >
+                                     <div class="modal-footer">
+                                        <button class="btn btn-info" type="submit">Share</button>
+                                      </div>
+                                    
+                                  {%csrf_token%}
+                                </form> 
+                                
+                              </div>
+                              <div id="pane4" class="tab-pane">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
+                                            
+                                            <form action="#" method="post" class="form" role="form">
+                                              <div class="form-group">
+                                              <label for="dtp_input2" class="col-md-3 control-label">Date </label>
+                                                <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    
+                                                      <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                      </span>
+                                                </div>
+                                       
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="dtp_input3" class="col-md-3 control-label">Time </label>
+                                                <div class="input-group date form_time col-md-7" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    
+                                                    <span class="input-group-addon">
+                                                      <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="loc_input" class="col-md-3 control-label">Location </label>
+                                                <div class="input-group  col-md-7" >
+                                                    <input class="form-control" size="16" type="text" value="" >
+                                                    
+                                                    
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="evt_input" class="col-md-3 control-label">Event </label>
+                                                <div class="input-group  col-md-7" >
+                                                    <input class="form-control" size="16" type="text" value="" >
+                                                    
+                                                    
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            
+                                           <div class="modal-footer">
+                                                <button class="btn btn-info" type="submit">Start Event</button>
+                                          </div>
+                                             {%csrf_token%}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div><!-- /.tab-content -->
+                          </div><!-- /.tabbable -->
+                         
+                    </div> <!-- /.container-->
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+             
+
+               
+          </div>  
+          <hr>
+
+
+          {% endblock post%}
+          
+          {% block articles %}
           <div class="container">
           <div class="row">
             
@@ -83,7 +204,7 @@
                         <img class="media-object" src="../../static/image/scottish-terrier-watercolor-irina-march.jpg" alt="..."width="100px">
                       </div>
                       <div class="caption">
-                        <p> America-Scotland Trading </p>
+                        <p> America-Scotland</p>
                       </div>
                     </div>
                   </a>
@@ -98,11 +219,7 @@
             
             
           </div><!--/row-->
-          </div>  
-
-          {% endblock post%}
           
-          {% block articles %}
           <div class="row">
             
               <div class="media">

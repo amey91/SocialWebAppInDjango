@@ -5,7 +5,7 @@ from django.conf.urls import patterns, include, url
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
     url(r'^$', 'moneyclub.groups.views.menu'),
-    url(r'^home', 'moneyclub.views.club_home'),
+    url(r'^home', 'moneyclub.groups.views.club_home'),
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
     url(r'^club_create', 'moneyclub.groups.views.club_create'),
     url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group'),

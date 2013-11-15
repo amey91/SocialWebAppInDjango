@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields.related import ForeignKey
-from test.test_imageop import MAX_LEN
+# from test.test_imageop import MAX_LEN
 # Create your models here.
 
     
@@ -46,7 +46,7 @@ class Comment(models.Model):
     
     def __unicode__(self):
         return self.comment
-    
+
 class GroupMembership(models.Model):
     user=models.ForeignKey(User, blank=False,related_name="groupmembername")
     group=models.ForeignKey(Group, blank=False, related_name="groupname")
@@ -54,11 +54,24 @@ class GroupMembership(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
-        return self.group.name + "  OF " + self.user.username
+        return self.group
     
 class UserProfile(models.Model):
-    user=models.ForeignKey(User,blank=False,related_name="usernameformember")
+    user=models.OneToOneField(User,blank=False,related_name="profile")
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    birthdate = models.DateField( blank=True, null=True)
+    location = models.CharField(max_length=40,blank=True)
+    education = models.CharField(max_length=40,blank=True)
+    occupation = models.CharField(max_length=80,blank=True)
     profilepicture = models.ImageField(upload_to="profile_pics", blank=True)
+
+
+    def __unicode__(self):
+        return self.user.username
+
+class Member(models.Model):
+    user=models.OneToOneField(User,blank=False,related_name="member")
     total_points = models.IntegerField(default=0)
     level=models.IntegerField(default=0)
 

@@ -1,8 +1,16 @@
 {% extends "moneyclub/login_template.html" %}
-
+  
+    {% block headblock %}
     {% block title %}
     <title>{{user}}'s Homepage</title>
     {% endblock title %}
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+  {% endblock headblock %}
 
   
   
@@ -49,38 +57,10 @@
           {% endblock jumbotron%}
 
           {% block post%}
-          <div class="container">  
-              <div class="row">  
-                <div class="span6">  
-                  <ul class="nav nav-tabs">  
-                    <li class="active">  
-                    <a href="#">Article</a> </li>   
-                    <li><a href="#">Link</a></li>  
-                    <li><a href="#">Image </a></li>   
-                    <li><a href="#">Start Activity</a></li>   
-                  
-                  </ul>  
-                </div>  
-              </div>  
-
-               <div class="row">
-              
-                    <div class="panel panel-default">
-                        <div class="panel-body">                
-                            <form accept-charset="UTF-8" action="" method="POST">
-                              <input type="text" class="form-control" placeholder="Title of the article" name="title">
-                                <textarea class="form-control counted" name="message" placeholder="Type in your text" rows="7" style="margin-bottom:10px;"></textarea>
-                                
-                                <button class="btn btn-info" type="submit">Post New Article</button>
-                            </form>
-                        </div>
-                    </div>
-                
-              </div>
-          </div>  
 
           {% endblock post%}
 
+  
           {% block articles %}
           <div class="row">
             
@@ -211,7 +191,15 @@
     </div><!--/.container-->
     {% endblock contentsblock %}
 
+    {% block endscript %}
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+     
+    <script src="/static/js/offcanvas.js"></script>
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+     <script src="/static/js/bootstrap-datetimepicker.js"></script>
 
+    {% endblock endscript %}
    
     
 
