@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from moneyclub.models import *
 from moneyclub.forms import *
-from moneyclub.groups.forms import *
-#from moneyclub.groups.models import *
-
 from django.db import transaction 
 from django.http import HttpResponse, Http404
 from mimetypes import guess_type
@@ -20,11 +17,9 @@ from django.contrib.auth.hashers import *
 
 def get_photo_group(request, id):
     entry = get_object_or_404(Group, id=id)
-    print entry
     if not entry.picture:
         raise Http404
     content_type = guess_type(entry.picture.name)
-    print content_type
     return HttpResponse(entry.picture, mimetype=content_type)
 
 
@@ -53,9 +48,7 @@ def club_create(request):
 @transaction.commit_on_success
 def club_create_submit(request):
     errors = []
-    context = {}
-    print "hi hello"
-    
+    context = {}    
     if request.method=='GET':
             return render(request, 'moneyclub/create_moneyclub.html', context)
     #check for missing fields
@@ -163,12 +156,8 @@ def view_group_members1(request):
             
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})
-def temp(request):
-    grp=Group.objects.get(id=1)
-    gr = GroupMembership(user=request.user,group=grp,points=13)
-    gr.save()
-    return render(request, 'moneyclub/view_group_members.html', {})
-    
+
+
 @transaction.commit_on_success   
 def block_member(request,id1,id2):
     u=User.objects.get(id=id2)
@@ -177,3 +166,107 @@ def block_member(request,id1,id2):
     b.blocked=1
     b.save()
     return render(request, 'moneyclub/menu.html', {})
+
+def get_group_description(request,id1):
+    g=Group.objects.get(id=id1)
+    return render(request, 'moneyclub/group_home_page.html', {'group':g})
+
+
+  
+def post_article(request,groupID):
+    errors = []
+    context = {}
+       
+    """if request.method=='GET':
+            return render(request, 'moneyclub/post_articles.html', context)
+    #check for missing fields
+    if not 'description' in request.POST or not request.POST['description']:
+        errors.append('description is required')
+    """
+    
+    #check if poster is a member of the group
+    group1=Group.objects.get(id=groupID)
+    group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+    if request.user.id not in group_list:
+        errors.append('You are not a member of the given group.')
+        
+    if errors:
+            context['errors']= errors
+            return render(request, 'moneyclub/post_article.html', context) 
+    desc="hello worldasdasdaasd"
+    new_entry = Article(groupId =group1,user=request.user,type=2,description=desc)
+    #new_entry.save()
+    form = CreateArticleForm(request.FILES, instance=new_entry )
+    if not form.is_valid():         
+        context['form'] = form
+        return render(request, 'moneyclub/temp.html', context)
+    form.save()
+    
+    #print this on the user page-> feedback that article has been created
+    errors.append("Group created successfully!") 
+    context['errors']=errors
+    g=group1
+    context['group_name'] = g.name
+    context['description'] = g.description
+    str1= g.keywords
+    context['keywords'] =str1.split(",") 
+    context['id']=g.id
+    return render(request, 'moneyclub/group_home_page.html', context)
+
+    
+def add_comment_on_article(request,groupID,articleID):
+    errors = []
+    context = {}
+       
+    """if request.method=='GET':
+            return render(request, 'moneyclub/post_articles.html', context)
+    #check for missing fields
+    if not 'comment' in request.POST or not request.POST['comment']:
+        errors.append('description is required')
+    """
+    
+    #check if poster is a member of the group
+    group1=Group.objects.get(id=groupID)
+    group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+    if request.user.id not in group_list:
+        errors.append('You are not a member of the given group.')
+        return render(request, 'moneyclub/nopage1.html', context)
+    
+    #check if article belongs to that grou[
+    a=Article.objects.get(id=articleID)
+    if a.groupId != group1:
+        errors.append('Error matching article to group')
+        return render(request, 'moneyclub/nopage2.html', context)
+        
+    if errors:
+            context['errors']= errors
+            #?? doubt where to derirect
+            return render(request, 'moneyclub/nopage3.html', context) 
+    
+     #??? doubt change comm from request
+    comm = "comm"
+    
+    #comm = request.POST['comment']
+    new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
+    new_entry.save()
+    
+    
+    #print this on the user page-> feedback that article has been created
+    errors.append("Group created successfully!")
+    context['errors']=errors
+    g=group1
+    context['group_name'] = g.name
+    context['description'] = g.description
+    str1= g.keywords
+    context['keywords'] =str1.split(",") 
+    context['id']=g.id
+    return render(request, 'moneyclub/group_home_page.html', context)
+
+    
+
+def get_all_articles(request):
+    a=Article.objects.all()
+    return render(request, 'moneyclub/temp.html', {'items':a})
+
+
+    
