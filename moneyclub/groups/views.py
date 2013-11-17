@@ -25,13 +25,16 @@ def get_photo_group(request, id):
 
 def club_home(request):
     print "club_home called"
+    
     context = {}    
+    """
     name = "group 1"
     owner = request.user
     description = "desc"
     keywords = "key11,key2,key3"
     g = Group(name=name,owner=owner,description=description,keywords=keywords)
     g.save()
+    """
     
     g=Group.objects.get(id=1);
     context['group_name'] = g.name
@@ -268,5 +271,11 @@ def get_all_articles(request):
     a=Article.objects.all()
     return render(request, 'moneyclub/temp.html', {'items':a})
 
+def member_management(request, groupID):
+    context = {}
+    grp=Group.objects.filter(owner=request.user)
+    context['groups'] = grp
+
+    return render(request, 'moneyclub/member_management.html',context  );
 
     

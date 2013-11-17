@@ -306,7 +306,9 @@
             
             
           </div><!--/row-->
+        </div><!--/.container-->
           {% endblock articles %}
+
           {% block sidebars %}
           <div class="well sidebar-nav">
             <ul class="nav">
@@ -358,7 +360,7 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li>Members</li><li><small><a href="/moneyclub/groups/add_members_generic">Add Member</a></small></li>
+              <li><h4><a href="{% url 'member_management' id%}">Members</a></h4></li>
               <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
               <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
               <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
@@ -371,23 +373,23 @@
             </div>
 
           </div><!--/.well -->
-          <div class="well sidebar-nav">
-            <ul class="nav">
-              <li>Events</li>
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>US-EU summit</a></li>
-              
-              
-            </ul>
-          </div><!--/.well -->
-          <div class="well sidebar-nav">
-            <ul class="nav">
-              <li>Apps</li>
-              <li class="active"><a href="#">Sharing</a></li>
-              <li><a href="#">Messages</a></li>
-              <li><a href="#">Inviting friends</a></li>
-              
-            </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+        <div class="well sidebar-nav">
+          <ul class="nav">
+            <li>Events</li>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>US-EU summit</a></li>
+            
+            
+          </ul>
+        </div><!--/.well -->
+        <div class="well sidebar-nav">
+          <ul class="nav">
+            <li>Apps</li>
+            <li class="active"><a href="#">Sharing</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="#">Inviting friends</a></li>
+            
+          </ul>
+        </div><!--/.well -->
+        
         {% endblock sidebars %}
      
