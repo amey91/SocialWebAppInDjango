@@ -30,13 +30,17 @@ class Invite(models.Model):
 class Article(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
     user=models.ForeignKey(User, blank=False,related_name="articleby")
-    type = models.IntegerField(default=0)
+    articleType = models.IntegerField(default=0, blank=True, null=True)
     description = models.CharField(max_length=400,blank=True)
     picture = models.ImageField(upload_to="article_pics", blank=True)
     datetime=models.DateTimeField(auto_now_add='true')
+    title = models.CharField(max_length=80)
+    content = models.CharField(max_length=2000, blank=True)
     
     def __unicode__(self):
         return self.description
+    class Meta:
+        ordering=['-datetime']
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")
@@ -46,6 +50,9 @@ class Comment(models.Model):
     
     def __unicode__(self):
         return self.comment
+
+    class Meta:
+        ordering=['-datetime']
 
 class GroupMembership(models.Model):
     user=models.ForeignKey(User, blank=False,related_name="groupmembername")

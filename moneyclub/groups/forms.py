@@ -2,7 +2,7 @@ from django import forms
 
 from django.contrib.auth.models import User
 
-from models import *
+from moneyclub.models import *
 
 
 
@@ -20,7 +20,9 @@ class UserProfileForm(forms.ModelForm):
         widgets = {'picture' : forms.FileInput() }
     
 class CreateArticleForm(forms.ModelForm):
+    #content=forms.CharField(widget=forms.Textarea)
     class Meta:
         model = Article
         exclude = ('user','groupId','datetime',)
-        widgets = {'picture' : forms.FileInput() }
+        widgets = {'picture' : forms.FileInput(),\
+        'content': forms.Textarea() }

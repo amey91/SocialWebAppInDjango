@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from moneyclub.models import *
 from moneyclub.forms import *
+from moneyclub.groups.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, Http404
 from mimetypes import guess_type
@@ -37,11 +38,16 @@ def club_home(request):
     """
     
     g=Group.objects.get(id=1);
+    articles = g.articleofgroup.all()
+    print len(articles)
     context['group_name'] = g.name
     context['description'] = g.description
     str1= g.keywords
     context['keywords'] =str1.split(",")
     context['id']= g.id
+    context['articles']=articles
+
+
     return render(request, 'moneyclub/group_home_page.html', context)
     
    
@@ -194,19 +200,25 @@ def post_article(request,groupID):
         errors.append('You are not a member of the given group.')
         
     if errors:
-            context['errors']= errors
-            return render(request, 'moneyclub/post_article.html', context) 
+        print errors
+        context['errors']= errors
+        return render(request, 'moneyclub/post_article.html', context) 
     desc="hello worldasdasdaasd"
-    new_entry = Article(groupId =group1,user=request.user,type=2,description=desc)
+    new_entry = Article(groupId =group1,user=request.user,articleType=2,description=desc)
     #new_entry.save()
-    form = CreateArticleForm(request.FILES, instance=new_entry )
-    if not form.is_valid():         
-        context['form'] = form
-        return render(request, 'moneyclub/temp.html', context)
-    form.save()
+    article = CreateArticleForm(request.POST, request.FILES, instance=new_entry   )
+    if not article.is_valid():         
+        context['article'] = article
+        return render(request, 'moneyclub/article.html', context)
+    article.save()
+
+    context['article'] = article
+    context['group'] = group1
+    user = request.user
+    context['user'] = user
     
     #print this on the user page-> feedback that article has been created
-    errors.append("Group created successfully!") 
+     
     context['errors']=errors
     g=group1
     context['group_name'] = g.name
@@ -214,7 +226,7 @@ def post_article(request,groupID):
     str1= g.keywords
     context['keywords'] =str1.split(",") 
     context['id']=g.id
-    return render(request, 'moneyclub/group_home_page.html', context)
+    return render(request, 'moneyclub/article.html', context)
 
     
 def add_comment_on_article(request,groupID,articleID):

@@ -77,17 +77,17 @@
                                   <div class="row">
               
                                                 
-                                          <form accept-charset="UTF-8" action="" method="POST">
-                                            
-                                            <input type="text" class="form-control" placeholder="Title of the article" name="title">
-                                          
-                                          
-                                              <textarea class="form-control counted" name="message" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
-                                              <div class="modal-footer">
-                                              <button class="btn btn-info" type="submit">Post New Article</button>
-                                            </div>
-                                            {%csrf_token%}
-                                          </form>
+                                      <form accept-charset="UTF-8" action="{% url 'post_article' id%}" method="POST" id="post-article">
+                                        
+                                        <input type="text" class="form-control" placeholder="Title of the article" name="title">
+                                      
+                                      
+                                          <textarea class="form-control counted" name="content" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
+                                          <div class="modal-footer">
+                                          <button class="btn btn-info" type="submit">Post New Article</button>
+                                        </div>
+                                        {%csrf_token%}
+                                      </form>
                                     
                               
                                   </div> <!--/row-->
@@ -195,6 +195,31 @@
           
           {% block articles %}
           <div class="container">
+            {% for article in articles %}
+              <div class="row"> 
+                <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="{% url 'user-photo' article.user.id %}" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> America-Scotland</p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  
+                  <h4 class="media-heading"><a href="#">{{article.title}}</a></h4>
+                  <span class="label label-info">Article</span>
+                  {{article.content|truncatechars:100}}...
+                  
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+              </div><!--/media-->
+              </div> <!--./row-->
+            {% endfor %}
           <div class="row">
             
               <div class="media">
