@@ -31,10 +31,12 @@ class Article(models.Model):
 	#same for both types 	
 	groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
 	#same for both types
-    user=models.ForeignKey(User, blank=False,related_name="articleby")
-    #articletype = 1 for generic articles
-    #articletype = 2 for events
-    articleType = models.IntegerField(default=0, blank=True, null=True)
+
+	user=models.ForeignKey(User, blank=False,related_name="articleby")
+	#articletype = 1 for generic articles
+	#articletype = 2 for events
+	articleType = models.IntegerField(default=0, blank=True, null=True)
+    
     #same for both types 
 	description = models.CharField(max_length=400,blank=True)
     #same for both types 
@@ -46,15 +48,14 @@ class Article(models.Model):
 	title = models.CharField(max_length=80)
 	#stores link for articles
 	#stores location for events
-    content = models.CharField(max_length=2000, blank=True)
+	content = models.CharField(max_length=2000, blank=True)
 	#date and time of the actual event
 	#blank for article
 	eventdatetime = models.CharField(max_length=100, blank=True)
-    
-    def __unicode__(self):
-        return self.description
-    class Meta:
-        ordering=['-datetime']
+	def __unicode__(self):
+		return self.description
+	class Meta:
+		ordering=['-datetime']
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")
