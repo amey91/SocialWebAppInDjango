@@ -156,9 +156,10 @@
           <div class="well sidebar-nav">
             <ul class="nav">
               <li>Groups</li>
-              <li class="active"><a href="#">Scrooge Mcduck Universe</a></li>
-              <li><a href="/moneyclub/groups/home">American-Scottish Trading</a></li>
-              <li><a href="#">Billionare Philanthropists</a></li>
+              {% for group in groups%}
+                <li><a href="{% url 'grouphomepage' group.id%}">{{group.name}}</a></li>
+              {% endfor %}
+              
               
             </ul>
           </div><!--/.well -->

@@ -54,8 +54,24 @@ def create_group(request):
 
 @login_required
 def home(request):
+    errors = []
+    context = {}
+    try:
+        profile = UserProfile.objects.get(user=request.user) 
+        profile = ProfileForm(instance=profile)
+    except ObjectDoesNotExist:
+        errors.append('Profile not found. Create your profile.')
+    print request.user.username
 
-    return render(request, 'moneyclub/index.html')
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=request.user)
+    groups = [membership.group for membership in memberships]
+
+    context['member'] = member
+    context['groups'] = groups
+    context['profile'] = profile;
+    context['errors'] = errors
+    return render(request, 'moneyclub/index.html', context)
 
 
 def register(request):

@@ -35,14 +35,15 @@ def club_home(request,id):
 	#all the keywords for the group to be display4ed in separate blocks.
     str1= g.keywords
     context['keywords'] =str1.split(",")
+    context['group'] = g
 	
 	#all the articles of the group
     articles = g.articleofgroup.all()
     context['articles']=articles
 	
 	#all members of the group arranged by decreasing number of points
-    m = GroupMembership.objects.filer(group=g).orderBy(points)
-    context['members'] = m
+    #m = GroupMembership.objects.filer(group=g).orderBy(points)
+    #context['members'] = m
     return render(request, 'moneyclub/group_home_page.html', context)
     
    

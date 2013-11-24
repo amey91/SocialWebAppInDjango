@@ -20,13 +20,12 @@
 
                     
                       <div class="media-body">
-                          <h4 class="media-heading">{{group_name}} </h4>
-                          <p><small>Founded by Mr. Andrew Carnegie and Mr. Scrooge MdDuck. Focused on uniting Scottish-American Bussinessmen. 
-                          Share your knowledge, information and interest in the cross-Atalantic Market with amazing people</small></p>
+                          <h4 class="media-heading">{{group.name}} </h4>
+                          <p><small>{{group.description}}</small></p>
                           <hr style="margin:8px auto">
                           <!-- display keywords -->
                           {% for keyword in group.keywords %}     
-                          <span class="label label-default">keyword</span>
+                          <span class="label label-default">{{keyword}}</span>
                           {% endfor %}
                           <p>
                              <a href="#" class="btn btn-primary "> Join</a>
@@ -61,9 +60,8 @@
                     
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#pane1" data-toggle="tab">Article</a></li>
-                            <li><a href="#pane2" data-toggle="tab">Link</a></li>
-                            <li><a href="#pane3" data-toggle="tab">Image</a></li>
-                            <li><a href="#pane4" data-toggle="tab">Event</a></li>
+       
+                            <li><a href="#pane2" data-toggle="tab">Event</a></li>
                         </ul>
                  
                       </div>
@@ -76,15 +74,31 @@
                                   <div class="row">
               
                                                 
-                                      <form accept-charset="UTF-8" action="{% url 'post_article' id%}" method="POST" id="post-article">
+                                      <form accept-charset="UTF-8" action="{% url 'post_article' group.id %}" method="POST" id="post-article">
                                         
                                         <input type="text" class="form-control" placeholder="Title of the article" name="title">
                                       
                                       
                                           <textarea class="form-control counted" name="content" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
+                                          <div class="input-group ">
+                                      
+                                            <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                            <input type="text" class="form-control" placeholder="URL">
+                                          </div>
+                                  <div class="input-group ">
+                                      
+                                    <span class="input-group-addon "><span class="glyphicon glyphicon-picture"></span></span>
+                                    <input type="text" class="form-control" placeholder="URL of the image">
+                                      </div>
+                                     <p> or upload local picture </p>
+                                     <input type="file" >
+                                  
+                                    
+                                     
                                           <div class="modal-footer">
-                                          <button class="btn btn-info" type="submit">Post New Article</button>
-                                        </div>
+                                            <button class="btn btn-info" type="submit">Post New Article</button>
+                                          </div>
+
                                         {%csrf_token%}
                                       </form>
                                     
@@ -92,46 +106,9 @@
                                   </div> <!--/row-->
                                 </div> <!--/container-->
                               </div>  
+                              
+                              
                               <div id="pane2" class="tab-pane">
-                                
-                                  <form action="#" method="POST">
-                                    <div class="form-group ">
-                                      <input type="text" class="form-control" placeholder="Title" name="title">
-                                    </div>
-                                    <div class="input-group ">
-                                      
-                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
-                                    <input type="text" class="form-control" placeholder="URL">
-                                     </div>
-                                    <div class="modal-footer">
-                                              <button class="btn btn-info" type="submit">Share</button>
-                                    </div>
-                                  {%csrf_token%}
-                                  </form> 
-                               
-                              </div>
-                              <div id="pane3" class="tab-pane">
-                                <form action="#" method="POST">
-                                  <div class="form-group ">
-                                      <input type="text" class="form-control" placeholder="Title" name="title">
-                                    </div>
-                                    <div class="input-group ">
-                                      
-                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
-                                    <input type="text" class="form-control" placeholder="URL of the image">
-                                     </div>
-                                     <p> or upload from local </p>
-                                     <input type="file" >
-                                      <textarea class="form-control counted" name="content" placeholder="Description" rows="2" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
-                                     <div class="modal-footer">
-                                        <button class="btn btn-info" type="submit">Share</button>
-                                      </div>
-                                    
-                                  {%csrf_token%}
-                                </form> 
-                                
-                              </div>
-                              <div id="pane4" class="tab-pane">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
@@ -218,13 +195,13 @@
                         <img class="media-object" src="" alt="..."width="100px">
                       </div>
                       <div class="caption">
-                        <p> post.user</p>
+                        <p>{{ post.user}}</p>
                       </div>
                     </div>
                   </a>
                 <div class="media-body">
                   
-                  <h4 class="media-heading"><a href="#">post.title</a></h4>
+                  <h4 class="media-heading"><a href="#">{{post.title}}</a></h4>
                   
                   <span class="label label-info">Event</span> <br>
                   
@@ -233,15 +210,15 @@
                                     <tbody>
                                     <tr>
                                         <td>Date Time</td>
-                                        <td>post.datetime</td>
+                                        <td>{{post.datetime}}</td>
                                     </tr>
                                     <tr>
                                         <td>Location</td>
-                                        <td>post.location</td>
+                                        <td>{{post.location}}</td>
                                     </tr>
                                     <tr>
                                         <td>Event</td>
-                                        <td>post.description</td>
+                                        <td>{{post.description}}</td>
                                     </tr>
                                     
                                     </tbody>
@@ -372,7 +349,7 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li><h4><a href="{% url 'member_management' id%}">Members</a></h4></li>
+              <li><h4><a href="{% url 'member_management' group.id%}">Members</a></h4></li>
               <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
               <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
               <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
