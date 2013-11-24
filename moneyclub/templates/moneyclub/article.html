@@ -23,10 +23,14 @@
           <p style="color:red;"> {{field.errors}} </p>
           {% endfor %}
         -->
-          
+          {% if articleType == 0 or articleType == 1 %}
           <p class="lead">{{article.content.value}}</p>
 
-       
+          {% endif %}
+          {% if articleType == 2 %}
+          <img class="media-object" src="{% url 'post-photo' post.id %}" alt="..."width="400px">
+          <p> {{article.description}} </p>
+          {% endif %}
           <hr>
        
           <div class="btn-sm-group">
