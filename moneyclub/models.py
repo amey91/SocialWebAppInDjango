@@ -30,10 +30,10 @@ class Invite(models.Model):
 class Article(models.Model):
 	#same for both types 	
 	groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
-	#same for both types 
+	#same for both types
     user=models.ForeignKey(User, blank=False,related_name="articleby")
-	#articletype = 1 for generic articles
-	#articletype = 2 for events
+    #articletype = 1 for generic articles
+    #articletype = 2 for events
     articleType = models.IntegerField(default=0, blank=True, null=True)
     #same for both types 
 	description = models.CharField(max_length=400,blank=True)
