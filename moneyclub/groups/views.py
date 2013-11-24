@@ -24,23 +24,25 @@ def get_photo_group(request, id):
     return HttpResponse(entry.picture, mimetype=content_type)
 
 
-def club_home(request):
+def club_home(request,id):
     print "club_home called"
     
     context = {}    
+
     
+    g=Group.objects.get(id=id);
     
-    g=Group.objects.get(id=4);
-    articles = g.articleofgroup.all()
-    print len(articles)
-    context['group_name'] = g.name
-    context['description'] = g.description
-    str1= g.keywords
+	#all the keywords for the group to be display4ed in separate blocks.
+	str1= g.keywords
     context['keywords'] =str1.split(",")
-    context['id']= g.id
-    context['articles']=articles
-
-
+	
+	#all the articles of the group
+	articles = g.articleofgroup.all()
+	context['articles']=articles
+	
+	#all members of the group arranged by decreasing number of points
+	m = GroupMembership.objects.filer(group=g).orderBy(points)
+	context['members'] = m
     return render(request, 'moneyclub/group_home_page.html', context)
     
    

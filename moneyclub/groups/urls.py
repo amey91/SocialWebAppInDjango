@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     #url(r'^temp', 'moneyclub.groups.views.temp'),
     url(r'^$', 'moneyclub.groups.views.menu'),
-    url(r'^home', 'moneyclub.groups.views.club_home'),
+    url(r'^home/(?P<id>\d+)/$', 'moneyclub.groups.views.club_home',name='grouphomepage'),
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
     url(r'^club_create', 'moneyclub.groups.views.club_create'),
     url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group',name='group-photo'),
