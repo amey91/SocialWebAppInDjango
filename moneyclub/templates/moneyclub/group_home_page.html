@@ -14,7 +14,7 @@
                   <div class="media">
                     
                       <a class="pull-left" href="#">
-                          <img id="ameyy" class="media-object dp img-circle" src="/moneyclub/groups/get_photo/{{id}}" 
+                          <img id="ameyy" class="media-object dp img-circle" src="/static/image/scottish-terrier-watercolor-irina-march.jpg" 
                           style="width: 100px;height:100px;">
                       </a>
 
@@ -24,12 +24,11 @@
                           <p><small>Founded by Mr. Andrew Carnegie and Mr. Scrooge MdDuck. Focused on uniting Scottish-American Bussinessmen. 
                           Share your knowledge, information and interest in the cross-Atalantic Market with amazing people</small></p>
                           <hr style="margin:8px auto">
-
-                                 
-                          <span class="label label-default">Scottish American</span>
-                          <span class="label label-info">Global Trading</span>
-                          <span class="label label-default">US-EU</span>
-                           <p>
+                          <!-- display keywords -->
+                          {% for keyword in group.keywords %}     
+                          <span class="label label-default">keyword</span>
+                          {% endfor %}
+                          <p>
                              <a href="#" class="btn btn-primary "> Join</a>
                           </p>
 
@@ -226,7 +225,7 @@
                   <a class="pull-left" href="#">
                     <div class="thumbnail" style="padding: 0">
                       <div style="padding:4px">
-                        <img class="media-object" src="../../static/image/scottish-terrier-watercolor-irina-march.jpg" alt="..."width="100px">
+                        <img class="media-object" src="/static/image/scottish-terrier-watercolor-irina-march.jpg" alt="..."width="100px">
                       </div>
                       <div class="caption">
                         <p> America-Scotland</p>

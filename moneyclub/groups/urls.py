@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^home', 'moneyclub.groups.views.club_home'),
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
     url(r'^club_create', 'moneyclub.groups.views.club_create'),
-    url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group'),
+    url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group',name='group-photo'),
     url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
     url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
     

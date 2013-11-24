@@ -37,7 +37,7 @@ def club_home(request):
     g.save()
     """
     
-    g=Group.objects.get(id=1);
+    g=Group.objects.get(id=4);
     articles = g.articleofgroup.all()
     print len(articles)
     context['group_name'] = g.name
@@ -56,16 +56,20 @@ def club_create(request):
     
 @transaction.commit_on_success
 def club_create_submit(request):
+    print "club_create called"
     errors = []
     context = {}    
     if request.method=='GET':
             return render(request, 'moneyclub/create_moneyclub.html', context)
     #check for missing fields
     if not 'name' in request.POST or not request.POST['name']:
+        print 'Group Name is required'
         errors.append('Group Name is required')
     if not 'description' in request.POST or not request.POST['description']:
+        print 'A short group description is required.'
         errors.append('A short group description is required.')
     if len(Group.objects.filter(name__iexact=request.POST['name'])) > 0:
+        print 'Group name is already taken.'
         errors.append('Group name is already taken.')
     if errors:
             context['errors']= errors
@@ -76,20 +80,25 @@ def club_create_submit(request):
     
     if not form.is_valid():         
         context['form'] = form
+        print "form is not valid"
         return render(request, 'moneyclub/create_moneyclub.html', context)
-    '''
-    if you don't want to use model forms: 
-    name=request.POST['group_name']
+    
+    #if you don't want to use model forms: 
+    name=request.POST['name']
     owner = request.user
     description = request.POST['description']
     keywords = request.POST['keywords']
     g = Group(name=name,owner=owner,description=description,keywords=keywords)
-    g.save()'''
-    
+    g.save()
+    print "group saved"
+    print "group name:"+g.name
+    print "group id:"+str(g.id)
+    """
     form.save()
     errors.append("Group created successfully!")
     context['errors']=errors
     g=Group.objects.get(name=request.POST['name']);
+    """
     context['group_name'] = g.name
     context['description'] = g.description
     str1= g.keywords
