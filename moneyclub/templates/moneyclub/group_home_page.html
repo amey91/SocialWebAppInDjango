@@ -96,6 +96,7 @@
                                 
                                   <form action="#" method="POST">
                                     <div class="input-group ">
+                                      <input type="text" class="form-control" placeholder="Title" name="title">
                                     <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
                                     <input type="text" class="form-control" placeholder="URL">
                                      </div>
@@ -109,11 +110,13 @@
                               <div id="pane3" class="tab-pane">
                                 <form action="#" method="POST">
                                     <div class="input-group ">
+                                      <input type="text" class="form-control" placeholder="Title" name="title">
                                     <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
                                     <input type="text" class="form-control" placeholder="URL of the image">
                                      </div>
                                      <p> or upload from local </p>
                                      <input type="file" >
+                                      <textarea class="form-control counted" name="content" placeholder="Description" rows="2" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
                                      <div class="modal-footer">
                                         <button class="btn btn-info" type="submit">Share</button>
                                       </div>
@@ -128,6 +131,7 @@
                                         <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
                                             
                                             <form action="#" method="post" class="form" role="form">
+                                              <input type="text" class="form-control" placeholder="Title" name="title">
                                               <div class="form-group">
                                               <label for="dtp_input2" class="col-md-3 control-label">Date </label>
                                                 <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
@@ -194,143 +198,53 @@
           
           {% block articles %}
           <div class="container">
-            {% for article in articles %}
+            {% for post in posts %}
               <div class="row"> 
                 <div class="media">
                   <a class="pull-left" href="#">
                     <div class="thumbnail" style="padding: 0">
                       <div style="padding:4px">
-                        <img class="media-object" src="{% url 'user-photo' article.user.id %}" alt="..."width="100px">
+                        <img class="media-object" src="{% url 'user-photo' post.user.id %}" alt="..."width="100px">
                       </div>
                       <div class="caption">
-                        <p> America-Scotland</p>
+                        <p> {{post.user}}</p>
                       </div>
                     </div>
                   </a>
                 <div class="media-body">
                   
-                  <h4 class="media-heading"><a href="#">{{article.title}}</a></h4>
+                  <h4 class="media-heading"><a href="#">{{post.title}}</a></h4>
+                  {% if post.type == 0 %}
+                  <!-- text post -->
                   <span class="label label-info">Article</span>
-                  {{article.content|truncatechars:100}}...
-                  
+                  {{post.content|truncatechars:100}}...
+                  {% endif%}
+                   {% if post.type == 1 %}
+                  <!-- link post -->
+                  <span class="label label-info">Link</span>
+                  <a href="{{post.link}}">
+                    {{post.link}}
+                  </a>
+                  {% endif%}
+                   {% if post.type==2 %}
+                  <!-- image post -->
+                  <span class="label label-info">Image</span>
+                  <img class="media-object" src="{% url 'post-photo' post..id %}" alt="..."width="400px">
+                  {% endif%}
+                   {% if post.type==3 %}
+                  <!-- event post to do-->
+                  <span class="label label-info">Event</span>
+                  {% for field in post.eventform.visible_fields %}
+                  {% field %}
+                  {%endfor%}
+                  {% endif%}
                 </div>
                 <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{post.datetime}}</p>
               </div><!--/media-->
               </div> <!--./row-->
             {% endfor %}
-          <div class="row">
-            
-              <div class="media">
-                  <a class="pull-left" href="#">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="/static/image/scottish-terrier-watercolor-irina-march.jpg" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p> America-Scotland</p>
-                      </div>
-                    </div>
-                  </a>
-                <div class="media-body">
-                  <h4 class="media-heading"><a href="article.html">Decision on splitting RBS overshadows trading update</a></h4>
-                  <span class="label label-info">Article</span>
-                  THE Treasury’s imminent decision on splitting Royal Bank of Scotland into a “good bank” and “bad bank” is set to overshadow Friday’s third-quarter trading update...
-                </div>
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 29, 2013 at 8:00 PM</p>
-              </div><!--/media-->
-            
-            
-          </div><!--/row-->
           
-          <div class="row">
-            
-              <div class="media">
-                  <a class="pull-left" href="#">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="../../static/image/Andrew_Carnegie,_three-quarter_length_portrait,_seated,_facing_slightly_left,_1913-crop.jpg" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p> Andrew Carnegie </p>
-                      </div>
-                    </div>
-                  </a>
-                <div class="media-body">
-                  <h4 class="media-heading"><a href="#">Real Rewarding Investment: Education</a></h4>
-                  <span class="label label-info">Article</span>
-                  Carnegie Mellon University (CMU) is a global research university with more than 12,000 students, 95,000 alumni, and 5,000 faculty and staff. 
-                  CMU has been a birthplace of innovation throughout its 113-year history.
-                  Today, we are a global leader bringing groundbreaking ideas to market and creating successful startup businesses...
-                </div>
-                  
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
-                  
-               
-              </div><!--/media-->
-               
-
-            
-          </div><!--/row-->
-
-          <div class="row">
-            
-              <div class="media">
-                  <a class="pull-left" href="#">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p> Scrooge McDuck </p>
-                      </div>
-                    </div>
-                    
-                  </a>
-                <div class="media-body">
-                  
-                  <h4 class="media-heading"><a href="#">Diving in the money poll</a></h4>
-                  <span class="label label-info">Link</span>
-                  <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">Diving in the money poll</a>
-                </div>
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p>
-                  
-               
-              </div><!--/media-->
-               
-
-            
-          </div><!--/row-->
-        
-
-           <div class="row">
-            
-              <div class="media">
-                  <a class="pull-left" href="#">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p> Scrooge McDuck </p>
-                      </div>
-                    </div>
-                  </a>
-                <div class="media-body">
-                  <h4 class="media-heading"><a href="#">Trend of Exporting/Importing in Scotland</a></h4>
-                  <span class="label label-info">Article</span>
-                  Scotland's most iconic exports, from Tunnock's tea cakes and Barr's world famous Irn Bru to high quality leather from Edinburgh...
-                </div>
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 8:00 PM</p>
-              </div><!--/media-->
-            
-            
-          </div><!--/row-->
-        </div><!--/.container-->
           {% endblock articles %}
 
           {% block sidebars %}

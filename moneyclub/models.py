@@ -30,12 +30,10 @@ class Invite(models.Model):
 class Article(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
     user=models.ForeignKey(User, blank=False,related_name="articleby")
-    articleType = models.IntegerField(default=0, blank=True, null=True)
+    type = models.IntegerField(default=0)
     description = models.CharField(max_length=400,blank=True)
     picture = models.ImageField(upload_to="article_pics", blank=True)
     datetime=models.DateTimeField(auto_now_add='true')
-    title = models.CharField(max_length=80)
-    content = models.CharField(max_length=2000, blank=True)
     
     def __unicode__(self):
         return self.description
