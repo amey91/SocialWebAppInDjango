@@ -28,14 +28,7 @@ def club_home(request):
     print "club_home called"
     
     context = {}    
-    """
-    name = "group 1"
-    owner = request.user
-    description = "desc"
-    keywords = "key11,key2,key3"
-    g = Group(name=name,owner=owner,description=description,keywords=keywords)
-    g.save()
-    """
+    
     
     g=Group.objects.get(id=4);
     articles = g.articleofgroup.all()

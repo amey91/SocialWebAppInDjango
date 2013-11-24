@@ -210,6 +210,49 @@
           
           {% block articles %}
           <div class="container">
+            <div class="row"> 
+                <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> post.user</p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  
+                  <h4 class="media-heading"><a href="#">post.title</a></h4>
+                  
+                  <span class="label label-info">Event</span> <br>
+                  
+                    <div class="span4">
+                      <table class="table table-condensed table-responsive table-user-information">
+                                    <tbody>
+                                    <tr>
+                                        <td>Date Time</td>
+                                        <td>post.datetime</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Location</td>
+                                        <td>post.location</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Event</td>
+                                        <td>post.description</td>
+                                    </tr>
+                                    
+                                    </tbody>
+                                </table>
+                    </div>
+                
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{post.datetime}}</p>
+              </div><!--/media-->
+              </div> <!--./row-->
             {% for post in posts %}
               <div class="row"> 
                 <div class="media">
@@ -244,13 +287,31 @@
                   <img class="media-object" src="{% url 'post-photo' post.id %}" alt="..."width="400px">
                   <p> {{post.description}} </p>
                   {% endif%}
-                   {% if post.articleType == 3 %}
+                  <!-- {% if post.articleType == 3 %} -->
                   <!-- event post to do-->
                   <span class="label label-info">Event</span>
-                  {% for field in post.eventform.visible_fields %}
-                    {{ field }}
-                  {%endfor%}
-                  {% endif%}
+                  <strong>Cyruxx</strong><br>
+                                <table class="table table-condensed table-responsive table-user-information">
+                                    <tbody>
+                                    <tr>
+                                        <td>User level:</td>
+                                        <td>Administrator</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registered since:</td>
+                                        <td>11/12/2013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Topics</td>
+                                        <td>15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Warnings</td>
+                                        <td>0</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                <!--  {% endif%} -->
                 </div>
                 <hr>
                 <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{post.datetime}}</p>
