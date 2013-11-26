@@ -99,3 +99,11 @@ class Member(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+class StockOfInterest(models.Model):
+    stock_name=models.CharField(max_length=10)
+    price=models.FloatField()
+    change=models.FloatField()
+
+    def __unicode__(self):
+        return self.stock_name

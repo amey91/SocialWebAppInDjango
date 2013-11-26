@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stocks>
+	{% for stock in stocks %}
+	<stock>
+		<stockname>{{stock.stock_name}}</stockname>
+		<price>{{stock.price}}</price>
+		<change>{{stock.change}}<price>
+	</stock>
+	{% endfor %}
+</stocks>

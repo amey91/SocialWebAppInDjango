@@ -182,3 +182,11 @@ def search(request):
                 'users_retrieved' : users_retrieved, 'errors': errors}
     return render(request, 'moneyclub/search_results.html', context)
 
+@login_required
+def get_user_stock(request):
+    errors = []
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    context={'stocks':stock}
+    return render(request, 'xml/stocks.xml', context, content_type='application/xml')
+
+
