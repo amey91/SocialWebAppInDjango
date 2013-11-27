@@ -24,7 +24,7 @@
                           <p><small>{{group.description}}</small></p>
                           <hr style="margin:8px auto">
                           <!-- display keywords -->
-                          {% for keyword in group.keywords %}     
+                          {% for keyword in keywords %}     
                           <span class="label label-default">{{keyword}}</span>
                           {% endfor %}
                           <p>
@@ -74,22 +74,21 @@
                                   <div class="row">
               
                                                 
-                                      <form accept-charset="UTF-8" action="{% url 'post_article' group.id %}" method="POST" id="post-article">
+                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article/{{group.id}}" method="POST" id="post-article"  enctype="multipart/form-data">
                                         
                                         <input type="text" class="form-control" placeholder="Title of the article" name="title">
                                       
                                       
-                                          <textarea class="form-control counted" name="content" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
-                                          
-                                  <div class="input-group ">
+                                          <textarea class="form-control counted" name="description" placeholder="Describe the article." rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
+                                          <div class="input-group ">
                                       
-                                    <span class="input-group-addon "><span class="glyphicon glyphicon-picture"></span></span>
-                                    <input type="text" class="form-control" placeholder="URL of the image">
-                                      </div>
-                                     <p> or upload local picture </p>
-                                     <input type="file" >
+                                            <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                            <input type="text" class="form-control" placeholder="External URL of the article">
+                                          </div>
                                   
-                                    
+                                     <p> Upload image for the article</p>
+                                     <input type="file" name="pic"></input>
+                                                                     
                                      
                                           <div class="modal-footer">
                                             <button class="btn btn-info" type="submit">Post New Article</button>
@@ -345,7 +344,7 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li><h4><a href="{% url 'member_management' group.id%}">Members</a></h4></li>
+              <li><h4><a href="{% url 'member_management' 1%}">Members</a></h4></li>
               <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
               <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
               <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
