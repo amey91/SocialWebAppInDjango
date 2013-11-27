@@ -1,45 +1,94 @@
 {% extends "moneyclub/login_template.html" %}
 
+{% block headblock %}
     {% block title %}
     <title>Article: {{article.title.value}}</title>
     {% endblock title %}
+       <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+  
+  {% endblock headblock %}
   
 
      {% block contentsblock %}
     <div class="container">
 
-      <div class="row row-offcanvas">
+      <div class="row ">
         <div class="col-lg-8">
           <div class="article">
-         <h1>{{article.title.value}}</h1>
-          <p class="lead">by <a href="grouppage.html">{{user}}</a></p>
-          <hr>
-          <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
-          <hr>
-          <!--
-          {% for field in article.visible_fields %}
-          {{field.label_tag}}: 
-          {{field}}
-          <p style="color:red;"> {{field.errors}} </p>
-          {% endfor %}
-        -->
-          {% if articleType == 0 or articleType == 1 %}
-          <p class="lead">{{article.content.value}}</p>
-
-          {% endif %}
-          {% if articleType == 2 %}
-          <img class="media-object" src="{% url 'post-photo' post.id %}" alt="..."width="400px">
-          <p> {{article.description}} </p>
-          {% endif %}
-          <hr>
-       
-          <div class="btn-sm-group">
+            <h1>{{article.title.value}}</h1>
+            <p class="lead">by <a href="grouppage.html">{{user}}</a></p>
+            <hr>
+            <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
             
-            <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-arrow-up">Upvote(35)</button>
-            <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-arrow-down">Downvote(47)</button>
+            <!--
+            {% for field in article.visible_fields %}
+            {{field.label_tag}}: 
+            {{field}}
+            <p style="color:red;"> {{field.errors}} </p>
+            {% endfor %}
+          -->
+            {% if  articleType == 1 %}
+            {% if article.picture %}
+              <img class="media-object" src="{% url 'post-photo' article.id %}" alt="..."width="400px">
+            {% endif %}
+            <p class="lead">{{article.content.value}}</p>
+
+            {% endif %}
+            
+            <!-- event post -->
+            {% if  articleType == 2 %}
+
+            
+            <div class="container">
+              <div class="row-fluid marketing">
+                <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3 col-md-offset-2 text-center"></th>
+                            <th class="col-md-6"></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                            <tr >
+                                <td class="text-center">When: </td>
+                                
+                                <td>{{article.datetime}}</td>
+                            </tr>
+                            <tr class="success">
+                                <td class="text-center">Where: </td>
+                                
+                                <td>{{article.location}}</td>
+                            </tr>
+                            <tr class="warning">
+                                <td class="text-center">Description: </td>
+                                
+                                <td>{{article.description.value}}</td>
+                            </tr>
+                   
+                    </tbody>
+                </table>
+              </div> <!--/.container -->
+     
+                  
+              </div><!--/.marketing -->
+            </div ><!--/.container -->
+            {% endif %}
          
-          </div>
-          <hr>
+            <div class="btn-sm-group">
+              
+              <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">({{article.upvotes|length}})</button>
+              <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">({{article.downvotes|length}})</button>
+
+           
+            </div>
+            <hr>
           </div> <!--/article--> 
           <!-- the comment box -->
           <div class=" well">
@@ -60,7 +109,7 @@
           
 
            <div class="row">
-              <div class="col-lg-8">
+              <div class="col-lg-9 col-lg-offset-1">
                 <div class="media">
                     <a class="pull-left" href="#">
                       <img class="media-object" src="/static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
@@ -89,7 +138,7 @@
                     </div><!-- /input-group -->
                   </form>
                 </div> <!--/well-->
-              </div>
+              </div> <!--/.row -->
             </div><!--/col-lg-8-->
           </div><!--/row-->
         </div><!--/span-->

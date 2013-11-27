@@ -87,6 +87,15 @@ footer {
     cursor: pointer;
 }
 
+.table > tbody > tr >td {
+    border-top: 0;
+    font-size: 125%;
+    
+}
+.table > tbody > tr >td:first-child {
+
+    font-weight : bold;
+}
 .table-user-information > tbody > tr {
     border-top: 1px solid rgb(221, 221, 221);
 }
@@ -99,3 +108,11 @@ footer {
 .table-user-information > tbody > tr > td {
     border-top: 0;
 }
+ .marketing {
+  margin: 60px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+
+
