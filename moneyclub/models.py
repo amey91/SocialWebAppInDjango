@@ -102,8 +102,17 @@ class Member(models.Model):
 
 class StockOfInterest(models.Model):
     stock_name=models.CharField(max_length=10)
-    price=models.FloatField()
-    change=models.FloatField()
+    price=models.CharField(max_length=10,blank=True,null=True)
+    change=models.CharField(max_length=10,blank=True,null=True)
+    percent_change=models.CharField(max_length=10,blank=True,null=True)
 
     def __unicode__(self):
         return self.stock_name
+    class Meta:
+        abstract = True
+
+class UserStockOfInterest(StockOfInterest):
+    user=models.ForeignKey(User,blank=False,related_name="user_stock")
+
+    class Meta:
+        app_label = "moneyclub"

@@ -2,9 +2,11 @@
 <stocks>
 	{% for stock in stocks %}
 	<stock>
+		<stock_id>{{stock.id}} </stock_id>
 		<stockname>{{stock.stock_name}}</stockname>
 		<price>{{stock.price}}</price>
-		<change>{{stock.change}}<price>
+		<change>{{stock.change}}</change>
+		<pctchange>{{stock.percent_change}}</pctchange>
 	</stock>
 	{% endfor %}
 </stocks>

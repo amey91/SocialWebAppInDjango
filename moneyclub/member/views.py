@@ -12,12 +12,20 @@ from django.core.files import File
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
+from django.core import serializers
+from django.utils.functional import Promise
+from django.utils.encoding import force_text
+from django.core.serializers.json import DjangoJSONEncoder
 
 import random
 import hashlib
+import json
+from django.utils import simplejson
 
 from moneyclub.models import *
 from moneyclub.forms import *
+
+import ystockquote
 
 
 @login_required
@@ -182,11 +190,91 @@ def search(request):
                 'users_retrieved' : users_retrieved, 'errors': errors}
     return render(request, 'moneyclub/search_results.html', context)
 
+
+
 @login_required
 def get_user_stock(request):
+    print "get_user_stock called"
     errors = []
+    """
+    stock = UserStockOfInterest(user=request.user, stock_name='GOOG')
+    stock.save()
+    print "stock saved"
+    """
     stocks = UserStockOfInterest.objects.filter(user=request.user)
-    context={'stocks':stock}
-    return render(request, 'xml/stocks.xml', context, content_type='application/xml')
+    
+    for stock in stocks:
+        allinfo = ystockquote.get_all(stock.stock_name)
+        stock.price=allinfo['ask_realtime']
+        stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
+        stock.percent_change=allinfo['change_percent'].strip("\"")
+        stock.save()
+        
+    context={'stocks':stocks}
+    
+    return render(request, 'xml/stock.xml', context, content_type='application/xml');
+
+@login_required
+def add_stock(request):
+    context={}
+    errors=[]
+    if not 'stock_name' in request.POST or not request.POST['stock_name']:
+        errors.append('A stock name is needed')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    stock_name = request.POST['stock_name']
+    stockinfo = ystockquote.get_all(stock_name)
+    if UserStockOfInterest.objects.filter(stock_name=stock_name):
+        errors.append('Stock already added')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+    
+    if stockinfo['shares_owned'] =="\"-\"" or stockinfo['shares_owned'] =="N/A":
+        errors.append('No matching stock found')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+    print "stock found"
+    stock = UserStockOfInterest(user=request.user, stock_name=stock_name)
+    stock.price=stockinfo['ask_realtime']
+    stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
+    stock.percent_change=stockinfo['change_percent'].strip("\"")
+    stock.save()
+    context['stock_name']=stock_name
+    context['price'] = stock.price
+    context['change'] = stock.change
+    context['pctchange'] = stock.percent_change
+    context['stock_id'] = stock.id
+    context['status'] = 'success'
+
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+@login_required
+def delete_stock(request):
+    context={}
+    errors=[]
+    if 'stock_id' in request.POST and request.POST['stock_id']:
+        stock_id = request.POST['stock_id']
+
+        try:
+            stock_to_delete = UserStockOfInterest.objects.get(id=stock_id)
+            stock_to_delete.delete()
+            context['status']='success'
+            print 'stock successfully deleted'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+
+        except ObjectDoesNotExist:
+            erros.append('delete error!')
+            context['status']='failure'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+    erros.append('delete error!')
+    context['status']='failure'
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+
+
+
 
 

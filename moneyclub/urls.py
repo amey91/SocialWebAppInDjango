@@ -14,5 +14,5 @@ urlpatterns = patterns('',
 	url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     url(r'^register$', 'moneyclub.views.register'),
     url(r'^confirm-registration/(?P<username>[a-zA-Z0-9_@\+\-]+)/(?P<token>[a-z0-9\-]+)$', 'moneyclub.views.confirm_registration', name='confirm'),
- 
+ 	
 )

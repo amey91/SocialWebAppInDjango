@@ -66,10 +66,12 @@ def home(request):
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=request.user)
     groups = [membership.group for membership in memberships]
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
 
     context['member'] = member
     context['groups'] = groups
-    context['profile'] = profile;
+    context['profile'] = profile
+    context['stocks'] = stocks
     context['errors'] = errors
     return render(request, 'moneyclub/index.html', context)
 
