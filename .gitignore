@@ -1,5 +1,5 @@
 # Class-specific section #
-venv
+myenv
 #staticfiles
 feedback/
 backup*/
