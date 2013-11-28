@@ -5,7 +5,7 @@ import os
 PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__)) + '/'
 #os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
