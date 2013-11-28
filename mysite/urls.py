@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -17,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^', include('moneyclub.urls')),
     url(r'^moneyclub/groups/', include('moneyclub.groups.urls')),
     url(r'^moneyclub/member/', include('moneyclub.member.urls')),
+    url(r'^static/(.*)$', 'django.views.static.serve', { 'document_root': settings.STATIC_ROOT }),
 )
