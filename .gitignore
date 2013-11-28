@@ -20,6 +20,7 @@ mysite/
 *.pot
 *.pyc
 local_settings.py
+mysite/local_settings.py
 *.py[cod]
 
 # C extensions
