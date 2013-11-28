@@ -1,0 +1,54 @@
+{% extends "moneyclub/index.html"%}
+
+  {% block headblock %}
+    {% block title %}
+    <title>{{group_name}}</title>
+    {% endblock title %}
+    
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet">
+  {% endblock headblock %}
+
+    {% block contentsblock %}
+  
+         {% block jumbotron %} 
+          <div class="jumbotron">
+           <div class="container">
+    <div class="row">
+        <div class="col-md-6 ">
+            <h1 class="text-center login-title">Add User</h1>
+            <div class="account-wall">
+                
+                <form class="form-signin" action="/moneyclub/groups/add_members/" method="post" >
+                <input type="text" class="form-control" placeholder="Email of new user" required autofocus name="email" >
+                Select a group you own:<select name="select_group">
+ {%for item in groups%}
+  <option value="{{item.name}}">{{item.name}}</option>
+  {%endfor%}
+ 
+</select>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Add User!</button>
+
+                {%csrf_token%}
+                </form>
+            </div>
+            <small><a href="/moneyclub/groups/club_create" class="text-center new-account">Create a new Money Club</a></small>
+        </div>
+    </div>
+</div>
+            
+          </div> <!-- jumbotron -->
+    {% endblock jumbotron %} 
+
+    {% block post%}
+    {% endblock post%}
+
+    {% block articles %}
+    {% endblock articles %}
+
+      
+
+    {% endblock contentsblock %}
