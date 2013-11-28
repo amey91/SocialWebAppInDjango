@@ -22,6 +22,13 @@ def get_photo_group(request, id):
     content_type = guess_type(entry.picture.name)
     return HttpResponse(entry.picture, mimetype=content_type)
 
+def get_photo_article(request, id):
+    entry = get_object_or_404(Article, id=id)
+    if not entry.picture:
+        raise Http404
+    content_type = guess_type(entry.picture.name)
+    return HttpResponse(entry.picture, mimetype=content_type)
+
 
 def club_home(request,id):
     context = {}    
@@ -78,8 +85,7 @@ def club_create_submit(request):
         print "form is not valid"
         return render(request, 'moneyclub/create_moneyclub.html', context)
     
-    #if you don't want to use model forms:
-    ''' 
+    #if you don't want to use model forms: 
     name=request.POST['name']
     owner = request.user
     description = request.POST['description']
@@ -89,24 +95,17 @@ def club_create_submit(request):
     print "group saved"
     print "group name:"+g.name
     print "group id:"+str(g.id)
-    '''
+    """
     form.save()
     errors.append("Group created successfully!")
     context['errors']=errors
     g=Group.objects.get(name=request.POST['name']);
-    context ['group'] = g
-    #all the keywords for the group to be display4ed in separate blocks.
+    """
+    context['group_name'] = g.name
+    context['description'] = g.description
     str1= g.keywords
-    context['keywords'] =str1.split(",")
-    context['group'] = g
-    
-    #all the articles of the group
-    articles = g.articleofgroup.all()
-    context['articles']=articles
-    
-    #all members of the group arranged by decreasing number of points
-    #m = GroupMembership.objects.filer(group=g).orderBy(points)
-    #context['members'] = m
+    context['keywords'] =str1.split(",") 
+    context['id']=g.id
     return render(request, 'moneyclub/group_home_page.html', context)
 
 @transaction.commit_on_success
@@ -203,9 +202,7 @@ def post_article(request,groupID):
     #check for missing fields
     if not 'description' in request.POST or not request.POST['description']:
         errors.append('description is required')
-    if not 'title' in request.POST or not request.POST['title']:
-        errors.append('description is required')
-    
+        
     #check if poster is a member of the group
     group1=Group.objects.get(id=groupID)
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
@@ -216,16 +213,14 @@ def post_article(request,groupID):
         print errors
         context['errors']= errors
         return render(request, 'moneyclub/post_article.html', context) 
-    desc="hello worldasdasdaasd"
+    
     new_entry = Article(groupId =group1,user=request.user,articleType=1)
     #new_entry.save()
-    article = CreateArticleForm(request.POST, request.FILES, instance=new_entry   )
-    if not article.is_valid():     
-        context['article'] = article
-        context['error'] = "Form Not Valid"
-        return render(request, 'moneyclub/article.html', context)
-    article.save()
-
+    form = CreateArticleForm(request.POST, request.FILES, instance=new_entry   )
+    if not form.is_valid():
+        return render(request, 'moneyclub/error.html', context)
+    article = form.save()
+    
     context['article'] = article
     context['group'] = group1
     user = request.user
@@ -303,6 +298,9 @@ def member_management(request, groupID):
     context['groups'] = grp
 
     return render(request, 'moneyclub/member_management.html',context  );
+
+def temp(request):
+    return render(request, 'moneyclub/temp.html',{});
 
 
 

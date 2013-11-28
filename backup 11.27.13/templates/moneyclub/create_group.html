@@ -1,0 +1,32 @@
+{% extends "moneyclub/login_template.html" %}
+
+  {% block headblock %}
+
+    <!-- title and scripts -->
+    {% block title %}
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/static/dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet">
+
+    {% endblock headblock %}
+
+    {% block contentsblock %}
+    <div class="container">
+
+      <form class="form-signin" >
+        <h2 class="form-signin-heading">Sign up Moneyclub</h2>
+        <input type="text" class="form-control" placeholder="Username" autofocus>
+        <input type="text" class="form-control" placeholder="Email address" >
+        <input type="password" class="form-control" placeholder="Password">
+        <input type="password" class="form-control" placeholder="Confirm Password">
+        
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+      </form>
+
+    </div> <!-- /container -->
+
+  {% endblock contentsblock %}

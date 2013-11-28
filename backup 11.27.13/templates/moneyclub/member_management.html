@@ -1,0 +1,149 @@
+{% extends "moneyclub/login_template.html" %}
+
+  {% block headblock %}
+
+    <!-- title and scripts -->
+    {% block title %}
+    <title>Off Canvas Template for Bootstrap</title>
+    {% endblock title %}
+    <!-- Bootstrap core CSS -->
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+  
+  {% endblock headblock %}
+
+  {% block contentsblock %}
+      <br><br>
+<div class="container">
+ <div class="well col-sm-12 col-md-8 col-md-offset-2">
+        <div class="row user-row">
+            
+            <div class="col-md-5">
+                <h4><span class="glyphicon glyphicon-plus-sign"  style="color:green;"></span> Add Members to Money Club</h4>
+            </div>
+            <div class="col-md-1 dropdown-user pull-right   " data-for=".cyruxx">
+                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+            </div>
+        </div>
+        <div class="row user-infos cyruxx">
+            <div class="col-sm-10 col-md-10 col-md-offset-1">
+                <div class="panel panel-primary">
+                    
+                    <div class="panel-body">
+                        <div class="container">
+                            <div class="row">
+                                <form class="form-signin" action="/moneyclub/groups/add_members/" method="post" >
+                                <div class="col-md-6 ">
+                                   
+                                        <input type="text" class="form-control" placeholder="Email of new user" required autofocus name="email" >
+                                        Select a group you own:
+                                        <select name="select_group">
+                                        {%for item in groups%}
+                                            <option value="{{item.name}}">{{item.name}}</option>
+                                        {%endfor%}
+                         
+                                        </select>
+                                        
+                                </div>
+                                <div class="col-md-3 pull-right">
+                                    <button class="btn btn-lg btn-success btn-block" type="submit">Add User!</button>
+                                </div>
+                            {%csrf_token%}
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row user-row">
+            
+            <div class="col-md-5">
+                <h4><span class="glyphicon glyphicon-search" style="color:blue;"></span> View Club Members</h4>
+            </div>
+            <div class="col-md-1 dropdown-user pull-right" data-for=".alexanderMahrt">
+                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+            </div>
+        </div>
+        <div class="row user-infos alexanderMahrt">
+            <div class="col-sm-10 col-md-10 col-md-offset-1">
+                <div class="panel panel-primary">
+                    
+                    
+                    <div class="panel-body">
+                        <div class="container">
+                         <form class="form-signin" action="/moneyclub/groups/view_group_members2/" method="post" >
+                                        
+                        Select a group you own:
+                        <select name="select_group">
+                         {%for item in groups%}
+                          <option value="{{item.name}}">{{item.name}}</option>
+                          {%endfor%}
+                         
+                        </select>
+                          <button class="btn btn-primary btn-primary" type="submit">
+                            <span class="glyphicon glyphicon-pushpin"></span>
+                            Get Members
+                          </button>
+
+                        {%csrf_token%}
+                        </form>
+                    </div> <!--/.container-->
+                    </div>
+              
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row user-row">
+ 
+            <div class="col-md-5">
+                <h4 ><span class="glyphicon glyphicon-minus-sign" style="color:red;"></span> Block Club Members</h4>
+            </div>
+            <div class="col-md-1 dropdown-user pull-right" data-for=".myUsername">
+                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+            </div>
+        </div>
+        <div class="row user-infos myUsername">
+            <div class="col-sm-10 col-md-10 col-md-offset-1">
+                <div class="panel panel-primary">
+                   <div class="panel-body">
+                                                <div class="container">
+                         <form class="form-signin" action="/moneyclub/groups/view_group_members2/" method="post" >
+                                        
+                        Select a group you own:
+                        <select name="select_group">
+                         {%for item in groups%}
+                          <option value="{{item.name}}">{{item.name}}</option>
+                          {%endfor%}
+                         
+                        </select>
+                          <button class="btn btn-danger" type="submit">
+                            <span class="glyphicon glyphicon-pushpin"></span>
+                            Block Members
+                          </button>
+
+                        {%csrf_token%}
+                        </form>
+                    </div> <!--/.container-->
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    
+     
+ {% endblock contentsblock %}

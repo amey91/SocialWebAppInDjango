@@ -10,8 +10,11 @@ urlpatterns = patterns('',
     url(r'^club_create_submit', 'moneyclub.groups.views.club_create_submit'),
     url(r'^club_create', 'moneyclub.groups.views.club_create'),
     url(r'^get_photo_group/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_group',name='group-photo'),
+    url(r'^get_photo_article/(?P<id>\d+)/$', 'moneyclub.groups.views.get_photo_article',name='article-photo'),
     url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
     url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
+    #donnot delete this. I use this for testing
+    url(r'^temp/$', 'moneyclub.groups.views.temp'),
     
     url(r'^view_group_members2/$', 'moneyclub.groups.views.view_group_members2'),
     url(r'^view_group_members1/$', 'moneyclub.groups.views.view_group_members1'),
@@ -22,7 +25,7 @@ urlpatterns = patterns('',
 
     url(r'^member-management/(?P<groupID>\d+)/$', 'moneyclub.groups.views.member_management', name='member_management'),
     #url(r'^profile/(?P<uname>\w+)/$', 'grumblr.profile.views.profile1'),
-	#url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'grumblr/signin.html'}),
+    #url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'grumblr/signin.html'}),
     # Route to logout a user and send them back to the login page
     #url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     #url(r'^becomefollower/(?P<uname>\w+)/$', 'grumblr.views.becomefollower1'),

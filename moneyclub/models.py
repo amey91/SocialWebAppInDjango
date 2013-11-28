@@ -28,34 +28,33 @@ class Invite(models.Model):
         return self.theInvitedOne.username
     
 class Article(models.Model):
-	#same for both types 	
-	groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
-	#same for both types
-
-	user=models.ForeignKey(User, blank=False,related_name="articleby")
-	#articletype = 1 for generic articles
-	#articletype = 2 for events
-	articleType = models.IntegerField(default=0, blank=True, null=True)
-    
+    #same for both types 	
+    groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
+    #same for both types
+    user=models.ForeignKey(User, blank=False,related_name="articleby")
+    #articletype = 1 for generic articles
+    #articletype = 2 for events
+    articleType = models.IntegerField(default=0, blank=True, null=True)
     #same for both types 
-	description = models.CharField(max_length=400,blank=True)
+    description = models.CharField(max_length=400,blank=True)
     #same for both types 
-	picture = models.ImageField(upload_to="article_pics", blank=True)
+    picture = models.ImageField(upload_to="article_pics", blank=True)
     #date and time of creation 
-	#same for both types 
-	datetime=models.DateTimeField(auto_now_add='true')
     #same for both types 
-	title = models.CharField(max_length=80)
-	#stores link for articles
-	#stores location for events
-	content = models.CharField(max_length=2000, blank=True)
-	#date and time of the actual event
-	#blank for article
-	eventdatetime = models.CharField(max_length=100, blank=True)
-	def __unicode__(self):
-		return self.description
-	class Meta:
-		ordering=['-datetime']
+    datetime=models.DateTimeField(auto_now_add='true')
+    #same for both types 
+    title = models.CharField(max_length=80)
+    #stores link for articles
+    #stores location for events
+    content = models.CharField(max_length=2000, blank=True)
+    #date and time of the actual event
+    #blank for article
+    eventdatetime = models.CharField(max_length=100, blank=True)
+    
+    def __unicode__(self):
+        return self.description
+    class Meta:
+        ordering=['-datetime']
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")
@@ -76,7 +75,7 @@ class GroupMembership(models.Model):
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
-        return self.group
+        return self.user.username + "  'memberOf'  " + self.group.name 
     
 class UserProfile(models.Model):
     user=models.OneToOneField(User,blank=False,related_name="profile")
@@ -99,20 +98,3 @@ class Member(models.Model):
 
     def __unicode__(self):
         return self.user.username
-
-class StockOfInterest(models.Model):
-    stock_name=models.CharField(max_length=10)
-    price=models.CharField(max_length=10,blank=True,null=True)
-    change=models.CharField(max_length=10,blank=True,null=True)
-    percent_change=models.CharField(max_length=10,blank=True,null=True)
-
-    def __unicode__(self):
-        return self.stock_name
-    class Meta:
-        abstract = True
-
-class UserStockOfInterest(StockOfInterest):
-    user=models.ForeignKey(User,blank=False,related_name="user_stock")
-
-    class Meta:
-        app_label = "moneyclub"
