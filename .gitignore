@@ -1,6 +1,6 @@
 # Class-specific section #
 venv
-staticfiles
+#staticfiles
 feedback/
 backup*/
 
