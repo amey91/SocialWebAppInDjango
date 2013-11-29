@@ -1,5 +1,10 @@
 # Class-specific section #
 
+mysite\settings.py
+mysite\settings_ernest.py
+
+
+
 myenv
 #staticfiles
 
