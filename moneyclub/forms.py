@@ -79,8 +79,10 @@ class ResetPasswordForm(forms.Form):
                                 widget = forms.PasswordInput(attrs={'class':'form-control',\
                                     'placeholder':'Confirm Password', 'autofocus':'on'}))
 
+    '''
     def __init__(self, *args, **kwargs):
         super(ResetPasswordForm,self).__init__(*args,**kwargs)
+        '''
 
     def __init__(self, user=None, *args, **kwargs):
         super(ResetPasswordForm,self).__init__(*args,**kwargs)

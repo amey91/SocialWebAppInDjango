@@ -296,9 +296,11 @@ def delete_stock(request):
 
 @login_required
 @transaction.commit_on_success
+
 def upvote(request):
     context = {}
     errors=[]
+    '''
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -334,6 +336,7 @@ def upvote(request):
                 errors.append('UpVote failed')
         
     context['status']='failure'
+    '''
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
@@ -341,6 +344,7 @@ def upvote(request):
 def downvote(request):
     context = {}
     errors=[]
+    '''
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -386,7 +390,6 @@ def downvote(request):
             except:
                 errors.append('UpVote failed')
         
-    context['status']='failure'
+    context['status']='failure' 
+    '''
     return HttpResponse(json.dumps(context), mimetype='application/json')
-
-
