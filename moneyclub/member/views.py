@@ -25,7 +25,7 @@ from django.utils import simplejson
 
 from moneyclub.models import *
 from moneyclub.forms import *
-#from moneyclub import settings
+from mysite.settings import *
 
 import ystockquote
 
@@ -222,6 +222,7 @@ def get_user_stock(request):
 def add_stock(request):
     context={}
     errors=[]
+    user = request.user
     if not 'stock_name' in request.POST or not request.POST['stock_name']:
         errors.append('A stock name is needed')
         context['status'] = 'failure'
@@ -229,7 +230,8 @@ def add_stock(request):
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
     stockinfo = ystockquote.get_all(stock_name)
-    if UserStockOfInterest.objects.filter(stock_name=stock_name):
+    #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
+    if user.user_stock.filter(stock_name=stock_name):
         errors.append('Stock already added')
         context['status'] = 'failure'
         context['errors'] = errors

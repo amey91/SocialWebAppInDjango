@@ -59,6 +59,7 @@ def create_group(request):
 def home(request):
     errors = []
     context = {}
+    profile = []
     try:
         profile = UserProfile.objects.get(user=request.user) 
         profile = ProfileForm(instance=profile)
