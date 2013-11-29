@@ -362,8 +362,152 @@ def group_settings(request, groupID):
     context['errors'] = errors
     return render(request, 'moneyclub/edit_moneyclub.html', context)
     
+@login_required
+def get_group_stock(request):
+    print "get_user_stock called"
+    errors = []
+    if not 'group_id' in request.GET or not request.GET['group_id']:
+        errors.append('Group not specified')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    group_id = request.GET['group_id']
+    try:
+        group = Group.objects.get(id=group_id)
+    except ObjectDoesNotExist:
+        errors.append('Group not found')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    
+    
+    stocks = group.group_stock.all()
+    
+    for stock in stocks:
+        allinfo = ystockquote.get_all(stock.stock_name)
+
+        stock.price=allinfo['ask_realtime'] if len(allinfo['ask_realtime'])<6 else allinfo['ask_realtime'][0:5]
+
+        stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
+        stock.percent_change=allinfo['change_percent'].strip("\"")
+        stock.save()
+        
+    context={'stocks':stocks}
+    
+    return render(request, 'xml/stock.xml', context, content_type='application/xml');
+
+@login_required
+@transaction.commit_on_success
+def add_stock(request):
+    context={}
+    errors=[]
+    group = []
+    user = request.user
+    if not 'group_id' in request.POST or not request.POST['group_id']:
+        errors.append('Group not specified')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    group_id = request.POST['group_id']
+    try:
+        group = Group.objects.get(id=group_id)
+    except ObjectDoesNotExist:
+        errors.append('Group not found')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    # check if the user is admin
+    if not is_admin(request.user, group):
+        errors.append('You donnot have the authority')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
     
 
+    if not 'stock_name' in request.POST or not request.POST['stock_name']:
+        errors.append('A stock name is needed')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    stock_name = request.POST['stock_name']
+    stockinfo = ystockquote.get_all(stock_name)
+
+    #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
+    if group.group_stock.filter(stock_name=stock_name):
+
+        errors.append('Stock already added')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+    
+    if stockinfo['shares_owned'] =="\"-\"" or stockinfo['shares_owned'] =="N/A":
+        errors.append('No matching stock found')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+    print "stock found"
+    stock = GroupStockOfInterest(group=group, stock_name=stock_name)
+    stock.price=stockinfo['ask_realtime']
+    stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
+    stock.percent_change=stockinfo['change_percent'].strip("\"")
+    stock.save()
+    context['stock_name']=stock_name
+    context['price'] = stock.price
+    context['change'] = stock.change
+    context['pctchange'] = stock.percent_change
+    context['stock_id'] = stock.id
+    context['status'] = 'success'
+
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+@login_required
+@transaction.commit_on_success
+def delete_stock(request):
+    context={}
+    errors=[]
+    user = request.user
+    if not 'group_id' in request.POST or not request.POST['group_id']:
+        errors.append('Group not specified')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    group_id = request.POST['group_id']
+    try:
+        group = Group.objects.get(id=group_id)
+    except ObjectDoesNotExist:
+        errors.append('Group not found')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    # check if the user is admin
+    if not is_admin(request.user, group):
+        errors.append('You donnot have the authority')
+        context['status'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(request, context, mimetype='application/json')
+    
+    if 'stock_id' in request.POST and request.POST['stock_id']:
+        stock_id = request.POST['stock_id']
+
+        try:
+            stock_to_delete = GroupStockOfInterest.objects.get(id=stock_id)
+            stock_to_delete.delete()
+            context['status']='success'
+            print 'stock successfully deleted'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+
+        except ObjectDoesNotExist:
+            erros.append('delete error!')
+            context['status']='failure'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+    erros.append('delete error!')
+    context['status']='failure'
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+def is_admin(user, group):
+    # check whether the user is an admin, who has the authority
+    membership = user.groupmembername.get(group=group)
+    return membership.is_admin
     
 
     

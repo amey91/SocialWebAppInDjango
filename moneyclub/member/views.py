@@ -230,6 +230,7 @@ def get_user_stock(request):
     return render(request, 'xml/stock.xml', context, content_type='application/xml');
 
 @login_required
+@transaction.commit_on_success
 def add_stock(request):
     context={}
     errors=[]

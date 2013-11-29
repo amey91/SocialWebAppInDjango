@@ -98,6 +98,10 @@ class Member(models.Model):
     user=models.OneToOneField(User,blank=False,related_name="member")
     total_points = models.IntegerField(default=0)
     level=models.IntegerField(default=0)
+    # type of the member:
+    #   0 : normal member,
+    #   1 : admin
+    memberType = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.user.username
@@ -131,4 +135,11 @@ class UserStockOfInterest(StockOfInterest):
 
     class Meta:
         app_label = "moneyclub"
+
+class ClubStockOfInterest(StockOfInterest):
+    group=models.ForeignKey(Group,blank=False,related_name="club_stock")
+
+    class Meta:
+        app_label = "moneyclub"
+
 

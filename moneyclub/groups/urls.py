@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^member-management/(?P<groupID>\d+)/$', 'moneyclub.groups.views.member_management', name='member_management'),
     url(r'^group-settings/(?P<groupID>\d+)/$', 'moneyclub.groups.views.group_settings', name='group_settings'),
     
-  
+    url(r'^add-stock$','moneyclub.groups.views.add_stock'),
+    url(r'^delete-stock$','moneyclub.groups.views.delete_stock'),  
 
 )
