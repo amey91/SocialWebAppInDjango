@@ -102,6 +102,19 @@ class Member(models.Model):
     def __unicode__(self):
         return self.user.username
 
+
+
+class UpVote(models.Model):
+    user=models.ForeignKey(User, blank=False, related_name="user_upvote")
+    Article=models.ForeignKey(Article,blank=False, related_name="article_upvote")
+
+    
+class DownVote(models.Model):
+    user=models.ForeignKey(User, blank=False, related_name="user_downvote")
+    Article=models.ForeignKey(Article,blank=False, related_name="article_downvote")
+
+
+
 class StockOfInterest(models.Model):
     stock_name=models.CharField(max_length=10)
     price=models.CharField(max_length=10,blank=True,null=True)

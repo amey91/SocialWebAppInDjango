@@ -272,6 +272,7 @@ def add_stock(request):
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
+@transaction.commit_on_success
 def delete_stock(request):
     context={}
     errors=[]
@@ -292,4 +293,98 @@ def delete_stock(request):
     erros.append('delete error!')
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
+
+@login_required
+@transaction.commit_on_success
+def upvote(request):
+    errors=[]
+    if 'article_id' in request.POST and request.POST['article_id']:
+        article_id = request.POST['article_id']
+        try:
+            article_to_vote = Article.objects.get(id=article_id)
+        except ObjectDoesNotExist:
+            erros.append('article not found!')
+            context['status']='failure'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+    
+        try:
+            vote = UpVote.objects.get(user=request.user and article=article_to_vote)    
+            erros.append('You can upvote this post only once')
+        except ObjectDoesNotExist:
+            vote = UpVote(user=request.user, article=article_to_vote)
+            vote.save()
+            try:
+                # reward the composer
+                composer = article_to_vote.user
+
+                member = composer.member
+                member.total_points = member.total_points+5
+                member.save()
+
+                group = Group.objects.get(id=article_to_vote.groupId)
+                membership = user.groupmembername.get(group=group)
+                membership.points = membership.points+5
+                membership.save()
+
+                context['status'] = 'success'
+                print 'upvote successfully'
+                return HttpResponse(json.dumps(context), mimetype='application/json')
+            except:
+                errors.append('UpVote failed')
+        
+    context['status']='failure'
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+@login_required
+@transaction.commit_on_success
+def downvote(request):
+    errors=[]
+    if 'article_id' in request.POST and request.POST['article_id']:
+        article_id = request.POST['article_id']
+        try:
+            article_to_vote = Article.objects.get(id=article_id)
+        except ObjectDoesNotExist:
+            erros.append('article not found!')
+            context['status']='failure'
+            return HttpResponse(json.dumps(context), mimetype='application/json')
+    
+        try:
+            vote = DownVote.objects.get(user=request.user and article=article_to_vote)   
+            erros.append('You can downvote this post only once')
+        except ObjectDoesNotExist:
+            vote = DownVote(user=request.user, article=article_to_vote)
+            vote.save()
+            try:
+                # downvote the composer
+                composer = article_to_vote.user
+
+                member = composer.member
+                member.total_points = member.total_points-2
+                member.save()
+
+                group = Group.objects.get(id=article_to_vote.groupId)
+                membership = user.groupmembername.get(group=group)
+                membership.points = membership.points-2
+                membership.save()
+                # penalize the voter
+                voter = request.user
+
+                member = voter.member
+                member.total_points = member.total_points-1
+                member.save()
+
+                group = Group.objects.get(id=article_to_vote.groupId)
+                membership = user.groupmembername.get(group=group)
+                membership.points = membership.points-1
+                membership.save()
+
+                context['status'] = 'success'
+                print 'upvote successfully'
+                return HttpResponse(json.dumps(context), mimetype='application/json')
+            except:
+                errors.append('UpVote failed')
+        
+    context['status']='failure'
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
 

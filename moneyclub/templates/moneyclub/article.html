@@ -86,7 +86,7 @@
             </div ><!--/.container -->
             {% endif %}
          
-            <div class="btn-sm-group">
+            <div class="btn-sm-group" id="{{article.id}}">
               
               <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">({{article.upvotes|length}})</button>
               <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">({{article.downvotes|length}})</button>

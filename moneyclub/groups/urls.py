@@ -27,6 +27,7 @@ urlpatterns = patterns('',
 
     url(r'^member-management/(?P<groupID>\d+)/$', 'moneyclub.groups.views.member_management', name='member_management'),
     url(r'^group-settings/(?P<groupID>\d+)/$', 'moneyclub.groups.views.group_settings', name='group_settings'),
+    
   
 
 )
