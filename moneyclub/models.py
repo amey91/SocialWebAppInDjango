@@ -75,6 +75,10 @@ class GroupMembership(models.Model):
     user=models.ForeignKey(User, blank=False,related_name="groupmembername")
     group=models.ForeignKey(Group, blank=False, related_name="groupname")
     points = models.IntegerField(default=0)    
+    # type of the member:
+    #   False : normal member,
+    #   True : admin
+    is_admin = models.BooleanField(default=False)
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
@@ -98,10 +102,7 @@ class Member(models.Model):
     user=models.OneToOneField(User,blank=False,related_name="member")
     total_points = models.IntegerField(default=0)
     level=models.IntegerField(default=0)
-    # type of the member:
-    #   0 : normal member,
-    #   1 : admin
-    memberType = models.IntegerField(default=0)
+
 
     def __unicode__(self):
         return self.user.username
@@ -136,8 +137,8 @@ class UserStockOfInterest(StockOfInterest):
     class Meta:
         app_label = "moneyclub"
 
-class ClubStockOfInterest(StockOfInterest):
-    group=models.ForeignKey(Group,blank=False,related_name="club_stock")
+class GroupStockOfInterest(StockOfInterest):
+    group=models.ForeignKey(Group,blank=False,related_name="group_stock")
 
     class Meta:
         app_label = "moneyclub"

@@ -1,8 +1,18 @@
 {% extends "moneyclub/index.html"%}
+  {% block headblock %}
   {% block title%}
 
     <title>{{group.name}}</title>
   {% endblock title%}
+  <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/stock.js"></script>
+    <script src="/static/js/edit_stock.js"></script>
+  {% endblock headblock %}
 
           {% block nav_settings %}
               <li class="dropdown">
