@@ -39,6 +39,7 @@ class Article(models.Model):
     description = models.CharField(max_length=400,blank=True, null=True)
     #same for both types 
     picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
+
     #date and time of creation 
     #same for both types 
     datetime=models.DateTimeField(auto_now_add='true')
@@ -46,10 +47,12 @@ class Article(models.Model):
     title = models.CharField(max_length=80)
     #stores link for articles
     #stores location for events
+
     content = models.CharField(max_length=2000, blank=True, null=True)
     #date and time of the actual event
     #blank for article
     eventdatetime = models.CharField(max_length=100, blank=True, null=True)
+
     
     def __unicode__(self):
         return self.description
@@ -115,3 +118,4 @@ class UserStockOfInterest(StockOfInterest):
 
     class Meta:
         app_label = "moneyclub"
+

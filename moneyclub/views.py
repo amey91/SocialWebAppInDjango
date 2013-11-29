@@ -59,7 +59,9 @@ def create_group(request):
 def home(request):
     errors = []
     context = {}
+
     profile = []
+
     try:
         profile = UserProfile.objects.get(user=request.user) 
         profile = ProfileForm(instance=profile)
@@ -120,12 +122,14 @@ verify your email address and complete the registration of your account:
 """ % (request.get_host(), 
        reverse('confirm', args=(new_user.username, token)))
 
+
     email = EmailMessage(subject="Verify your email address",
               body= email_body,
               from_email=settings.EMAIL_HOST_USER,
               to=[new_user.email])
     
     email.send()
+
 
     context['email'] = form.cleaned_data['email']
     return render(request, 'moneyclub/needs-confirmation.html', context)
@@ -147,4 +151,3 @@ def confirm_registration(request, username, token):
     member.save();
     return render(request, 'moneyclub/confirmed.html', {})
 
-    
