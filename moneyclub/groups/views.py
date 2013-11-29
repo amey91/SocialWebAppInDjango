@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate
 from moneyclub.models import *
 from moneyclub.forms import *
 from django.db import transaction 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -86,28 +86,21 @@ def club_create_submit(request):
         return render(request, 'moneyclub/create_moneyclub.html', context)
     
     #if you don't want to use model forms: 
-    name=request.POST['name']
-    owner = request.user
-    description = request.POST['description']
-    keywords = request.POST['keywords']
-    g = Group(name=name,owner=owner,description=description,keywords=keywords)
-    g.save()
+
+    form.save()
+    g=new_entry
+    membership = GroupMembership(user=request.user, group=g)
+    membership.save()
     print "group saved"
     print "group name:"+g.name
     print "group id:"+str(g.id)
-    """
-    form.save()
-    errors.append("Group created successfully!")
-    context['errors']=errors
-    g=Group.objects.get(name=request.POST['name']);
-    """
-    context['group_name'] = g.name
-    context['description'] = g.description
+    
+    context['group'] = g
     str1= g.keywords
     context['keywords'] =str1.split(",") 
-    context['id']=g.id
-    return render(request, 'moneyclub/group_home_page.html', context)
-
+    
+    return HttpResponseRedirect(reverse('grouphomepage',args=(g.id,)),context)
+    
 @transaction.commit_on_success
 def add_members_generic(request):
     context={}
@@ -191,8 +184,28 @@ def get_group_description(request,id1):
     g=Group.objects.get(id=id1)
     return render(request, 'moneyclub/group_home_page.html', {'group':g})
 
+@login_required
+def article(request,articleID):
+    errors=[]
+    context = {}
 
-  
+    try:
+        article = Article.objects.get(id=articleID)
+        group = Group.objects.get(id=article.groupId)
+        
+    except ObjectDoesNotExist:
+        errors.append('Article not found')
+
+    context['article']=article
+    context['group'] = group
+    context['errors'] = errors
+
+    return render(request, '/moneyclub/article.html', context)
+
+
+
+
+@login_required
 def post_article(request,groupID):
     errors = []
     context = {}
@@ -235,7 +248,7 @@ def post_article(request,groupID):
     str1= g.keywords
     context['keywords'] =str1.split(",") 
     context['id']=g.id
-    return render(request, 'moneyclub/article.html', context)
+    return HttpResponseRedirect(reverse('article', args=(article.id,)), context)
 
     
 def add_comment_on_article(request,groupID,articleID):
@@ -302,9 +315,55 @@ def member_management(request, groupID):
 
 
 @login_required
+@transaction.commit_on_success
 def group_settings(request, groupID):
+    errors = []
+    context = {}    
+    group = []
+    group_to_edit = []
+    try:
+        group_to_edit = Group.objects.get(id=groupID)
+        group = CreateGroupForm(instance=group_to_edit)
+    except ObjectDoesNotExist:
+        errors.append('Group not found!')
 
-    return render(request, 'moneyclub/temp.html')
+       
+    if request.method=='GET':
+        context['group'] = group_to_edit
+        
+        return render(request, 'moneyclub/edit_moneyclub.html', context)
+    group = CreateGroupForm(request.POST,request.FILES, instance=group_to_edit) 
+    
+    try:
+        g = Group.objects.get(name=request.POST['name']) 
+        if g!=group_to_edit:
+            errors.append('The name is already taken')
+            
+        elif group.is_valid():
+            group.save()
+            return HttpResponseRedirect(reverse('grouphomepage',args=(group_to_edit.id,)),context)
+        else:
+            errors.append('required fields are missing')
+    
+    except ObjectDoesNotExist:
+        if  group.is_valid():
+    
+            group.save()
+
+            return HttpResponseRedirect(reverse('grouphomepage',args=(group_to_edit.id,)),context)
+        else:
+            errors.append('required fields are missing')
+    
+    context['group'] = group_to_edit
+    
+    context['errors'] = errors
+    return render(request, 'moneyclub/edit_moneyclub.html', context)
+    
+    
+
+    
+
+    
 def temp(request):
     return render(request, 'moneyclub/temp.html')
 

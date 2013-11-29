@@ -4,7 +4,7 @@
 
     <!-- title and scripts -->
     {% block title %}
-    <title>Create a Money Club</title>
+    <title>Edit Money Club Profile</title>
     {% endblock title %}
     <!-- Bootstrap core CSS -->
     <link href="/static/dist/css/bootstrap.css" rel="stylesheet">
@@ -18,23 +18,23 @@
     <div class="container">
     
  
-    <form enctype="multipart/form-data"  action="/moneyclub/groups/club_create_submit" method="post" class="form-signin">
-     <h2 class="form-signin-heading">Create a Money Club!</h2>
+    <form enctype="multipart/form-data"  action="{% url 'group_settings' group.id %}" method="post" class="form-signin">
+     <h2 class="form-signin-heading">{{group.name}}'s Profile</h2>
         		<table>
         		
 <tr>
     <td>Group Name<font style="color:red">*</font>:</td>
-    <td class="grumblr-green"><input class="form-control" type="text" name="name" placeholder="Group Name"></input></td>
+    <td class="grumblr-green"><input class="form-control" type="text" name="name" value="{{group.name}}"></input></td>
 </tr>
 
 <tr>
     <td width="400">Description<font style="color:red">*</font>: <br/> <small><font style="color:green">Upto 3000 characters</font></small></td>
-    <td class="grumblr-orange"><textarea size="3000" class="form-control" type="text" name="description" placeholder="Group Description"></textarea></td>
+    <td class="grumblr-orange"><textarea size="3000" class="form-control" type="text" name="description" value="{{group.description}}">{{group.description}}</textarea></td>
 </tr>
 
 <tr>
     <td>Keywords: <br/><small><font style="color:green">Comma Separated</font><br/> </small> </td>
-    <td class="grumblr-orange"><input class="form-control" type="text" name="keywords" placeholder="Keywords separated by commas"></input></td>
+    <td class="grumblr-orange"><input class="form-control" type="text" name="keywords" value="{{group.keywords}}"></input></td>
 </tr>
 <tr>
 	<td><label for="id_picture">Picture:</label></td>

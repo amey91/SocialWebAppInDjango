@@ -10,7 +10,7 @@ class Group(models.Model):
     name=models.CharField(max_length=30,blank=False)
     owner = models.ForeignKey(User,blank=False,related_name="groupowner")
     description = models.CharField(max_length=10000)
-    keywords = models.CharField(max_length=900)
+    keywords = models.CharField(max_length=900, blank=True, null=True)
     datetime=models.DateTimeField(auto_now_add='true')
     picture = models.ImageField(upload_to="group_pics", blank=True)
     
@@ -36,9 +36,9 @@ class Article(models.Model):
     #articletype = 2 for events
     articleType = models.IntegerField(default=0, blank=True, null=True)
     #same for both types 
-    description = models.CharField(max_length=400,blank=True)
+    description = models.CharField(max_length=400,blank=True, null=True)
     #same for both types 
-    picture = models.ImageField(upload_to="article_pics", blank=True)
+    picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
     #date and time of creation 
     #same for both types 
     datetime=models.DateTimeField(auto_now_add='true')
@@ -46,10 +46,10 @@ class Article(models.Model):
     title = models.CharField(max_length=80)
     #stores link for articles
     #stores location for events
-    content = models.CharField(max_length=2000, blank=True)
+    content = models.CharField(max_length=2000, blank=True, null=True)
     #date and time of the actual event
     #blank for article
-    eventdatetime = models.CharField(max_length=100, blank=True)
+    eventdatetime = models.CharField(max_length=100, blank=True, null=True)
     
     def __unicode__(self):
         return self.description

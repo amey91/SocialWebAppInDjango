@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.db import transaction 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -73,7 +73,8 @@ def save_profile(request):
     
     context = {'profile': profile, 'errors': errors}
 
-    return render(request, 'moneyclub/profile.html',context)
+    return HttpResponseRedirect(reverse('profile'),context)
+    #return render(request, 'moneyclub/profile.html',context)
 
 @login_required
 def get_photo(request, id):
@@ -107,8 +108,8 @@ def reset_password(request):
     user.set_password(password)
     user.save()
     
-    return render(request, 'moneyclub/reset-password.html', context)
-
+    return HttpResponseRedirect(reverse('reset_password'),context)
+    
 @login_required
 @transaction.commit_on_success
 def reset_password_by_email(request):
