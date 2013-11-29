@@ -7,8 +7,10 @@ function sendRequest() {
     } else {
         req = new ActiveXObject("Microsoft.XMLHTTP");
     }
+    var group_id = $(".stock").attr("id")
     req.onreadystatechange = handleResponse;
-    req.open("GET", "/moneyclub/member/get-stock-info", true);
+    req.open("GET", "/moneyclub/groups/get-stock-info/"+group_id, true);
+
     req.send();
 }
 
@@ -18,7 +20,7 @@ function handleResponse() {
     if (req.readyState != 4 || req.status != 200) {
         return;
     }
-    var stock_table = $("#stock  table")
+    var stock_table = $(".stock  table")
     var stock_list = stock_table.find("tbody tr")
     var stock=$(".well.sidebar-nav#stock").find("tbody").find("tr").eq(0)
      var xmlData = req.responseXML;

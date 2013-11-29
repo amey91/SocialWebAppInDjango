@@ -18,7 +18,7 @@ function handleResponse() {
     if (req.readyState != 4 || req.status != 200) {
         return;
     }
-    var stock_table = $("#stock  table")
+    var stock_table = $(".stock  table")
     var stock_list = stock_table.find("tbody tr")
     var stock=$(".well.sidebar-nav#stock").find("tbody").find("tr").eq(0)
      var xmlData = req.responseXML;
@@ -33,7 +33,7 @@ function handleResponse() {
         info[2] = stocks[i].getElementsByTagName("change")[0].textContent;
         info[3] = stocks[i].getElementsByTagName("pctchange")[0].textContent;
         var stock_id = stocks[i].getElementsByTagName("stock_id")[0].textContent;
-        //console.log("price"+price+",change"+change+",pctchange"+pctchange)
+        console.log("price"+info[1]+",change"+info[2]+",pctchange"+info[3])
         //console.log("stock id: "+stock_id);
         //console.log(stock_list.eq(i).attr("id"));
         for (j=0; j<stock_list.length;j++){

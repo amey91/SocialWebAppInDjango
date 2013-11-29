@@ -2,7 +2,9 @@ $(document).ready(function(){
 
 	$(".stock tbody tr").each(function(){
 		var tds=$(this).find("td");
+		console.log(tds.eq(2))
 		if (tds.eq(2).html() < 0){
+
 			 tds.eq(2).attr("style", "color:red")
             tds.eq(3).attr("style", "color:red")
         } else{
@@ -10,7 +12,8 @@ $(document).ready(function(){
             tds.eq(3).attr("style", "color:green")
         }
 	});
-
+	var group_id = $(".stock").attr("id")
+		
 	var add_stock = function(){
 		event.preventDefault();
 		var stock_name = $("input.form-control.add-stock").val();
@@ -20,13 +23,13 @@ $(document).ready(function(){
 			var stock_table = $(".stock  table")
 
 			stock_name = stock_name.toUpperCase();
-			var data = {"stock_name": stock_name}
+			var data = {"stock_name": stock_name, 'group_id':group_id}
 			var add_new_stock=function(response){
-				//console.log("response:")
-				//console.log(response)
+				console.log("response:")
+				console.log(response)
 
 				if (response.status=="success"){
-					//console.log(response)
+					console.log(response)
 					var info = new Array();
 					info[0] = response.stock_name;
 					info[1] = response.price;
@@ -65,8 +68,8 @@ $(document).ready(function(){
 				
 			}
 		}
-		var data={'stock_name': stock_name};
-        var args = {type:"POST", url: "/moneyclub/member/add-stock", data:data,  success:add_new_stock};
+		var data={'stock_name': stock_name, 'group_id':group_id};
+        var args = {type:"POST", url: "/moneyclub/groups/add-stock", data:data,  success:add_new_stock};
         $.ajax(args);
         return false;
 	}
@@ -87,8 +90,8 @@ $(document).ready(function(){
             }
 		}
 		
-		var data={'stock_id': id};
-        var args = {type:"POST", url: "moneyclub/member/delete-stock", data:data,  success:deleted};
+		var data={'stock_id': id, 'group_id':group_id};
+        var args = {type:"POST", url: "/moneyclub/groups/delete-stock", data:data,  success:deleted};
         $.ajax(args);
         
         return false;

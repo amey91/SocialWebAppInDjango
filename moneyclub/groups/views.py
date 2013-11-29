@@ -8,12 +8,17 @@ from moneyclub.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 
+import json
+from django.utils import simplejson
+
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
+
+import ystockquote
 
 
 def get_photo_group(request, id):
@@ -44,7 +49,11 @@ def club_home(request,id):
     
     #all the articles of the group
     articles = g.articleofgroup.all()
+    
+    stocks= g.group_stock.all()
+
     context['articles']=articles
+    context['stocks']=stocks
     
     #all members of the group arranged by decreasing number of points
     #m = GroupMembership.objects.filer(group=g).orderBy(points)
@@ -90,7 +99,7 @@ def club_create_submit(request):
 
     form.save()
     g=new_entry
-    membership = GroupMembership(user=request.user, group=g)
+    membership = GroupMembership(user=request.user, group=g, is_admin=True)
     membership.save()
     print "group saved"
     print "group name:"+g.name
@@ -192,7 +201,7 @@ def article(request,articleID):
 
     try:
         article = Article.objects.get(id=articleID)
-        group = Group.objects.get(id=article.groupId)
+        group = article.groupId
         
     except ObjectDoesNotExist:
         errors.append('Article not found')
@@ -201,7 +210,7 @@ def article(request,articleID):
     context['group'] = group
     context['errors'] = errors
 
-    return render(request, '/moneyclub/article.html', context)
+    return render(request, 'moneyclub/article.html', context)
 
 
 
@@ -363,15 +372,12 @@ def group_settings(request, groupID):
     return render(request, 'moneyclub/edit_moneyclub.html', context)
     
 @login_required
-def get_group_stock(request):
-    print "get_user_stock called"
+def get_group_stock(request,group_id):
+
+    print "get_group_stock called"
+    context={}
     errors = []
-    if not 'group_id' in request.GET or not request.GET['group_id']:
-        errors.append('Group not specified')
-        context['status'] = 'failure'
-        context['errors'] = errors
-        return HttpResponse(request, context, mimetype='application/json')
-    group_id = request.GET['group_id']
+    
     try:
         group = Group.objects.get(id=group_id)
     except ObjectDoesNotExist:
@@ -386,7 +392,8 @@ def get_group_stock(request):
     for stock in stocks:
         allinfo = ystockquote.get_all(stock.stock_name)
 
-        stock.price=allinfo['ask_realtime'] if len(allinfo['ask_realtime'])<6 else allinfo['ask_realtime'][0:5]
+        price = allinfo['last_trade_realtime_time']
+        stock.price=price if len(price)<6 else price[0:5]
 
         stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
         stock.percent_change=allinfo['change_percent'].strip("\"")
@@ -403,7 +410,9 @@ def add_stock(request):
     errors=[]
     group = []
     user = request.user
+    print "add stock group"
     if not 'group_id' in request.POST or not request.POST['group_id']:
+        print 'group'
         errors.append('Group not specified')
         context['status'] = 'failure'
         context['errors'] = errors
@@ -411,6 +420,7 @@ def add_stock(request):
     group_id = request.POST['group_id']
     try:
         group = Group.objects.get(id=group_id)
+        print 'found the group'
     except ObjectDoesNotExist:
         errors.append('Group not found')
         context['status'] = 'failure'
@@ -418,6 +428,7 @@ def add_stock(request):
         return HttpResponse(request, context, mimetype='application/json')
     # check if the user is admin
     if not is_admin(request.user, group):
+
         errors.append('You donnot have the authority')
         context['status'] = 'failure'
         context['errors'] = errors
@@ -457,7 +468,7 @@ def add_stock(request):
     context['pctchange'] = stock.percent_change
     context['stock_id'] = stock.id
     context['status'] = 'success'
-
+    
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
@@ -466,6 +477,7 @@ def delete_stock(request):
     context={}
     errors=[]
     user = request.user
+    
     if not 'group_id' in request.POST or not request.POST['group_id']:
         errors.append('Group not specified')
         context['status'] = 'failure'
@@ -502,6 +514,7 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
     erros.append('delete error!')
     context['status']='failure'
+    
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 def is_admin(user, group):

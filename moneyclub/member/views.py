@@ -148,7 +148,7 @@ as soon as possible:
     email = EmailMessage(subject="Verify your email address",
               body= email_body,
               from_email=settings.EMAIL_HOST_USER,
-              to=[new_user.email])
+              to=[user.email])
     
     email.send()
 
@@ -218,8 +218,8 @@ def get_user_stock(request):
     
     for stock in stocks:
         allinfo = ystockquote.get_all(stock.stock_name)
-
-        stock.price=allinfo['ask_realtime'] if len(allinfo['ask_realtime'])<6 else allinfo['ask_realtime'][0:5]
+        price = allinfo['last_trade_realtime_time']
+        stock.price=price if len(price)<6 else price[0:5]
 
         stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
         stock.percent_change=allinfo['change_percent'].strip("\"")
@@ -295,10 +295,14 @@ def delete_stock(request):
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
+
 @login_required
 @transaction.commit_on_success
 def upvote(request):
+
+    context = {}
     errors=[]
+    """
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -332,7 +336,7 @@ def upvote(request):
                 return HttpResponse(json.dumps(context), mimetype='application/json')
             except:
                 errors.append('UpVote failed')
-        
+       """ 
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
@@ -340,6 +344,8 @@ def upvote(request):
 @transaction.commit_on_success
 def downvote(request):
     errors=[]
+    context = {}    
+    """
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -384,7 +390,7 @@ def downvote(request):
                 return HttpResponse(json.dumps(context), mimetype='application/json')
             except:
                 errors.append('UpVote failed')
-        
+"""        
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
