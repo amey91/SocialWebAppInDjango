@@ -109,7 +109,7 @@ def club_create_submit(request):
     str1= g.keywords
     context['keywords'] =str1.split(",") 
     
-    return HttpResponseRedirect(reverse('grouphomepage',args=(g.id,)),context)
+    return render(request, 'moneyclub/group_home_page.html', context)
     
 @transaction.commit_on_success
 def add_members_generic(request):
@@ -371,6 +371,7 @@ def group_settings(request, groupID):
     context['errors'] = errors
     return render(request, 'moneyclub/edit_moneyclub.html', context)
     
+
 @login_required
 def get_group_stock(request,group_id):
 
@@ -524,5 +525,6 @@ def is_admin(user, group):
     
 
     
+
 def temp(request):
-    return render(request, 'moneyclub/temp.html')
+    return render(request, 'moneyclub/temp.html', {})

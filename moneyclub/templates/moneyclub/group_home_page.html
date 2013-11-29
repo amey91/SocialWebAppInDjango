@@ -1,9 +1,7 @@
 {% extends "moneyclub/index.html"%}
   {% block headblock %}
   {% block title%}
-
     <title>{{group.name}}</title>
-    
   {% endblock title%}
   <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -16,23 +14,6 @@
   {% endblock headblock %}
 
 
-          {% block nav_settings %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="/moneyclub/member/reset-password">Reset Password</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header"> Group Settings </li>
-                    <li><a href="{% url 'group_settings' group.id %}">Edit Group Profile</a></li>
-
-                  </li>
-                 
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-          {% endblock nav_settings %}
 
 
           {% block jumbotron %}  
@@ -43,8 +24,6 @@
               <div class="col-lg-12">
                   <div class="media">
                     
-
-
                       <div class="pull-left" >
                           <img id="ameyy" class="media-object dp img-circle" src="/moneyclub/groups/get_photo_group/{{group.id}}/" 
                           style="width: 100px;height:100px;">
@@ -110,7 +89,7 @@
                                         
                                         <input type="text" class="form-control" placeholder="Title of the article" name="title">
                                       
-                                      
+                                      <input type="text" id="article type" name="article_type" value=1 hidden ></input>
                                           <textarea class="form-control counted" name="description" placeholder="Describe the article." 
                                           rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
                                           <div class="input-group ">
@@ -153,7 +132,7 @@
                                               <div class="form-group">
                                               <label for="dtp_input2" class="col-md-3 control-label">Date </label>
                                                 <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    <input class="form-control" size="16" type="text" value="" readonly name="eventdatetime">
                                                     
                                                       <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -164,7 +143,7 @@
                                             <div class="form-group">
                                                 <label for="dtp_input3" class="col-md-3 control-label">Time </label>
                                                 <div class="input-group date form_time col-md-7" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
-                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    <input class="form-control" size="16" type="text" value="" readonly name="eventdatetime2">
                                                     
                                                     <span class="input-group-addon">
                                                       <span class="glyphicon glyphicon-time"></span>
