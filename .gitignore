@@ -1,8 +1,8 @@
 # Class-specific section #
 myenv
 #staticfiles
-feedback/
-backup*/
+#feedback/
+#backup*/
 
 # Java section #
 
