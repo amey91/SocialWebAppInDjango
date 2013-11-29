@@ -1,94 +1,96 @@
-{% extends "moneyclub/root_template.html" %}
+{% extends "moneyclub/index.html" %}
+{% block title %}<title>View Members</title>
+{% endblock title %}
 
-  {% block headblock %}
+ {% block jumbotron%}
+   <div class="jumbotron1">
+    	<div class="row">
+    <div class="container">
 
-    <!-- title and scripts -->
-    {% block title %}
-    <title>Off Canvas Template for Bootstrap</title>
-    {% endblock title %}
-    <!-- Bootstrap core CSS -->
-    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+                
+                
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/offcanvas.css" rel="stylesheet">
-  {% endblock headblock %}
-   
-  {% block bodyblock %} 
-    {% block nevbar %}
-    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="newsfeed.html">Moneyclub</a>
+                <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+		{%if not members %}<div class="alert alert-info">Internal server error. You should be more careful.</div>
+        
+        {%else%}
+        <div class="alert alert-info">
+        Members for group "<a href="/moneyclub/groups/home/{{members.0.group.id}}">{{members.0.group.name}}</a>":             
         </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <ul  class="nav navbar-nav navbar-right">
-            <form class="navbar-form navbar-left" role="search"
-                  action="#" method="post">
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search Moneyclub" name="query">
-                </div>
-                <button type="submit" class="btn btn-default">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
              
-            </form>
+            <div class="alert alert-success" style="display:none;">
+                </div>
+            <table class="table">
+                <thead>
+                    <tr><th>Member</th><th>Points</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
 
-            
-            <li ><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
-            <li ><a href="welcome.html"><span class="glyphicon glyphicon-log-out"></span></a></li> <!-- link to signin-->
-
-        </ul>
-        </div><!-- /.nav-collapse -->
-      </div><!-- /.container -->
-    </div><!-- /.navbar -->
-    {% endblock nevbar %}
-    {% block contentsblock %}
-      <!-- add your contents of the page here -->
-
+					{% for item in members%}
+					
+					{% if item.blocked == 0%}
+					
+                    <tr class="success">
+                    <td>{{item.user}}</td>
+                    <td>{{item.points}}</td>
+                    <td>
+                       <div class="btn-success">
+                       <span class="glyphicon glyphicon-ok-circle"></span> Active Member</div>          
+                    </td>
+                    <td>
+                    <a href="/moneyclub/groups/block_member/{{item.group.id}}/{{item.user.id}}/"
+                     class="btn btn-block btn-primary btn-primary">Block This Member</a>
+					</td>
+                    </tr>
+                  	{% elif item.blocked == 1 %}
+					<tr class="danger">
+                    <td>{{item.user}}</td>
+                    <td>{{item.points}}</td>
+                    <td>
+                    
+                    <div class=" btn-primary btn-danger">
+                    <span class="glyphicon glyphicon-remove-sign"></span> Blocked Member</div>
+                    </td>
+                    <td>
+                    <a href="/moneyclub/groups/unblock_member/{{item.group.id}}/{{item.user.id}}/"
+                     class="btn btn-block btn-primary btn-primary">Unblock This Member</a>
+                    </td>
+                    </tr>
+					{%endif%}                   
+                    
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
     
-<br/><br/><br/><br/><br/>
-     <div class="container">
- <form class="form-signin" action="/moneyclub/groups/view_group_members2/" method="post" >
-                Members for group "{{members.0.group.name}}":
-                <ol>
- {%for item in members%}<li>
-  {{item.user}} -- {{item.points}} points  ---{%if item.blocked == 0%}<a href="/moneyclub/groups/block_member/{{item.group.id}}/{{item.user.id}}/" class="btn btn-xs btn-danger">
-  <span class="glyphicon glyphicon-remove"></span> Block this Member</a>
-  {%else%}<div  class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-info-sign"></span> Member is blocked!</div>
-  {%endif%}<br/><br/></li>
-  {%endfor%}
-  </ol>
- 
-
-  
-    </button>
-
-                {%csrf_token%}
-                </form>
+    	{%endif%}
+    </div>
+</div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
     </div> 
-           {% endblock contentsblock %}<br/><br/><br/><br/><br/>
-     <footer>
-        <p>&copy; Company 2013</p>
-      </footer>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    {% block endscript %}
-    <script src="/static/assets/js/jquery.js"></script>
-    <script src="/static/dist/js/bootstrap.min.js"></script>
-    <script src="/static/css/offcanvas.js"></script>
-    {% endblock endscript %}
-  {% endblock bodyblock %}
-  </body>
-</html>
+          
+    
+    	</div>
+    </div>
+          
+          
+  {% endblock jumbotron%}
+  
+  
+  {% block articles %}
+  {% endblock articles %}
+          

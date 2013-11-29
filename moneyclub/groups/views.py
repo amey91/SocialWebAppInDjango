@@ -150,6 +150,8 @@ You have an invite from the group " """ +grp_name.name +""""
 
 def view_group_members2(request):
     context={}
+    if not request.POST:
+        return render(request, 'moneyclub/view_group_members2.html', {'error':"This "})
     print request.POST['select_group']
     if request.method=="GET":
         view_group_members1(request)
@@ -174,12 +176,43 @@ def menu(request):
 
 @transaction.commit_on_success   
 def block_member(request,id1,id2):
-    u=User.objects.get(id=id2)
-    g=Group.objects.get(id=id1)
-    b=GroupMembership.objects.get(user=u,group=g)
-    b.blocked=1
-    b.save()
-    return render(request, 'moneyclub/menu.html', {})
+    try:
+        u=User.objects.get(id=id2)
+        g=Group.objects.get(id=id1)
+        
+        # check if user who sent request is owner of group
+        if not g.owner==request.user:
+            return render(request, 'moneyclub/errors.html', {'errors':"Invalid Access"}) 
+          
+        b=GroupMembership.objects.get(user=u,group=g)
+        b.blocked=1
+        b.save()
+        #return members of the group
+        members=GroupMembership.objects.filter(group=g).order_by('-points')
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
+
+
+@transaction.commit_on_success   
+def unblock_member(request,id1,id2):
+    try:
+        u=User.objects.get(id=id2)
+        g=Group.objects.get(id=id1)
+        
+        # check if user who sent request is owner of group
+        if not g.owner==request.user:
+            return render(request, 'moneyclub/errors.html', {'errors':"Invalid Access"}) 
+          
+        b=GroupMembership.objects.get(user=u,group=g)
+        b.blocked=0
+        b.save()
+        #return members of the group
+        members=GroupMembership.objects.filter(group=g).order_by('-points')
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
+
 
 def get_group_description(request,id1):
     g=Group.objects.get(id=id1)
