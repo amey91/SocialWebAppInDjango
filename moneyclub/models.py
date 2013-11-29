@@ -106,12 +106,12 @@ class Member(models.Model):
 
 class UpVote(models.Model):
     user=models.ForeignKey(User, blank=False, related_name="user_upvote")
-    Article=models.ForeignKey(Article,blank=False, related_name="article_upvote")
+    article=models.ForeignKey(Article,blank=False, related_name="article_upvote")
 
     
 class DownVote(models.Model):
     user=models.ForeignKey(User, blank=False, related_name="user_downvote")
-    Article=models.ForeignKey(Article,blank=False, related_name="article_downvote")
+    article=models.ForeignKey(Article,blank=False, related_name="article_downvote")
 
 
 

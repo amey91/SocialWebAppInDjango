@@ -148,7 +148,7 @@ as soon as possible:
     email = EmailMessage(subject="Verify your email address",
               body= email_body,
               from_email=settings.EMAIL_HOST_USER,
-              to=[new_user.email])
+              to=[user.email])
     
     email.send()
 
@@ -287,29 +287,30 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
 
         except ObjectDoesNotExist:
-            erros.append('delete error!')
+            errors.append('delete error!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
-    erros.append('delete error!')
+    errors.append('delete error!')
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
 @transaction.commit_on_success
 def upvote(request):
+    context = {}
     errors=[]
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
             article_to_vote = Article.objects.get(id=article_id)
         except ObjectDoesNotExist:
-            erros.append('article not found!')
+            errors.append('article not found!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
     
         try:
             vote = UpVote.objects.get(user=request.user and article=article_to_vote)    
-            erros.append('You can upvote this post only once')
+            errors.append('You can upvote this post only once')
         except ObjectDoesNotExist:
             vote = UpVote(user=request.user, article=article_to_vote)
             vote.save()
@@ -322,7 +323,7 @@ def upvote(request):
                 member.save()
 
                 group = Group.objects.get(id=article_to_vote.groupId)
-                membership = user.groupmembername.get(group=group)
+                membership = request.user.groupmembername.get(group=group)
                 membership.points = membership.points+5
                 membership.save()
 
@@ -338,19 +339,20 @@ def upvote(request):
 @login_required
 @transaction.commit_on_success
 def downvote(request):
+    context = {}
     errors=[]
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
             article_to_vote = Article.objects.get(id=article_id)
         except ObjectDoesNotExist:
-            erros.append('article not found!')
+            errors.append('article not found!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
     
         try:
             vote = DownVote.objects.get(user=request.user and article=article_to_vote)   
-            erros.append('You can downvote this post only once')
+            errors.append('You can downvote this post only once')
         except ObjectDoesNotExist:
             vote = DownVote(user=request.user, article=article_to_vote)
             vote.save()
@@ -363,7 +365,7 @@ def downvote(request):
                 member.save()
 
                 group = Group.objects.get(id=article_to_vote.groupId)
-                membership = user.groupmembername.get(group=group)
+                membership = request.user.groupmembername.get(group=group)
                 membership.points = membership.points-2
                 membership.save()
                 # penalize the voter
@@ -374,7 +376,7 @@ def downvote(request):
                 member.save()
 
                 group = Group.objects.get(id=article_to_vote.groupId)
-                membership = user.groupmembername.get(group=group)
+                membership = request.user.groupmembername.get(group=group)
                 membership.points = membership.points-1
                 membership.save()
 
