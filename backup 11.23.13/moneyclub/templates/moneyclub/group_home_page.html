@@ -1,0 +1,420 @@
+{% extends "moneyclub/index.html"%}
+  {% block title%}
+    <title>{{group_name}}</title>
+  {% endblock title%}
+
+
+
+          {% block jumbotron %}  
+          <div class="jumbotron">
+            <div class="row">
+
+
+              <div class="col-lg-12">
+                  <div class="media">
+                    
+                      <a class="pull-left" href="#">
+                          <img id="ameyy" class="media-object dp img-circle" src="/moneyclub/groups/get_photo/{{id}}" 
+                          style="width: 100px;height:100px;">
+                      </a>
+
+                    
+                      <div class="media-body">
+                          <h4 class="media-heading">{{group_name}} </h4>
+                          <p><small>Founded by Mr. Andrew Carnegie and Mr. Scrooge MdDuck. Focused on uniting Scottish-American Bussinessmen. 
+                          Share your knowledge, information and interest in the cross-Atalantic Market with amazing people</small></p>
+                          <hr style="margin:8px auto">
+
+                                 
+                          <span class="label label-default">Scottish American</span>
+                          <span class="label label-info">Global Trading</span>
+                          <span class="label label-default">US-EU</span>
+                           <p>
+                             <a href="#" class="btn btn-primary "> Join</a>
+                          </p>
+
+                      </div>
+                  </div>
+
+              </div><!-- col-lg-5 -->
+
+            </div>
+            
+          </div> <!-- jumbotron -->
+          {% endblock jumbotron %}
+          {% block post%}
+           <div class="container">  
+            <button class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#myModal">
+              New Post
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+              <div class="modal-dialog">
+
+                <div class="modal-content">
+                  <div class="container">
+                    
+
+                    <div class="tabbable">
+                      <div class="modal-header">
+                    
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#pane1" data-toggle="tab">Article</a></li>
+                            <li><a href="#pane2" data-toggle="tab">Link</a></li>
+                            <li><a href="#pane3" data-toggle="tab">Image</a></li>
+                            <li><a href="#pane4" data-toggle="tab">Event</a></li>
+                        </ul>
+                 
+                      </div>
+                        
+                            
+                            <div class="tab-content">
+                              
+                              <div id="pane1" class="tab-pane active">
+                                <div class="container">
+                                  <div class="row">
+              
+                                                
+                                      <form accept-charset="UTF-8" action="{% url 'post_article' id%}" method="POST" id="post-article">
+                                        
+                                        <input type="text" class="form-control" placeholder="Title of the article" name="title">
+                                      
+                                      
+                                          <textarea class="form-control counted" name="content" placeholder="Type in your text" rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
+                                          <div class="modal-footer">
+                                          <button class="btn btn-info" type="submit">Post New Article</button>
+                                        </div>
+                                        {%csrf_token%}
+                                      </form>
+                                    
+                              
+                                  </div> <!--/row-->
+                                </div> <!--/container-->
+                              </div>  
+                              <div id="pane2" class="tab-pane">
+                                
+                                  <form action="#" method="POST">
+                                    <div class="input-group ">
+                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                    <input type="text" class="form-control" placeholder="URL">
+                                     </div>
+                                    <div class="modal-footer">
+                                              <button class="btn btn-info" type="submit">Share</button>
+                                    </div>
+                                  {%csrf_token%}
+                                  </form> 
+                               
+                              </div>
+                              <div id="pane3" class="tab-pane">
+                                <form action="#" method="POST">
+                                    <div class="input-group ">
+                                    <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
+                                    <input type="text" class="form-control" placeholder="URL of the image">
+                                     </div>
+                                     <p> or upload from local </p>
+                                     <input type="file" >
+                                     <div class="modal-footer">
+                                        <button class="btn btn-info" type="submit">Share</button>
+                                      </div>
+                                    
+                                  {%csrf_token%}
+                                </form> 
+                                
+                              </div>
+                              <div id="pane4" class="tab-pane">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
+                                            
+                                            <form action="#" method="post" class="form" role="form">
+                                              <div class="form-group">
+                                              <label for="dtp_input2" class="col-md-3 control-label">Date </label>
+                                                <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    
+                                                      <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                      </span>
+                                                </div>
+                                       
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="dtp_input3" class="col-md-3 control-label">Time </label>
+                                                <div class="input-group date form_time col-md-7" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                                                    <input class="form-control" size="16" type="text" value="" readonly>
+                                                    
+                                                    <span class="input-group-addon">
+                                                      <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="loc_input" class="col-md-3 control-label">Location </label>
+                                                <div class="input-group  col-md-7" >
+                                                    <input class="form-control" size="16" type="text" value="" >
+                                                    
+                                                    
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            <div class="form-group">
+                                                <label for="evt_input" class="col-md-3 control-label">Event </label>
+                                                <div class="input-group  col-md-7" >
+                                                    <input class="form-control" size="16" type="text" value="" >
+                                                    
+                                                    
+                                                </div>
+                                            </div> <!--/.form-group -->
+                                            
+                                           <div class="modal-footer">
+                                                <button class="btn btn-info" type="submit">Start Event</button>
+                                          </div>
+                                             {%csrf_token%}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div><!-- /.tab-content -->
+                          </div><!-- /.tabbable -->
+                         
+                    </div> <!-- /.container-->
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+             
+
+               
+          </div>  
+          <hr>
+
+
+          {% endblock post%}
+          
+          {% block articles %}
+          <div class="container">
+            {% for article in articles %}
+              <div class="row"> 
+                <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="{% url 'user-photo' article.user.id %}" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> America-Scotland</p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  
+                  <h4 class="media-heading"><a href="#">{{article.title}}</a></h4>
+                  <span class="label label-info">Article</span>
+                  {{article.content|truncatechars:100}}...
+                  
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+              </div><!--/media-->
+              </div> <!--./row-->
+            {% endfor %}
+          <div class="row">
+            
+              <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="../../static/image/scottish-terrier-watercolor-irina-march.jpg" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> America-Scotland</p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  <h4 class="media-heading"><a href="article.html">Decision on splitting RBS overshadows trading update</a></h4>
+                  <span class="label label-info">Article</span>
+                  THE Treasury’s imminent decision on splitting Royal Bank of Scotland into a “good bank” and “bad bank” is set to overshadow Friday’s third-quarter trading update...
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 29, 2013 at 8:00 PM</p>
+              </div><!--/media-->
+            
+            
+          </div><!--/row-->
+          
+          <div class="row">
+            
+              <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="../../static/image/Andrew_Carnegie,_three-quarter_length_portrait,_seated,_facing_slightly_left,_1913-crop.jpg" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> Andrew Carnegie </p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  <h4 class="media-heading"><a href="#">Real Rewarding Investment: Education</a></h4>
+                  <span class="label label-info">Article</span>
+                  Carnegie Mellon University (CMU) is a global research university with more than 12,000 students, 95,000 alumni, and 5,000 faculty and staff. 
+                  CMU has been a birthplace of innovation throughout its 113-year history.
+                  Today, we are a global leader bringing groundbreaking ideas to market and creating successful startup businesses...
+                </div>
+                  
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
+                  
+               
+              </div><!--/media-->
+               
+
+            
+          </div><!--/row-->
+
+          <div class="row">
+            
+              <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> Scrooge McDuck </p>
+                      </div>
+                    </div>
+                    
+                  </a>
+                <div class="media-body">
+                  
+                  <h4 class="media-heading"><a href="#">Diving in the money poll</a></h4>
+                  <span class="label label-info">Link</span>
+                  <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">Diving in the money poll</a>
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p>
+                  
+               
+              </div><!--/media-->
+               
+
+            
+          </div><!--/row-->
+        
+
+           <div class="row">
+            
+              <div class="media">
+                  <a class="pull-left" href="#">
+                    <div class="thumbnail" style="padding: 0">
+                      <div style="padding:4px">
+                        <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
+                      </div>
+                      <div class="caption">
+                        <p> Scrooge McDuck </p>
+                      </div>
+                    </div>
+                  </a>
+                <div class="media-body">
+                  <h4 class="media-heading"><a href="#">Trend of Exporting/Importing in Scotland</a></h4>
+                  <span class="label label-info">Article</span>
+                  Scotland's most iconic exports, from Tunnock's tea cakes and Barr's world famous Irn Bru to high quality leather from Edinburgh...
+                </div>
+                <hr>
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 8:00 PM</p>
+              </div><!--/media-->
+            
+            
+          </div><!--/row-->
+        </div><!--/.container-->
+          {% endblock articles %}
+
+          {% block sidebars %}
+          <div class="well sidebar-nav">
+            <ul class="nav">
+             
+              <table class="table table-striped table-condensed">
+                  <thead>
+                          <tr>
+                            <th></th>
+                            <th>PRICE</th>
+                            <th>CHG</th>
+                            <th>%CHG</th>
+                          </tr>
+                  </thead>   
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Dow</a></td>
+                            <td>15,580</td>
+                            <td style="color:red">-40</td>
+                            <th style="color:red">0.27%</th>
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">S&P</a></td>
+                            <td>1,760</td>
+                            <td style="color:red">-3</td>
+                            <th style="color:red">0.19%</th>
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Gold</a></td>
+                            <td>1,325</td>
+                            <td style="color:red">-24</td>
+                            <th style="color:red">1.80%</th>
+                          </tr>
+                  </tbody>
+                   <tbody>
+                          <tr>
+                            <td><a href="#">FTSE</a></td>
+                            <td>6,731</td>
+                            <td style="color:red">-47</td>
+                            <th style="color:red">0.69%</th>
+                          </tr>
+                  </tbody>
+              </table>
+              
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li><h4><a href="{% url 'member_management' id%}">Members</a></h4></li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
+              <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Johnnie Walker</a></li>
+              
+            </ul>
+            <div>
+              <span class="glyphicon glyphicon-user" style="color:red"></span> Admin
+              <span class="glyphicon glyphicon-user" style="color:green"></span>User
+            </div>
+
+          </div><!--/.well -->
+        <div class="well sidebar-nav">
+          <ul class="nav">
+            <li>Events</li>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>US-EU summit</a></li>
+            
+            
+          </ul>
+        </div><!--/.well -->
+        <div class="well sidebar-nav">
+          <ul class="nav">
+            <li>Apps</li>
+            <li class="active"><a href="#">Sharing</a></li>
+            <li><a href="#">Messages</a></li>
+            <li><a href="#">Inviting friends</a></li>
+            
+          </ul>
+        </div><!--/.well -->
+        
+        {% endblock sidebars %}
+     

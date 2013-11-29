@@ -87,11 +87,14 @@ footer {
     cursor: pointer;
 }
 
+
 .article>table > tbody > tr >td {
+
     border-top: 0;
     font-size: 125%;
     
 }
+
 .article>table > tbody > tr >td:first-child {
 
     font-weight : bold;

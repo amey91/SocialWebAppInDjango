@@ -4,7 +4,8 @@ from django.conf.urls import patterns, include, url
 # Typical use is a regular expression for a URL pattern, and then the
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
-	url(r'^profile$', 'moneyclub.member.views.view_profile', name='profile'),
+    url(r'^profile$', 'moneyclub.member.views.view_profile', name='profile'),
+
     #url(r'^edit-profile$', 'grumblr.views.edit_profile'),
     url(r'^save-profile$', 'moneyclub.member.views.save_profile'),
     url(r'^userphoto/(?P<id>\d+)$', 'moneyclub.member.views.get_photo', name='user-photo'),

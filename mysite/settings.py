@@ -3,22 +3,25 @@
 import os
 
 PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__)) + '/'
-#os.environ['DJANGO_SETTINGS_MODULE'] = 'mysite.settings'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
+
     ('Amey', 'aghadiga@andrew.cmu.edu'),
     ('Ernest','erzhuow@andrew.cmu.edu'),
+
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
+
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+
         'NAME': 'moneyclub',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
@@ -111,12 +114,14 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'moneyclub.webapp637@gmail.com'
 EMAIL_HOST_PASSWORD = 'amey&ernest'
+
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -139,7 +144,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
+
     'django.contrib.admin',
+
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     "moneyclub",
@@ -178,6 +185,7 @@ LOGGING = {
         },
     }
 }
+
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 STATIC_ROOT = 'staticfiles'

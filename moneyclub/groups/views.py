@@ -7,6 +7,7 @@ from moneyclub.models import *
 from moneyclub.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -250,6 +251,7 @@ def post_article(request,groupID):
     context['id']=g.id
     return HttpResponseRedirect(reverse('article', args=(article.id,)), context)
 
+
     
 def add_comment_on_article(request,groupID,articleID):
     errors = []
@@ -304,6 +306,7 @@ def add_comment_on_article(request,groupID,articleID):
 def get_all_articles(request):
     a=Article.objects.all()
     return render(request, 'moneyclub/temp.html', {'items':a})
+
 
 @login_required
 def member_management(request, groupID):
@@ -366,5 +369,3 @@ def group_settings(request, groupID):
     
 def temp(request):
     return render(request, 'moneyclub/temp.html')
-
-    

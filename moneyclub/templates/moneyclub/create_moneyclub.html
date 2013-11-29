@@ -4,7 +4,9 @@
 
     <!-- title and scripts -->
     {% block title %}
-    <title>Create a Money Club</title>
+
+    <title>Create Money Club</title>
+
     {% endblock title %}
     <!-- Bootstrap core CSS -->
     <link href="/static/dist/css/bootstrap.css" rel="stylesheet">
@@ -42,7 +44,9 @@
 </tr><br/>
 
 <tr>
+
 	<td><input type="submit" value="Submit"  method="post" ></td>
+
 	<td>{%csrf_token%}</td>
 </tr>
 {%for error in errors%}
@@ -50,7 +54,7 @@
 {%endfor%}
 </table>
 </form>
-   
+
     </div> <!-- /container -->
     {% endblock contentsblock %}
 

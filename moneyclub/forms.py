@@ -12,13 +12,6 @@ class CreateGroupForm(forms.ModelForm):
         exclude=('owner','datetime')
         widgets={'picture' : forms.FileInput() }
 
-    def clean(self):
-        # Calls our parent (forms.Form) .clean function, gets a dictionary
-        # of cleaned data as a result
-        
-        
-        # We must return the cleaned data we got from our parent.
-        return self.cleaned_data
         
 
 class RegistrationForm(forms.Form):

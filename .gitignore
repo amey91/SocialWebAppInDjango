@@ -1,8 +1,12 @@
 # Class-specific section #
+<<<<<<< HEAD
 myenv
 #staticfiles
 #feedback/
 #backup*/
+=======
+
+>>>>>>> f69b8d0efeec7118d42640b34f8d6ede205029da
 
 # Java section #
 
@@ -18,7 +22,10 @@ myenv
 *.pot
 *.pyc
 local_settings.py
+<<<<<<< HEAD
 mysite/local_settings.py
+=======
+>>>>>>> f69b8d0efeec7118d42640b34f8d6ede205029da
 *.py[cod]
 
 # C extensions

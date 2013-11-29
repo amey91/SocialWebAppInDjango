@@ -1,5 +1,6 @@
 {% extends "moneyclub/index.html"%}
   {% block title%}
+
     <title>{{group.name}}</title>
   {% endblock title%}
 
@@ -21,6 +22,7 @@
               </li>
           {% endblock nav_settings %}
 
+
           {% block jumbotron %}  
           <div class="jumbotron">
             <div class="row">
@@ -30,9 +32,9 @@
                   <div class="media">
                     
 
+
                       <div class="pull-left" >
                           <img id="ameyy" class="media-object dp img-circle" src="/moneyclub/groups/get_photo_group/{{group.id}}/" 
-
                           style="width: 100px;height:100px;">
                       </div>
 

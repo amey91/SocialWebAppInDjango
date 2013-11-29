@@ -6,11 +6,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.db import transaction 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.mail import send_mail
+
 from django.core.mail import EmailMessage
+
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
 from django.core import serializers
@@ -25,7 +28,9 @@ from django.utils import simplejson
 
 from moneyclub.models import *
 from moneyclub.forms import *
+
 from mysite.settings import *
+
 
 import ystockquote
 
@@ -73,8 +78,9 @@ def save_profile(request):
     
     context = {'profile': profile, 'errors': errors}
 
+
     return HttpResponseRedirect(reverse('profile'),context)
-    #return render(request, 'moneyclub/profile.html',context)
+
 
 @login_required
 def get_photo(request, id):
@@ -110,6 +116,7 @@ def reset_password(request):
     
     return HttpResponseRedirect(reverse('reset_password'),context)
     
+
 @login_required
 @transaction.commit_on_success
 def reset_password_by_email(request):
@@ -144,6 +151,7 @@ as soon as possible:
               to=[new_user.email])
     
     email.send()
+
     context = {}
     context['email'] = user.email
     return render(request, 'moneyclub/reset-password-needs-confirmation.html', context)
@@ -210,7 +218,9 @@ def get_user_stock(request):
     
     for stock in stocks:
         allinfo = ystockquote.get_all(stock.stock_name)
+
         stock.price=allinfo['ask_realtime'] if len(allinfo['ask_realtime'])<6 else allinfo['ask_realtime'][0:5]
+
         stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
         stock.percent_change=allinfo['change_percent'].strip("\"")
         stock.save()
@@ -224,6 +234,7 @@ def add_stock(request):
     context={}
     errors=[]
     user = request.user
+
     if not 'stock_name' in request.POST or not request.POST['stock_name']:
         errors.append('A stock name is needed')
         context['status'] = 'failure'
@@ -231,8 +242,10 @@ def add_stock(request):
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
     stockinfo = ystockquote.get_all(stock_name)
+
     #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
     if user.user_stock.filter(stock_name=stock_name):
+
         errors.append('Stock already added')
         context['status'] = 'failure'
         context['errors'] = errors
@@ -279,9 +292,4 @@ def delete_stock(request):
     erros.append('delete error!')
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
-
-
-
-
-
 
