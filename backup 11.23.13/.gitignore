@@ -1,8 +1,5 @@
 # Class-specific section #
-myenv
-#staticfiles
-feedback/
-#backup*/
+
 
 # Java section #
 
@@ -18,7 +15,6 @@ feedback/
 *.pot
 *.pyc
 local_settings.py
-mysite/local_settings.py
 *.py[cod]
 
 # C extensions
