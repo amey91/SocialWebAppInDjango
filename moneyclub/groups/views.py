@@ -58,7 +58,8 @@ def club_home(request,id):
     #all members of the group arranged by decreasing number of points
     m = GroupMembership.objects.filter(group=g).order_by('-points').exclude(user=g.owner)
     context['members'] = m[:5]
-    if len(m) > 0:
+    if len(m) > 5:
+        context['more_members_count'] = len(m) - 5
         context['more_members'] = "yup"
     return render(request, 'moneyclub/group_home_page.html', context) 
    
@@ -99,19 +100,19 @@ def club_create_submit(request):
     
     #if you don't want to use model forms: 
 
-    form.save()
-    g=new_entry
+    g=form.save()
+    #add group creator to the group
     membership = GroupMembership(user=request.user, group=g, is_admin=True)
     membership.save()
     print "group saved"
     print "group name:"+g.name
     print "group id:"+str(g.id)
     
+    #print success 
     context['group'] = g
-    str1= g.keywords
-    context['keywords'] =str1.split(",") 
-    
-    return render(request, 'moneyclub/group_home_page.html', context)
+    context['message'] = "Group Created Successfully!"
+    context['create_group'] = "true"
+    return render(request, 'moneyclub/success.html', context)
     
 @transaction.commit_on_success
 def add_members_generic(request):
@@ -559,6 +560,23 @@ def is_admin(user, group):
     return membership.is_admin
     
 
+def join_group(request,id1):
+    g=Group.objects.get(id=id1)
+    
+    #check if user is already part of the given group
+    if GroupMembership.objects.filter(user=request.user,group=g).count()>0:
+        return render(request, 'moneyclub/errors.html', {'errors':"You are already a member."})
+    
+    #check if already sent the join request
+    if Invite.objects.filter(theInvitedOne = request.user, groupId = g).count() > 0:
+        return render(request, 'moneyclub/errors.html', {'errors':"You have already sent  join request to this group."})
+    
+    #send the join request
+    i=Invite(groupId = g, invitedBy=request.user, theInvitedOne=request.user)
+    i.save()
+    
+    
+    return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
     
 
 def temp(request):
