@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^get-stock-info$', 'moneyclub.member.views.get_user_stock'),
     url(r'^add-stock$','moneyclub.member.views.add_stock'),
     url(r'^delete-stock$','moneyclub.member.views.delete_stock'),
-    url(r'^upvote/$', 'moneyclub.member.views.upvote', name='upvote'),
-    url(r'^downvote/$', 'moneyclub.member.views.downvote', name='downvote'),
+    url(r'^upvote$', 'moneyclub.member.views.upvote', name='upvote'),
+    url(r'^downvote$', 'moneyclub.member.views.downvote', name='downvote'),
 
 )

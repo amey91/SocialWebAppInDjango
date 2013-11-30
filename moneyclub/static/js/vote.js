@@ -1,13 +1,29 @@
 $(document).ready(function(){
 
+	$("#upvote").each(function(){
+		if (!$(this).html())
+			$(this).html(0)
+	});
+	$("#downvote").each(function(){
+		if (!$(this).html())
+			$(this).html(0)
+	});
 	var upvote = function(){
 		event.preventDefault();
-		var article_id = $(this).parent().id()
-
+		var article_id = $(this).parent().attr("id")
+		var e = $(this)
 		var upvoted = function (response){
+			//console.log(response)
 			if (response.status=="success"){
-				var count = $(this).html()
-				$(this).html(count+1)
+				if (!e.html()){
+					//console.log('set button')
+					e.html(1)
+				} else{
+					var count = parseInt(e.html())
+					e.html(count+1)
+				}
+					
+				
 			} else{
 				alert(response.errors)
 			}
@@ -15,17 +31,23 @@ $(document).ready(function(){
 		var data={'article_id': article_id};
 		var args = {type:"POST", url: "/moneyclub/member/upvote", data:data,  success:upvoted};
     	$.ajax(args);
-        
+        return false;
 	}
 
 	var downvote = function(){
 		event.preventDefault();
-		var article_id = $(this).parent().id()
-
+		var article_id = $(this).parent().attr("id")
+		var e = $(this)
 		var downvoted = function (response){
+			//console.log(response)
 			if (response.status=="success"){
-				var count = $(this).html()
-				$(this).html(count+1)
+				if (!e.html()){
+					//console.log('set button')
+					e.html(1)
+				} else{
+					var count = parseInt(e.html())
+					e.html(count+1)
+				}
 			}else{
 				alert("downvote failed!")
 			}
@@ -33,14 +55,14 @@ $(document).ready(function(){
 		var data={'article_id': article_id};
 		var args = {type:"POST", url: "/moneyclub/member/downvote", data:data,  success:downvoted};
     	$.ajax(args);
-        
+        return false;
 	}
 	
 
 	$("#upvote").on('click', upvote);
 	$("#downvote").on('click', downvote);
 	
-    return false;
+    
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {

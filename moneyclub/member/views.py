@@ -322,7 +322,7 @@ def upvote(request):
     context = {}
     errors=[]
 
-    '''
+    
 
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
@@ -332,34 +332,38 @@ def upvote(request):
             errors.append('article not found!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
-    
+        
         try:
-            vote = UpVote.objects.get(user=request.user and article=article_to_vote)    
+            vote = UpVote.objects.get(user=request.user, article=article_to_vote)    
             errors.append('You can upvote this post only once')
         except ObjectDoesNotExist:
             vote = UpVote(user=request.user, article=article_to_vote)
             vote.save()
+
             try:
+                #print 'reward composer'
                 # reward the composer
                 composer = article_to_vote.user
 
                 member = composer.member
                 member.total_points = member.total_points+5
                 member.save()
-
-                group = Group.objects.get(id=article_to_vote.groupId)
+                #print 'reward groups '+str(article_to_vote.groupId)
+                group = article_to_vote.groupId
+                #print 'group found'
                 membership = request.user.groupmembername.get(group=group)
+                #print 'membership found'
                 membership.points = membership.points+5
                 membership.save()
 
                 context['status'] = 'success'
-                print 'upvote successfully'
+                #print 'upvote successfully'
                 return HttpResponse(json.dumps(context), mimetype='application/json')
             except:
                 errors.append('UpVote failed')
-
+    context['errors'] = errors
     context['status']='failure'
-    '''
+    
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
@@ -369,7 +373,7 @@ def downvote(request):
     errors=[]
 
 
-    '''
+    
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -378,22 +382,24 @@ def downvote(request):
             errors.append('article not found!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
-    
         try:
-            vote = DownVote.objects.get(user=request.user and article=article_to_vote)   
+            vote = DownVote.objects.get(user=request.user , article=article_to_vote)   
             errors.append('You can downvote this post only once')
+            
+            #print 'vote found'
         except ObjectDoesNotExist:
             vote = DownVote(user=request.user, article=article_to_vote)
             vote.save()
             try:
                 # downvote the composer
+                #print 'reward composer'
                 composer = article_to_vote.user
 
                 member = composer.member
                 member.total_points = member.total_points-2
                 member.save()
 
-                group = Group.objects.get(id=article_to_vote.groupId)
+                group = article_to_vote.groupId
                 membership = request.user.groupmembername.get(group=group)
                 membership.points = membership.points-2
                 membership.save()
@@ -404,18 +410,18 @@ def downvote(request):
                 member.total_points = member.total_points-1
                 member.save()
 
-                group = Group.objects.get(id=article_to_vote.groupId)
+                group = article_to_vote.groupId
                 membership = request.user.groupmembername.get(group=group)
                 membership.points = membership.points-1
                 membership.save()
 
                 context['status'] = 'success'
-                print 'upvote successfully'
+                #print 'downvote successfully'
                 return HttpResponse(json.dumps(context), mimetype='application/json')
             except:
-                errors.append('UpVote failed')
+                errors.append('DownVote failed')
         
     context['status']='failure' 
-    '''
+    
 
     return HttpResponse(json.dumps(context), mimetype='application/json')
