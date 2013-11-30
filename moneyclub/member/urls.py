@@ -5,9 +5,11 @@ from django.conf.urls import patterns, include, url
 # action to call to process requests for that URL pattern.
 urlpatterns = patterns('',
     url(r'^profile$', 'moneyclub.member.views.view_profile', name='profile'),
-
+    url(r'^profile/$', 'moneyclub.member.views.view_profile', name='profile'),
+    url(r'^profile/(?P<uname>\w+)/$', 'moneyclub.member.views.view_profile1', name="others_profile"),
     #url(r'^edit-profile$', 'grumblr.views.edit_profile'),
     url(r'^save-profile$', 'moneyclub.member.views.save_profile'),
+    
     url(r'^userphoto/(?P<id>\d+)$', 'moneyclub.member.views.get_photo', name='user-photo'),
     url(r'^reset-password$', 'moneyclub.member.views.reset_password', name='reset_password'),
     url(r'^reset-password-by-email$', 'moneyclub.member.views.reset_password_by_email', name='reset_password_by_email'),

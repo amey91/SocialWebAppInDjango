@@ -54,6 +54,24 @@ def view_profile(request):
 
     return render(request, 'moneyclub/profile.html',context)
 
+
+@login_required
+@transaction.commit_on_success
+def view_profile1(request,uname):
+    errors = []
+    context = {}
+    try:
+        u=User.objects.get(username=uname)
+        profile= UserProfile.objects.get(user=u) 
+        context = {'profile': profile, 'errors': errors}
+        return render(request, 'moneyclub/profile.html',context)
+
+    except ObjectDoesNotExist:
+        errors.append('Sorry, Profile not found. ')
+        context['errors']=errors
+        return render(request, 'moneyclub/profile.html',context)   
+
+
 @login_required
 @transaction.commit_on_success
 def save_profile(request):
