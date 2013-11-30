@@ -74,18 +74,16 @@ class Comment(models.Model):
 class GroupMembership(models.Model):
     user=models.ForeignKey(User, blank=False,related_name="groupmembername")
     group=models.ForeignKey(Group, blank=False, related_name="groupname")
-<<<<<<< HEAD
     points = models.IntegerField(default=0)   
     # 0 == member is NOT blocked
     # 1 == member IS blocked
     blocked = models.IntegerField(default=0)    
-=======
+
     points = models.IntegerField(default=0)    
     # type of the member:
     #   False : normal member,
     #   True : admin
     is_admin = models.BooleanField(default=False)
->>>>>>> 2976f1fc2f347344fcf20ec2e538b50c83ea1ef1
     datetime=models.DateTimeField(auto_now_add='true')
 
     def __unicode__(self):
