@@ -7,8 +7,10 @@ function sendRequest() {
     } else {
         req = new ActiveXObject("Microsoft.XMLHTTP");
     }
+    var group_id = $(".stock").attr("id")
     req.onreadystatechange = handleResponse;
-    req.open("GET", "/moneyclub/member/get-stock-info", true);
+    req.open("GET", "/moneyclub/groups/get-stock-info/"+group_id, true);
+
     req.send();
 }
 
@@ -33,7 +35,7 @@ function handleResponse() {
         info[2] = stocks[i].getElementsByTagName("change")[0].textContent;
         info[3] = stocks[i].getElementsByTagName("pctchange")[0].textContent;
         var stock_id = stocks[i].getElementsByTagName("stock_id")[0].textContent;
-        console.log("price"+info[1]+",change"+info[2]+",pctchange"+info[3])
+        //console.log("price"+price+",change"+change+",pctchange"+pctchange)
         //console.log("stock id: "+stock_id);
         //console.log(stock_list.eq(i).attr("id"));
         for (j=0; j<stock_list.length;j++){

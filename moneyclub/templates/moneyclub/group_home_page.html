@@ -1,7 +1,18 @@
 {% extends "moneyclub/index.html"%}
+  {% block headblock %}
   {% block title%}
-    <title>{{group_name}}</title>
+    <title>{{group.name}}</title>
   {% endblock title%}
+  <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/group_stock.js"></script>
+    <script src="/static/js/edit_group_stock.js"></script>
+  {% endblock headblock %}
+
 
 
 
@@ -295,52 +306,43 @@
           {% endblock articles %}
 
           {% block sidebars %}
-          <div class="well sidebar-nav">
+          <div class="well sidebar-nav stock" id="{{group.id}}">
             <ul class="nav">
              
               <table class="table table-striped table-condensed">
                   <thead>
                           <tr>
-                            <th></th>
-                            <th>PRICE</th>
-                            <th>CHG</th>
-                            <th>%CHG</th>
+                            <td></td>
+                            <td>PRICE</td>
+                            <td>CHG</td>
+                            <td>%CHG</td>
                           </tr>
                   </thead>   
                   <tbody>
-                          <tr>
-                            <td><a href="#">Dow</a></td>
-                            <td>15,580</td>
-                            <td style="color:red">-40</td>
-                            <th style="color:red">0.27%</th>
-                          </tr>
-                  </tbody>
-                  <tbody>
-                          <tr>
-                            <td><a href="#">S&P</a></td>
-                            <td>1,760</td>
-                            <td style="color:red">-3</td>
-                            <th style="color:red">0.19%</th>
-                          </tr>
-                  </tbody>
-                  <tbody>
-                          <tr>
-                            <td><a href="#">Gold</a></td>
-                            <td>1,325</td>
-                            <td style="color:red">-24</td>
-                            <th style="color:red">1.80%</th>
-                          </tr>
-                  </tbody>
-                   <tbody>
-                          <tr>
-                            <td><a href="#">FTSE</a></td>
-                            <td>6,731</td>
-                            <td style="color:red">-47</td>
-                            <th style="color:red">0.69%</th>
-                          </tr>
+                    {% for stock in stocks %}
+                      <tr id="{{stock.id}}">
+                            <td>{{stock.stock_name}}</td>
+                            <td>{{stock.price}}</td>
+                            <td>{{stock.change}}</td>
+                            <td >{{stock.percent_change}}</td>
+                            <th> <span class="glyphicon glyphicon-minus delete-stock" id="{{stock.id}}" style="color:red;font-size:75%"></span></th>
+                      </tr>
+                    {% endfor %}
+                         
                   </tbody>
               </table>
+
+              <div class="input-group add-stock">
+                <input type="text" class="form-control add-stock" placeholder="add stock">
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button">
+                    <span class="glyphicon glyphicon-plus">
+                </span>
+                
+              </div><!-- /input-group -->
               
+
+
             </ul>
           </div><!--/.well -->
           <div class="well sidebar-nav">

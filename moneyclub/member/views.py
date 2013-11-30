@@ -218,8 +218,8 @@ def get_user_stock(request):
     
     for stock in stocks:
         allinfo = ystockquote.get_all(stock.stock_name)
-
-        stock.price=allinfo['ask_realtime'] if len(allinfo['ask_realtime'])<6 else allinfo['ask_realtime'][0:5]
+        price = allinfo['last_trade_realtime_time']
+        stock.price=price if len(price)<6 else price[0:5]
 
         stock.change=allinfo['change'] if len(allinfo['change'])<6 else allinfo['change'][0:5]
         stock.percent_change=allinfo['change_percent'].strip("\"")
@@ -230,6 +230,7 @@ def get_user_stock(request):
     return render(request, 'xml/stock.xml', context, content_type='application/xml');
 
 @login_required
+@transaction.commit_on_success
 def add_stock(request):
     context={}
     errors=[]
@@ -258,7 +259,7 @@ def add_stock(request):
         return HttpResponse(json.dumps(context), mimetype='application/json')
     print "stock found"
     stock = UserStockOfInterest(user=request.user, stock_name=stock_name)
-    stock.price=stockinfo['ask_realtime']
+    stock.price=stockinfo['last_trade_realtime_time']
     stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
     stock.percent_change=stockinfo['change_percent'].strip("\"")
     stock.save()
@@ -294,13 +295,17 @@ def delete_stock(request):
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
+
 @login_required
 @transaction.commit_on_success
 
 def upvote(request):
+
     context = {}
     errors=[]
+
     '''
+
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
@@ -334,7 +339,7 @@ def upvote(request):
                 return HttpResponse(json.dumps(context), mimetype='application/json')
             except:
                 errors.append('UpVote failed')
-        
+
     context['status']='failure'
     '''
     return HttpResponse(json.dumps(context), mimetype='application/json')
@@ -344,6 +349,8 @@ def upvote(request):
 def downvote(request):
     context = {}
     errors=[]
+
+
     '''
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
@@ -392,4 +399,5 @@ def downvote(request):
         
     context['status']='failure' 
     '''
+
     return HttpResponse(json.dumps(context), mimetype='application/json')
