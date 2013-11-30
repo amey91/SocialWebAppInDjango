@@ -54,10 +54,13 @@ def club_home(request,id):
 
     context['articles']=articles
     context['stocks']=stocks
-    
+    context['group_owner'] = g.owner
     #all members of the group arranged by decreasing number of points
-    #m = GroupMembership.objects.filer(group=g).orderBy(points)
-    #context['members'] = m
+    m = GroupMembership.objects.filter(group=g).order_by('-points').exclude(user=g.owner)
+    context['members'] = m[:5]
+    if len(m) > 5:
+        context['more_members_count'] = len(m) - 5
+        context['more_members'] = "yup"
     return render(request, 'moneyclub/group_home_page.html', context) 
    
 def club_create(request):
@@ -97,19 +100,19 @@ def club_create_submit(request):
     
     #if you don't want to use model forms: 
 
-    form.save()
-    g=new_entry
+    g=form.save()
+    #add group creator to the group
     membership = GroupMembership(user=request.user, group=g, is_admin=True)
     membership.save()
     print "group saved"
     print "group name:"+g.name
     print "group id:"+str(g.id)
     
+    #print success 
     context['group'] = g
-    str1= g.keywords
-    context['keywords'] =str1.split(",") 
-    
-    return render(request, 'moneyclub/group_home_page.html', context)
+    context['message'] = "Group Created Successfully!"
+    context['create_group'] = "true"
+    return render(request, 'moneyclub/success.html', context)
     
 @transaction.commit_on_success
 def add_members_generic(request):
@@ -159,6 +162,8 @@ You have an invite from the group " """ +grp_name.name +""""
 
 def view_group_members2(request):
     context={}
+    if not request.POST:
+        return render(request, 'moneyclub/view_group_members2.html', {'error':"This "})
     print request.POST['select_group']
     if request.method=="GET":
         view_group_members1(request)
@@ -183,12 +188,43 @@ def menu(request):
 
 @transaction.commit_on_success   
 def block_member(request,id1,id2):
-    u=User.objects.get(id=id2)
-    g=Group.objects.get(id=id1)
-    b=GroupMembership.objects.get(user=u,group=g)
-    b.blocked=1
-    b.save()
-    return render(request, 'moneyclub/menu.html', {})
+    try:
+        u=User.objects.get(id=id2)
+        g=Group.objects.get(id=id1)
+        
+        # check if user who sent request is owner of group
+        if not g.owner==request.user:
+            return render(request, 'moneyclub/errors.html', {'errors':"Invalid Access"}) 
+          
+        b=GroupMembership.objects.get(user=u,group=g)
+        b.blocked=1
+        b.save()
+        #return members of the group
+        members=GroupMembership.objects.filter(group=g).order_by('-points')
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
+
+
+@transaction.commit_on_success   
+def unblock_member(request,id1,id2):
+    try:
+        u=User.objects.get(id=id2)
+        g=Group.objects.get(id=id1)
+        
+        # check if user who sent request is owner of group
+        if not g.owner==request.user:
+            return render(request, 'moneyclub/errors.html', {'errors':"Invalid Access"}) 
+          
+        b=GroupMembership.objects.get(user=u,group=g)
+        b.blocked=0
+        b.save()
+        #return members of the group
+        members=GroupMembership.objects.filter(group=g).order_by('-points')
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
+
 
 def get_group_description(request,id1):
     g=Group.objects.get(id=id1)
@@ -510,10 +546,10 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
 
         except ObjectDoesNotExist:
-            erros.append('delete error!')
+            errors.append('delete error!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
-    erros.append('delete error!')
+    errors.append('delete error!')
     context['status']='failure'
     
     return HttpResponse(json.dumps(context), mimetype='application/json')
@@ -524,6 +560,23 @@ def is_admin(user, group):
     return membership.is_admin
     
 
+def join_group(request,id1):
+    g=Group.objects.get(id=id1)
+    
+    #check if user is already part of the given group
+    if GroupMembership.objects.filter(user=request.user,group=g).count()>0:
+        return render(request, 'moneyclub/errors.html', {'errors':"You are already a member."})
+    
+    #check if already sent the join request
+    if Invite.objects.filter(theInvitedOne = request.user, groupId = g).count() > 0:
+        return render(request, 'moneyclub/errors.html', {'errors':"You have already sent  join request to this group."})
+    
+    #send the join request
+    i=Invite(groupId = g, invitedBy=request.user, theInvitedOne=request.user)
+    i.save()
+    
+    
+    return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
     
 
 def temp(request):

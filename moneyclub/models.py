@@ -20,7 +20,9 @@ class Group(models.Model):
     
 class Invite(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="idofgroup")
+    # this user has invited someone to the group. He already is a member.
     invitedBy = models.ForeignKey(User, blank=False,related_name="invitedBy")
+    # this user will be invited to the group
     theInvitedOne = models.ForeignKey(User, blank= False,related_name="onewhoisinvited")
     datetime=models.DateTimeField(auto_now_add='true')
     
@@ -74,6 +76,11 @@ class Comment(models.Model):
 class GroupMembership(models.Model):
     user=models.ForeignKey(User, blank=False,related_name="groupmembername")
     group=models.ForeignKey(Group, blank=False, related_name="groupname")
+    points = models.IntegerField(default=0)   
+    # 0 == member is NOT blocked
+    # 1 == member IS blocked
+    blocked = models.IntegerField(default=0)    
+
     points = models.IntegerField(default=0)    
     # type of the member:
     #   False : normal member,

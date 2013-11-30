@@ -39,7 +39,7 @@
                           <span class="label label-default">{{keyword}}</span>
                           {% endfor %}
                           <p>
-                             <a href="#" class="btn btn-primary "> Join</a>
+                             <a href="/moneyclub/groups/join_group/{{group.id}}/" class="btn btn-primary "> Join</a>
                           </p>
 
                       </div>
@@ -347,16 +347,17 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li><h4><a href="{% url 'member_management' 1%}">Members</a></h4></li>
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
-              <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Johnnie Walker</a></li>
-              
+              <li><h4><a href="{% url 'member_management' group.id%}">Members</a></h4></li>
+              {%for member in members%}
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}</a></li>
+              {%endfor%}
+              {% if more_members%}<li>
+              <a href="{% url 'member_management' group.id%}"> {{more_members_count}} more Members</a></li>
+              {%endif%}
             </ul>
             <div>
-              <span class="glyphicon glyphicon-user" style="color:red"></span> Admin
-              <span class="glyphicon glyphicon-user" style="color:green"></span>User
+              <span class="glyphicon glyphicon-user" style="color:red"></span> Group Owner: {{group_owner.username}}
+           
             </div>
 
           </div><!--/.well -->
