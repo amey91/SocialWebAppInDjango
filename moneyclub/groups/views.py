@@ -54,10 +54,12 @@ def club_home(request,id):
 
     context['articles']=articles
     context['stocks']=stocks
-    
+    context['group_owner'] = g.owner
     #all members of the group arranged by decreasing number of points
-    #m = GroupMembership.objects.filer(group=g).orderBy(points)
-    #context['members'] = m
+    m = GroupMembership.objects.filter(group=g).order_by('-points').exclude(user=g.owner)
+    context['members'] = m[:5]
+    if len(m) > 0:
+        context['more_members'] = "yup"
     return render(request, 'moneyclub/group_home_page.html', context) 
    
 def club_create(request):
@@ -543,10 +545,10 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
 
         except ObjectDoesNotExist:
-            erros.append('delete error!')
+            errors.append('delete error!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
-    erros.append('delete error!')
+    errors.append('delete error!')
     context['status']='failure'
     
     return HttpResponse(json.dumps(context), mimetype='application/json')

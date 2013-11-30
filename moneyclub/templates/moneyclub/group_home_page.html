@@ -348,15 +348,14 @@
           <div class="well sidebar-nav">
             <ul class="nav">
               <li><h4><a href="{% url 'member_management' 1%}">Members</a></h4></li>
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:red"></span>Andrew Carnegie</a></li>
-              <li><a href="index.html"><span class="glyphicon glyphicon-user" style="color:red"></span>Scrooge Mcduck</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Rupert Murdoch</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>Johnnie Walker</a></li>
-              
+              {%for member in members%}
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}</a></li>
+              {%endfor%}
+              {% if %}<li></li>{%%}
             </ul>
             <div>
-              <span class="glyphicon glyphicon-user" style="color:red"></span> Admin
-              <span class="glyphicon glyphicon-user" style="color:green"></span>User
+              <span class="glyphicon glyphicon-user" style="color:red"></span> Group Owner: {{group_owner.username}}
+           
             </div>
 
           </div><!--/.well -->

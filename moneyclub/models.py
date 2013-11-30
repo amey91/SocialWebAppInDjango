@@ -20,7 +20,9 @@ class Group(models.Model):
     
 class Invite(models.Model):
     groupId = models.ForeignKey(Group, blank=False,related_name="idofgroup")
+    # this user has invited someone to the group. He already is a member.
     invitedBy = models.ForeignKey(User, blank=False,related_name="invitedBy")
+    # this user will be invited to the group
     theInvitedOne = models.ForeignKey(User, blank= False,related_name="onewhoisinvited")
     datetime=models.DateTimeField(auto_now_add='true')
     
