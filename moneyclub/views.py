@@ -67,12 +67,19 @@ def home(request):
         profile = ProfileForm(instance=profile)
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
+        context['no_pic']="T"
     print request.user.username
 
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=request.user)
     groups = [membership.group for membership in memberships]
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
     stocks = UserStockOfInterest.objects.filter(user=request.user)
+    context['articles'] = Article.objects.filter(user=request.user)
+    if len(context['articles'])==0:
+        context['no_article'] = "T"
 
     context['member'] = member
     context['groups'] = groups

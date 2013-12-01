@@ -580,4 +580,4 @@ def join_group(request,id1):
     
 
 def temp(request):
-    return render(request, 'moneyclub/temp.html', {})
+    return render(request, 'moneyclub/simplegraph.html', {})
