@@ -29,37 +29,54 @@ class Invite(models.Model):
     def __unicode__(self):
         return self.theInvitedOne.username
     
-class Article(models.Model):
-    #same for both types 	
-    groupId = models.ForeignKey(Group, blank=False,related_name="articleofgroup")
+class Post(models.Model):
+    #same for both types    
+    groupId = models.ForeignKey(Group, blank=False,related_name="%(app_label)s_%(class)s_post")
     #same for both types
-    user=models.ForeignKey(User, blank=False,related_name="articleby")
+    user=models.ForeignKey(User, blank=False,related_name="%(app_label)s_%(class)s_post")
     #articletype = 1 for generic articles
     #articletype = 2 for events
     articleType = models.IntegerField(default=0, blank=True, null=True)
     #same for both types 
-    description = models.CharField(max_length=400,blank=True, null=True)
-    #same for both types 
-    picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
-
+    title = models.CharField(max_length=80)
     #date and time of creation 
     #same for both types 
     datetime=models.DateTimeField(auto_now_add='true')
-    #same for both types 
-    title = models.CharField(max_length=80)
-    #stores link for articles
-    #stores location for events
-
-    content = models.CharField(max_length=2000, blank=True, null=True)
-    #date and time of the actual event
-    #blank for article
-    eventdatetime = models.CharField(max_length=100, blank=True, null=True)
-
     
     def __unicode__(self):
-        return self.description
+        return self.title
     class Meta:
         ordering=['-datetime']
+        abstract = True
+
+
+class Article(Post):
+    #same for both types 
+    picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
+
+    picture_url = models.URLField(null=True, blank=True)
+    content = models.CharField(max_length=2000, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.picture_url and not self.picture:
+            import urllib, os
+            from urlparse import urlparse
+            filename = urlparse(self.picture_url).path.split('/')[-1]
+            urllib.urlretrieve(self.picture_url, os.path.join("article_pics", filename))
+            self.picture = os.path.join("article_pics", filename)
+            self.picture_url = ''
+        super(Article, self).save()
+    
+class Event(Post):
+    #same for both types 
+    description = models.CharField(max_length=400,blank=True, null=True)
+    #date and time of the actual event
+    eventDate = models.DateField()
+    eventTime = models.TimeField()
+    location = models.CharField(max_length=100)
+
+    
+    
     
 class Comment(models.Model):
     articleId=models.ForeignKey(Article, related_name="comment_for_article")

@@ -18,6 +18,12 @@ class CreateArticleForm(forms.ModelForm):
         exclude = ('user','groupId','datetime','articleType' )
         widgets = {'picture' : forms.FileInput(), 'articleType':forms.HiddenInput()}
 
+class CreateEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        exclude = ('user','groupId','datetime','articleType' )
+       
+
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(max_length = 20,
