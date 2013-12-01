@@ -48,7 +48,7 @@ def club_home(request,id):
     context['group'] = g
     
     #all the articles of the group
-    articles = g.articleofgroup.all()
+    articles = Article.objects.filter(groupId=g)
     
     stocks= g.group_stock.all()
 
@@ -252,50 +252,121 @@ def article(request,articleID):
 
 
 @login_required
-def post_article(request,groupID):
+@transaction.commit_on_success
+def post_article(request):
     errors = []
     context = {}
        
-    if request.method=='GET':
-            return render(request, 'moneyclub/post_articles.html', context)
+    #if request.method=='GET':
+    #       return render(request, 'moneyclub/post_articles.html', context)
     #check for missing fields
-    if not 'description' in request.POST or not request.POST['description']:
-        errors.append('description is required')
+    #if not 'description' in request.POST or not request.POST['description']:
+    #    errors.append('description is required')
         
     #check if poster is a member of the group
+    if not 'group_id' in request.POST or not request.POST['group_id']:
+        
+        errors.append('Not a group specified')
+        context['errors'] = errors
+        context['status'] = 'failure'
+
+        #return render(reverse('homepage'), context)
+        return HttpResponse(request, context, mimetype='application/json')
+    groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
-        errors.append('You are not a member of the given group.')
         
-    if errors:
-        print errors
-        context['errors']= errors
-        return render(request, 'moneyclub/post_article.html', context) 
+        errors.append('You are not a member of the given group.')
+        context['errors'] = errors
+        context['status'] = 'failure'
+        #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
+        return HttpResponse( context, mimetype='application/json')
+   
     
     new_entry = Article(groupId =group1,user=request.user,articleType=1)
     #new_entry.save()
     form = CreateArticleForm(request.POST, request.FILES, instance=new_entry   )
+
+    print "request files:"
+    print request.FILES
+
     if not form.is_valid():
-        return render(request, 'moneyclub/error.html', context)
+        
+        errors.append('Invalid form')
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        context['form'] = form
+        #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
+        return HttpResponse( context, mimetype='application/json')
+
+   
     article = form.save()
     
-    context['article'] = article
-    context['group'] = group1
-    user = request.user
-    context['user'] = user
+    print article.content
+    print article.articleType
+    print article.picture
+    #context['article'] = article
+    context['article_id'] = article.id
+    #context['group'] = group1
+
     
     #print this on the user page-> feedback that article has been created
-     
-    context['errors']=errors
-    g=group1
-    context['group_name'] = g.name
-    context['description'] = g.description
-    str1= g.keywords
-    context['keywords'] =str1.split(",") 
-    context['id']=g.id
-    return HttpResponseRedirect(reverse('article', args=(article.id,)), context)
+    context['stat'] = 'success'
+    context['success'] = True
+#    context['errors']=errors
 
+    context['redirect'] = '/moneyclub/groups/article/%d' % article.id
+    return HttpResponseRedirect(reverse('article', args=(article.id,)), context)
+    #return HttpResponse(json.dumps(context), mimetype='application/json')
+    
+
+@login_required
+@transaction.commit_on_success
+def start_event(request):
+    errors = []
+    context = {}
+    
+    print "start_event"
+    if request.method=='GET':
+        print "not post`"
+        return render(request, 'moneyclub/post_articles.html', context)
+
+    if not 'group_id' in request.POST or not request.POST['group_id']:
+        print 'Not a group specified'
+        errors.append('Not a group specified')
+        context['errors'] = errors
+        context['status'] = 'failure'
+        return HttpResponse(context, mimetype='application/json')
+
+    groupID = request.POST['group_id']
+    group1=Group.objects.get(id=groupID)
+    group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+    if request.user.id not in group_list:
+        errors.append('You are not a member of the given group.')
+        context['errors'] = errors
+        context['status'] = 'failure'
+        return HttpResponse( context, mimetype='application/json')
+   
+    
+    new_entry = Event(groupId =group1,user=request.user,articleType=2)
+    #new_entry.save()
+    form = CreateEventForm(request.POST, instance=new_entry   )
+    if not form.is_valid():
+        print "form not valid"
+        errors.append('Invalid form')
+        context['errors'] = errors
+        context['status'] = 'failure'
+        return HttpResponse( context, mimetype='application/json')
+
+    event = form.save()
+    print "event saved"
+    context['article'] = event
+    context['group'] = group1
+    context['errors']=errors
+
+    return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
+    
 
     
 def add_comment_on_article(request,groupID,articleID):

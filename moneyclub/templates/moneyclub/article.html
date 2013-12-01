@@ -2,7 +2,7 @@
 
 {% block headblock %}
     {% block title %}
-    <title>Article: {{article.title.value}}</title>
+    <title>Article: {{article.title}}</title>
     {% endblock title %}
        <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -19,8 +19,13 @@
       <div class="row ">
         <div class="col-lg-8">
           <div class="article">
+<<<<<<< HEAD
             <h1>Title: {{article.title}}</h1>
             <p class="lead">by <a href="/moneyclub/member/profile/{{user.id}}/">{{article.user}}</a></p>
+=======
+            <h1>{{article.title}}</h1>
+            <p class="lead">by <a href="/moneyclub/users/{{user}}/">{{article.user}}</a></p>
+>>>>>>> acdba6b4dedcb5871f719d445aa9d16083e35a5e
             
             <hr>
               <div class="media">
@@ -39,6 +44,7 @@
                {%endif%}
             
             
+<<<<<<< HEAD
             <div class="media-body">
             
             <p class="lead">Description:{{article.description}}</p>
@@ -56,10 +62,14 @@
             {% endfor %}
           -->
             {% if  articleType == 1 %}
+=======
+
+            {% if  article.articleType == 1 %}
+>>>>>>> acdba6b4dedcb5871f719d445aa9d16083e35a5e
             {% if article.picture %}
               <img class="media-object" src="{% url 'post-photo' article.id %}" alt="..."width="400px">
             {% endif %}
-            <p class="lead">{{article.content.value}}</p>
+            <p class="lead">{{article.content}}</p>
 
             {% endif %}
             

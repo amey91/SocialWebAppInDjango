@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     
     
     
-    url(r'^$', 'moneyclub.views.home'),
+    url(r'^$', 'moneyclub.views.home', name='homepage'),
     url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'moneyclub/welcome.html'}, name='login'),
 	url(r'^logout$', 'django.contrib.auth.views.logout_then_login'),
     url(r'^register$', 'moneyclub.views.register'),
