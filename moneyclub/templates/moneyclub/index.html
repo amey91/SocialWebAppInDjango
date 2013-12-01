@@ -101,6 +101,8 @@
           </div><!--/row-->
 			{%else %}
 		{%for article in articles%}
+		
+		{%if article.articleType = 0 %}
            <div class="row">
             
               <div class="media">
@@ -120,7 +122,7 @@
                
                
                 <div class="media-body">
-                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/home/{{article.groupId.id}}">{{article.title}}</a></h4>
+                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.groupId.id}}">{{article.title}}</a></h4>
                   <span class="label label-info">Article description:</span>
                   
                   <br/>
@@ -137,6 +139,12 @@
           <!--/row-->
           
           <hr/>
+          {% else %}
+          
+          Insert second article here
+          
+          
+          {%endif%}
           {%endfor%}
           
           {%endif%}
