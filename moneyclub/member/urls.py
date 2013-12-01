@@ -21,4 +21,6 @@ urlpatterns = patterns('',
     url(r'^upvote$', 'moneyclub.member.views.upvote', name='upvote'),
     url(r'^downvote$', 'moneyclub.member.views.downvote', name='downvote'),
 
+    url(r'^visit-user/(?P<id>\d+)$', 'moneyclub.member.views.visit_user', name='visit_user')
+
 )

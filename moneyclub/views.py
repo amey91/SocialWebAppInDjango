@@ -81,6 +81,36 @@ def home(request):
     context['errors'] = errors
     return render(request, 'moneyclub/index.html', context)
 
+@login_required
+def visit_user(request, user_id):
+    errors = []
+    context = {}
+
+    profile = []
+    try:
+        user_to_visit = User.objects.get(user=user_id)
+    except ObjectDoesNotExist:
+        errors.append('User not found')
+
+    try:
+        profile = UserProfile.objects.get(user=user_id) 
+        profile = ProfileForm(instance=profile)
+    except ObjectDoesNotExist:
+        errors.append('Profile not found. Create your profile.')
+    print 
+
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=request.user)
+    groups = [membership.group for membership in memberships]
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+
+    context['member'] = member
+    context['groups'] = groups
+    context['profile'] = profile
+    context['stocks'] = stocks
+    context['errors'] = errors
+    return render(request, 'moneyclub/index.html', context)
+
 
 def register(request):
     print "register called"
