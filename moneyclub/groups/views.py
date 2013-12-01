@@ -236,11 +236,18 @@ def article(request,articleID):
     context = {}
 
     try:
-        article = Article.objects.get(id=articleID)
+        article = Post.objects.get(id=articleID)
+        if article.articleType==1:
+            article = article.article
+            #print "this is an article"
+        else :
+            article = article.event
+            #print "this is an event"
         group = article.groupId
         
     except ObjectDoesNotExist:
         errors.append('Article not found')
+
 
     context['article']=article
     context['group'] = group
@@ -361,6 +368,7 @@ def start_event(request):
 
     event = form.save()
     print "event saved"
+    print "event type" + str(event.articleType)
     context['article'] = event
     context['group'] = group1
     context['errors']=errors
@@ -388,7 +396,7 @@ def add_comment_on_article(request,groupID,articleID):
         return render(request, 'moneyclub/nopage1.html', context)
     
     #check if article belongs to that grou[
-    a=Article.objects.get(id=articleID)
+    a=Post.objects.get(id=articleID)
     if a.groupId != group1:
         errors.append('Error matching article to group')
         return render(request, 'moneyclub/nopage2.html', context)

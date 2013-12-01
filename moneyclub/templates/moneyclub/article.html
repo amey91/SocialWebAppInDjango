@@ -26,8 +26,8 @@
             
             <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
             
-
             {% if  article.articleType == 1 %}
+            <span class="label label-info">Article</span>
             {% if article.picture %}
               <img class="media-object" src="{% url 'post-photo' article.id %}" alt="..."width="400px">
             {% endif %}
@@ -36,8 +36,8 @@
             {% endif %}
             
             <!-- event post -->
-            {% if  articleType == 2 %}
-
+            {% if  article.articleType == 2 %}
+            <span class="label label-info">Event</span>
             
             <div class="container">
               <div class="row-fluid marketing">
@@ -55,7 +55,7 @@
                             <tr >
                                 <td class="text-center">When: </td>
                                 
-                                <td>{{article.datetime}}</td>
+                                <td>{{article.eventTime}}, {{article.eventDate}}</td>
                             </tr>
                             <tr class="success">
                                 <td class="text-center">Where: </td>
@@ -65,11 +65,14 @@
                             <tr class="warning">
                                 <td class="text-center">Description: </td>
                                 
-                                <td>{{article.description.value}}</td>
+                                <td>{{article.description}}</td>
                             </tr>
                    
                     </tbody>
                 </table>
+                {% for error in errors %}
+                  <p style="color:red">{{error}}</p>
+                {% endfor%}
               </div> <!--/.container -->
      
                   

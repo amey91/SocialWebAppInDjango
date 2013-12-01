@@ -47,7 +47,7 @@ class Post(models.Model):
         return self.title
     class Meta:
         ordering=['-datetime']
-        abstract = True
+        
 
 
 class Article(Post):
@@ -135,12 +135,12 @@ class Member(models.Model):
 
 class UpVote(models.Model):
     user=models.ForeignKey(User, blank=False, related_name="user_upvote")
-    article=models.ForeignKey(Article,blank=False, related_name="article_upvote")
+    article=models.ForeignKey(Post,blank=False, related_name="article_upvote")
 
     
 class DownVote(models.Model):
     user=models.ForeignKey(User, blank=False, related_name="user_downvote")
-    article=models.ForeignKey(Article,blank=False, related_name="article_downvote")
+    article=models.ForeignKey(Post,blank=False, related_name="article_downvote")
 
 
 

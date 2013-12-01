@@ -327,7 +327,7 @@ def upvote(request):
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
-            article_to_vote = Article.objects.get(id=article_id)
+            article_to_vote = Post.objects.get(id=article_id)
         except ObjectDoesNotExist:
             errors.append('article not found!')
             context['status']='failure'
@@ -377,7 +377,7 @@ def downvote(request):
     if 'article_id' in request.POST and request.POST['article_id']:
         article_id = request.POST['article_id']
         try:
-            article_to_vote = Article.objects.get(id=article_id)
+            article_to_vote = Post.objects.get(id=article_id)
         except ObjectDoesNotExist:
             errors.append('article not found!')
             context['status']='failure'
