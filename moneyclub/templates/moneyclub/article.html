@@ -19,15 +19,34 @@
       <div class="row ">
         <div class="col-lg-8">
           <div class="article">
-            <h1>{{article.title.value}}</h1>
-            <p class="lead">by <a href="/moneyclub/users/{{user}}/">{{user}}</a></p>
-            <p class="lead">Desccription: <br/> <a href="/moneyclub/users/{{user}}/">{{article.description}}</a></p>
+            <h1>Title: {{article.title}}</h1>
+            <p class="lead">by <a href="/moneyclub/member/profile/{{user.id}}/">{{article.user}}</a></p>
+            
             <hr>
+              <div class="media">
+              {%if article.picture%}
+                  <div class="pull-left" >
+                    <img class="media-object" 
+                    style="max-width:600px;"
+                    
+                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
+                    
+                    
+                    alt="Image Not Found!" max_width="100px">
+                  </div>
+               
+               
+               {%endif%}
             
+            
+            <div class="media-body">
+            
+            <p class="lead">Description:{{article.description}}</p>
+            	                        
+            </div>
+            
+            </div>
             <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
-            
-            <img src="/moneyclub/groups/get_photo_article/{{article.id}}"/>
-            
             
             <!--
             {% for field in article.visible_fields %}
@@ -98,12 +117,16 @@
           <!-- the comment box -->
           <div class=" well">
             <h4>Leave a Comment:</h4>
-            <form role="form">
-              <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <form action="/moneyclub/groups/add_comment_on_article/{{article.groupId.id}}/{{article.id}}/"
+            method="POST">
+                    <div class="input-group">
+                      <input type="text" class="form-control" name = "comment">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Comment</button>
+                      </span>
+                    </div><!-- /input-group -->
+                    {%csrf_token%}
+                  </form>
           </div>
           
           <hr>
@@ -116,34 +139,17 @@
            <div class="row">
               <div class="col-lg-9 col-lg-offset-1">
                 <div class="media">
-                    <a class="pull-left" href="#">
-                      <img class="media-object" src="/static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
-                    </a>
+                    
                   <div class="media-body">
-                    <h4 class="media-heading"><a href="index.html">Scrooge Mcduck</a></h4>
+                    <h4 class="media-heading"><a href="index.html">Scrooge Mcduck</a> said</h4>
                     <p> Told you ! </p>
                   </div>
                   <hr>
                   <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 8:00 PM</p>
-                  <div class="btn-group-sm pull-right">
-                    <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-arrow-up">Upvote(3)</button>
-                    <button  id="downvote" type="button"  class="btn btn-danger glyphicon glyphicon-arrow-down">Downvote(7)</button>
-                  </div>
+                  
                 </div><!--/media-->
              
-              <div class="row">
-                <div class=" well">
-                  
-                  <form role="form">
-                    <div class="input-group">
-                      <input type="text" class="form-control">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">Comment</button>
-                      </span>
-                    </div><!-- /input-group -->
-                  </form>
-                </div> <!--/well-->
-              </div> <!--/.row -->
+              
             </div><!--/col-lg-8-->
           </div><!--/row-->
         </div><!--/span-->
