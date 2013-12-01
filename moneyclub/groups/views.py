@@ -381,49 +381,48 @@ def add_comment_on_article(request,groupID,articleID):
     errors = []
     context = {}
        
-    """if request.method=='GET':
-            return render(request, 'moneyclub/post_articles.html', context)
+    if request.method=='GET':
+        errors.append('Something went wrong.')
+        context['errors'] = errors
+        return render(request, 'moneyclub/errors.html', context)
+    
     #check for missing fields
     if not 'comment' in request.POST or not request.POST['comment']:
         errors.append('description is required')
-    """
+    
     
     #check if poster is a member of the group
     group1=Group.objects.get(id=groupID)
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
-        return render(request, 'moneyclub/nopage1.html', context)
+        print 'You are not a member of the given group.'
+        context['errors'] = errors 
+        return render(request, 'moneyclub/errors.html', context)
     
     #check if article belongs to that grou[
     a=Post.objects.get(id=articleID)
+
     if a.groupId != group1:
         errors.append('Error matching article to group')
-        return render(request, 'moneyclub/nopage2.html', context)
         
+    
     if errors:
-            context['errors']= errors
-            #?? doubt where to derirect
-            return render(request, 'moneyclub/nopage3.html', context) 
+            context['errors'] = errors
+            return render(request, 'moneyclub/errors.html', context) 
     
-     #??? doubt change comm from request
-    comm = "comm"
+    comm = request.POST['comment']
     
-    #comm = request.POST['comment']
+    #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
-    new_entry.save()
+    new_entry.save()    
+    article = Article.objects.get(id=articleID)
+    context['comments'] = Comment.objects.filter(articleId=articleID)
     
-    
-    #print this on the user page-> feedback that article has been created
-    errors.append("Group created successfully!")
-    context['errors']=errors
-    g=group1
-    context['group_name'] = g.name
-    context['description'] = g.description
-    str1= g.keywords
-    context['keywords'] =str1.split(",") 
-    context['id']=g.id
-    return render(request, 'moneyclub/group_home_page.html', context)
+    context['article']=article
+    context['errors'] = errors    
+
+    return HttpResponseRedirect('/article.html', context)
 
     
 @login_required
@@ -659,4 +658,4 @@ def join_group(request,id1):
     
 
 def temp(request):
-    return render(request, 'moneyclub/temp.html', {})
+    return render(request, 'moneyclub/simplegraph.html', {})

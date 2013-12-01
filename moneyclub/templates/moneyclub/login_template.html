@@ -34,7 +34,39 @@
             <li><a href="/moneyclub/member/profile">Profile</a></li>
           </ul>
           <ul  class="nav navbar-nav navbar-right">
+<<<<<<< HEAD
+             <li class="dropdown">
+                    <ul class="dropdown-menu">
+                      {% for request in requests %}
+                        <li id="{{request.id}}"><a href="#">
+                          {{request.user}} wants to join {{request.group}} 
+                          <button type="button" class="btn btn-success btn-xs" title="Approve">
+                              <span class="glyphicon glyphicon-ok"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger btn-xs" title="Decline">
+                              <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                        </a>
+                        </li> 
+                      {% endfor %}
+                     
+                        <li id="{{request.id}}"> 
+                          request.user wants to join request.group 
+                          <button type="button" class="btn btn-success btn-xs" title="Approve">
+                              <span class="glyphicon glyphicon-ok"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger btn-xs" title="Decline">
+                              <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                          </a>
+                        </li> 
+                        <li class="divider"></li>
+                        
+                    </ul>
+                </li>
+=======
              
+>>>>>>> acdba6b4dedcb5871f719d445aa9d16083e35a5e
             <form class="navbar-form navbar-left" role="search"
                   action="/moneyclub/member/search" method="post">
                 <div class="form-group">

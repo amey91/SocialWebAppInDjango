@@ -31,9 +31,24 @@
 
               <div class="col-lg-12">
                   <div class="media">
-                      <a class="pull-left" href="#">
-                          <img class="media-object dp img-circle" src="/moneyclub/member/userphoto/{{user.id}}" style="width: 100px;height:100px;">
+                  {%if no_pic %}
+                  
+                  <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" src="/static/image/money.jpg" 
+                          
+                          title="Create a Profile now!"
+                          style="width: 100px;height:100px;">
                       </a>
+                  
+                  {%else%}
+                  
+                      <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" 
+                          title="Edit your Profile!"
+                          src="/moneyclub/member/userphoto/{{user.id}}" style="width: 100px;height:100px;">
+                      </a>
+                      
+                   {%endif%}
                     <div class="media-body">
                         <h4 class="media-heading">{{user}} <small> USA/Scotland</small></h4>
                         <h5>adventurer, explorer and philanthropist at <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">McDuck & Company</a></h5>
@@ -62,43 +77,78 @@
   
           {% block articles %}
           <div class="container">
-          <div class="row">
+      
+ <div class="row">
+ 	<h3>Articles Authored:</h3>
+ </div>       
+ <hr/>
+        
+        
+			{%if not articles%}
+				    <div class="row">
             
               <div class="media">
-                  <a class="pull-left" href="#">
-                    <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
-                  </a>
+                  
                 <div class="media-body">
                   
-                  <h4 class="media-heading"><a href="#">Diving in the money poll</a></h4>
-                  <span class="label label-info">Link</span>
-                  <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">Diving in the money poll</a>
+                  <h4 class="media-heading">You have not authored any articles in any Money Club.</h4>
+                  <span class="label label-info">Suggestion</span>
+                  <a href="/moneyclub/groups/findgroups/">Find Money Clubs</a>
                 </div>
-                <hr>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 9:00 PM</p>
-                  
+                <hr>                 
                
               </div><!--/media-->
           </div><!--/row-->
-        
-
+			{%else %}
+		{%for article in articles%}
+		
+		{%if article.articleType = 0 %}
            <div class="row">
             
               <div class="media">
+              {%if article.picture%}
                   <a class="pull-left" href="#">
-                    <img class="media-object" src="../../static/image/289919_1252843359020_250_330.jpg" alt="..."width="100px">
+                    <img class="media-object" 
+                    
+                    
+                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
+                    
+                    
+                    alt="Image Not Found!" width="100px">
                   </a>
+               
+               
+               {%endif%}
+               
+               
                 <div class="media-body">
-                  <h4 class="media-heading"><a href="#">Trend of Exporting/Importing in Scotland</a></h4>
-                  <span class="label label-info">Article</span>
-                  Scotland's most iconic exports, from Tunnock's tea cakes and Barr's world famous Irn Bru to high quality leather from Edinburgh...
+                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+                  <span class="label label-info">Article description:</span>
+                  
+                  <br/>
+                  {{article.description}}
+                                    
                 </div>
                 <hr>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 8:00 PM</p>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
               </div><!--/media-->
             
             
-          </div><!--/row-->
+          </div>
+          
+          <!--/row-->
+          
+          <hr/>
+          {% else %}
+          
+          Insert second article here
+          
+          
+          {%endif%}
+          {%endfor%}
+          
+          {%endif%}
+          
            </div><!--/.container-->
           {% endblock articles %}
         </div><!--/span-->
@@ -148,11 +198,22 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li>Groups</li>
+              <li>
+              <h4>My Money Clubs:</h4>
+              </li>
+              <font style="color:grey">
+              {%if no_groups %} 
+              	You are not enrolled in any Money Clubs.
+              	<br/>
+				<a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>              
+              {%else%}
+               
               {% for group in groups%}
                 <li><a href="{% url 'grouphomepage' group.id%}">{{group.name}}</a></li>
               {% endfor %}
-              
+             
+              {%endif%}
+              </font>
               
             </ul>
           </div><!--/.well -->
