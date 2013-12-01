@@ -19,9 +19,15 @@ class CreateArticleForm(forms.ModelForm):
         widgets = {'picture' : forms.FileInput(), 'articleType':forms.HiddenInput()}
 
 class CreateEventForm(forms.ModelForm):
+    eventDate = forms.DateField(widget=forms.DateInput(format = '%d %B %Y'), 
+                               input_formats=('%d %B %Y',), 
+                               )
     class Meta:
         model = Event
+       
+
         exclude = ('user','groupId','datetime','articleType' )
+
        
 
 

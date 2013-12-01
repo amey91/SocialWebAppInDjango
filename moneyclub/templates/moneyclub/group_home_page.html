@@ -58,9 +58,14 @@
             <button class="btn btn-warning btn-lg pull-right" data-toggle="modal" data-target="#myModal">
               New Post
             </button>
-
+            <script>
+               {% if errors %}
+                    console.log(errors)
+                   $("#myModal").modal('show')
+              {% endif %}
+            </script>
             <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" isValid="{{form_is_valid}}" pane="{{pane}}">
 
               <div class="modal-dialog">
 
@@ -110,7 +115,13 @@
 
                                         {%csrf_token%}
                                       </form>
-                                    
+                                    {% for error in form.errors %}
+                                    {{error}}
+                                    {% endfor %}
+                                    {% for error in errors %}
+                                      <p>      {{error}} </p>
+                                    {% endfor %}
+
                               
                                   </div> <!--/row-->
                                 </div> <!--/container-->
@@ -121,8 +132,9 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
+                                            <form accept-charset="UTF-8" action="/moneyclub/groups/start_event" method="POST" id="start-event"  enctype="multipart/form-data">
                                             
-                                            <form action="#" method="post" class="form" role="form">
+                                              <input type="hidden" name="group_id" value="{{group.id}}">
                                               <div class="form-group">
                                                 <label for="loc_input" class="col-md-3 control-label">Event </label>
                                                 <div class="input-group  col-md-7" >

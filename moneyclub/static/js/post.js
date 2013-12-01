@@ -1,9 +1,10 @@
 $(document).ready(function(){
 
-	var post_article = function(){
+	//var post_article = function(){
+	$("#post-article").submit(fucntion(e){
 		event.preventDefault();
 		var form = $("#post-article");
-		alert(form)
+		
 		var group_id = $(this).attr("id")
 		//var data = form.serializeArray();
 		var data = new FormData(form);
@@ -24,11 +25,11 @@ $(document).ready(function(){
 		}
 
 		var args = {type:"POST", url: "/moneyclub/groups/post_article", 
-					data:data,  
+					//data:data,  
 					enctype: "multipart/form-data",
 					success: post,
 					cache: false,
-        			processData:false,
+        			//processData:false,
 					fail: function(response){
 						//console.log(response)
 						alert("fail!")
@@ -42,17 +43,21 @@ $(document).ready(function(){
 
 		return false;
 
-	}
+	});
 
 	var start_event = function(){
 		event.preventDefault();
+		console.log('start-event')
 		var form = $("#start-event");
 		var group_id = $(this).attr("id")
-		var data = { 'group_id': group_id,
-					'form':form.serializeArray()};
+		var data = form.serializeArray()};
+		console.log(form)
 		var post = function (response){
-			if (response.status=="success"){
-
+			if (response.stat=="success"){
+				if(response.redirect){
+					window.location.href = response.redirect;
+				}
+				
 			} else {
 				alert(response.errors);
 			}
@@ -79,34 +84,8 @@ $(document).ready(function(){
 		return false;
 
 	}
-	var f = $("#post-article");
-	var b = $("button.post-article");
-	b.click(function(){
-    // implement with ajaxForm Plugin
-    f.ajaxForm({
-      beforeSend: function(){
-      	console.log(e)
-        l.show();
-        b.attr('disabled', 'disabled');
-        p.fadeOut();
-      },
-      success: function(e){
-        if (response.stat=="success"){
-				if(response.redirect){
-					window.location.href = response.redirect;
-				}
-				
-			} else {
-				alert(response.errors);
-			}
-      },
-      error: function(e){
-      	alert(e)
-        b.removeAttr('disabled');
-        p.html(e).fadeIn();
-      }
-    });
-  });
+
+	$("#post-article").submit();
 	//$("button.post-article").on('click', post_article);
 	$("button.start-event").on('click',start_event);
 

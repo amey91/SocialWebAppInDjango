@@ -264,13 +264,13 @@ def post_article(request):
     #    errors.append('description is required')
         
     #check if poster is a member of the group
-    print request.POST
     if not 'group_id' in request.POST or not request.POST['group_id']:
         
         errors.append('Not a group specified')
         context['errors'] = errors
         context['status'] = 'failure'
-        print errors
+
+        #return render(reverse('homepage'), context)
         return HttpResponse(request, context, mimetype='application/json')
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
@@ -280,8 +280,8 @@ def post_article(request):
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
         context['status'] = 'failure'
-        print errors
-        return HttpResponse(request, context, mimetype='application/json')
+        #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
+        return HttpResponse( context, mimetype='application/json')
    
     
     new_entry = Article(groupId =group1,user=request.user,articleType=1)
@@ -296,8 +296,9 @@ def post_article(request):
         errors.append('Invalid form')
         context['errors'] = errors
         context['stat'] = 'failure'
-        print errors
-        return HttpResponse(request, context, mimetype='application/json')
+        context['form'] = form
+        #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
+        return HttpResponse( context, mimetype='application/json')
 
    
     article = form.save()
@@ -312,15 +313,12 @@ def post_article(request):
     
     #print this on the user page-> feedback that article has been created
     context['stat'] = 'success'
-    context['errors']=errors
-    #g=group1
-    #context['group_name'] = g.name
-    #context['description'] = g.description
-    #str1= g.keywords
-    #context['keywords'] =str1.split(",") 
-    #context['id']=g.id
+    context['success'] = True
+#    context['errors']=errors
+
     context['redirect'] = '/moneyclub/groups/article/%d' % article.id
-    return HttpResponse(json.dumps(context), mimetype='application/json')
+    return HttpResponseRedirect(reverse('article', args=(article.id,)), context)
+    #return HttpResponse(json.dumps(context), mimetype='application/json')
     
 
 @login_required
@@ -328,15 +326,18 @@ def post_article(request):
 def start_event(request):
     errors = []
     context = {}
-       
+    
+    print "start_event"
     if request.method=='GET':
+        print "not post`"
         return render(request, 'moneyclub/post_articles.html', context)
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
+        print 'Not a group specified'
         errors.append('Not a group specified')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse(request, context, mimetype='application/json')
+        return HttpResponse(context, mimetype='application/json')
 
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
@@ -345,22 +346,23 @@ def start_event(request):
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse(request, context, mimetype='application/json')
+        return HttpResponse( context, mimetype='application/json')
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
     #new_entry.save()
     form = CreateEventForm(request.POST, instance=new_entry   )
     if not form.is_valid():
+        print "form not valid"
         errors.append('Invalid form')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse(request, context, mimetype='application/json')
+        return HttpResponse( context, mimetype='application/json')
 
     event = form.save()
+    print "event saved"
     context['article'] = event
     context['group'] = group1
-
     context['errors']=errors
 
     return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
