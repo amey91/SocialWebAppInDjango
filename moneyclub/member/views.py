@@ -76,7 +76,7 @@ def view_profile1(request,uname):
 @transaction.commit_on_success
 def save_profile(request):
     errors = []
-    context = []
+    context = {}
     profile = []
     try:
         profile = UserProfile.objects.get(user = request.user)
@@ -88,17 +88,61 @@ def save_profile(request):
         context = {'profile': profile, 'errors': errors}
         return render(request, 'moneyclub/profile.html',context)
     # Creates or Updates a profile
-    profile = ProfileForm(request.POST, request.FILES, instance=profile)
+    profileform = ProfileForm(request.POST, request.FILES, instance=profile)
     
-    if  profile.is_valid():
-        profile.save();
+    if  not profileform.is_valid():
+        context['profile'] = profileform
+        return render(request, 'moneyclub/profile.html',context)
     
-    
-    context = {'profile': profile, 'errors': errors}
+    profileform.save();
+    context = {'profile': profileform, 'errors': errors}
 
 
     return HttpResponseRedirect(reverse('profile'),context)
 
+@login_required
+def visit_user(request, user_id):
+    errors = []
+    context = {}
+
+    profile = []
+    try:
+        user_to_visit = User.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        errors.append('User not found')
+        return HttpResponseRedirect(reverse('homepage'))
+
+    try:
+        profile = UserProfile.objects.get(user=user_id) 
+        #profile = ProfileForm(instance=profile)
+    except ObjectDoesNotExist:
+        pass
+
+    posts = Post.objects.filter(user = user_to_visit)
+    for post in posts:
+        if post.articleType ==1:
+            post = post.article
+        else:
+            post = post.event
+    events = Event.objects.filter(user = user_to_visit)
+
+
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=user_to_visit)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
+    groups = [membership.group for membership in memberships]
+
+    context['visitee'] = user_to_visit
+    context['articles'] = posts
+    context['events'] = events
+    context['score'] = score
+    context['member'] = member
+    context['groups'] = groups
+    context['profile'] = profile
+    context['errors'] = errors
+    return render(request, 'moneyclub/visitpage.html', context)
 
 @login_required
 def get_photo(request, id):

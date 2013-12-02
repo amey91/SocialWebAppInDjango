@@ -2,7 +2,7 @@
   
     {% block headblock %}
     {% block title %}
-    <title>{{user}}'s Homepage</title>
+    <title>{{visitee}}'s Homepage</title>
     {% endblock title %}
     <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -46,12 +46,12 @@
                       <a class="pull-left" href="/moneyclub/member/profile">
                           <img class="media-object dp img-circle" 
                           title="Edit your Profile!"
-                          src="/moneyclub/member/userphoto/{{user.id}}" style="width: 100px;height:100px;">
+                          src="/moneyclub/member/userphoto/{{visitee.id}}" style="width: 100px;height:100px;">
                       </a>
                       
                    {%endif%}
                     <div class="media-body">
-                        <h4 class="media-heading">{{user}} <small> {{profile.location}}</small></h4>
+                        <h4 class="media-heading">{{visitee}} <small> {{profile.location}}</small></h4>
                         <h5>{{occupation}} </h5>
                         <hr style="margin:8px auto">
                         <div class="container">
@@ -91,13 +91,13 @@
           <div class="container">
       
  <div class="row">
- 	<h3>Articles Authored:</h3>
+  <h3>Articles Authored:</h3>
  </div>       
  <hr/>
         
         
-			{%if not articles%}
-				    <div class="row">
+      {%if not articles%}
+            <div class="row">
             
               <div class="media">
                   
@@ -111,10 +111,10 @@
                
               </div><!--/media-->
           </div><!--/row-->
-			{%else %}
-		{%for article in articles%}
-		
-		{%if article.articleType = 1 %}
+      {%else %}
+    {%for article in articles%}
+    
+    {%if article.articleType = 1 %}
            <div class="row">
             
               <div class="media">
@@ -169,7 +169,7 @@
         
         <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="siderbars" role="navigation">
           {% block sidebars %}
-          <div class="well sidebar-nav stock" id="{{user.id}}">
+          <div class="well sidebar-nav stock" id="{{visitee.id}}">
             <ul class="nav">
              
               <table class="table table-striped table-condensed">
@@ -215,9 +215,9 @@
               </li>
               <font style="color:grey">
               {%if no_groups %} 
-              	You are not enrolled in any Money Clubs.
-              	<br/>
-				<a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>              
+                You are not enrolled in any Money Clubs.
+                <br/>
+        <a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>              
               {%else%}
                
               {% for group in groups%}

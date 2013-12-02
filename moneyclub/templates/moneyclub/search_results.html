@@ -20,7 +20,7 @@
 	          
 	          <div class="media-body">
 	            <p style="font-size:175%; color:grey"> 
-	              <a href="#"> {{group}} </a> 
+	              <a href="{% url 'grouphomepage' group.id%}"> {{group}} </a> 
 	            </p>
 	            <p >{{group.description}}
 	            <div class="btn-group-sm pull-right">
@@ -36,15 +36,15 @@
 	    <h4> Users found: </h4>
 	    {% if users_retrieved|length > 0 %}
 	  		
-	      {% for user in users_retrieved %}
+	      {% for user_ret in users_retrieved %}
 	        <div class="media">
 	          <img data-src="holder.js/50x50" class="img-thumbnail pull-left" 
-	            src="{% url 'user-photo' user.id %}" alt="{{user}}"width="50px">
+	            src="{% url 'user-photo' user_ret.id %}" alt="{{user_ret}}"width="50px">
 	   
 	        
 	          <div class="media-body">
 	            <p style="font-size:75%; color:grey"> 
-	            	<a href="#">{{user}}  </a>
+	            	<a href="{% url 'visit_user' user_ret.id %}">{{user_ret}}  </a>
 	            </p>
 	           
 	          </div>

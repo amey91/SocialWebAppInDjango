@@ -64,7 +64,7 @@ def home(request):
 
     try:
         profile = UserProfile.objects.get(user=request.user) 
-        profile = ProfileForm(instance=profile)
+        #profile = ProfileForm(instance=profile)
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"
@@ -72,6 +72,9 @@ def home(request):
 
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
     groups = [membership.group for membership in memberships]
     # no groups as of now.
     if len(groups)==0:
@@ -80,7 +83,7 @@ def home(request):
     context['articles'] = Article.objects.filter(user=request.user)
     if len(context['articles'])==0:
         context['no_article'] = "T"
-
+    context['score'] =score
     context['member'] = member
     context['groups'] = groups
     context['profile'] = profile
@@ -88,35 +91,7 @@ def home(request):
     context['errors'] = errors
     return render(request, 'moneyclub/index.html', context)
 
-@login_required
-def visit_user(request, user_id):
-    errors = []
-    context = {}
 
-    profile = []
-    try:
-        user_to_visit = User.objects.get(user=user_id)
-    except ObjectDoesNotExist:
-        errors.append('User not found')
-
-    try:
-        profile = UserProfile.objects.get(user=user_id) 
-        profile = ProfileForm(instance=profile)
-    except ObjectDoesNotExist:
-        errors.append('Profile not found. Create your profile.')
-    print 
-
-    member = Member.objects.get(user=request.user)
-    memberships = GroupMembership.objects.filter(user=request.user)
-    groups = [membership.group for membership in memberships]
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
-
-    context['member'] = member
-    context['groups'] = groups
-    context['profile'] = profile
-    context['stocks'] = stocks
-    context['errors'] = errors
-    return render(request, 'moneyclub/index.html', context)
 
 
 def register(request):

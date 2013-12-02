@@ -54,18 +54,10 @@ class Article(Post):
     #same for both types 
     picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
 
-    picture_url = models.URLField(null=True, blank=True)
+    #picture_url = models.URLField(null=True, blank=True)
     content = models.CharField(max_length=2000, blank=True, null=True)
 
-    def save(self, *args, **kwargs):
-        if self.picture_url and not self.picture:
-            import urllib, os
-            from urlparse import urlparse
-            filename = urlparse(self.picture_url).path.split('/')[-1]
-            urllib.urlretrieve(self.picture_url, os.path.join("article_pics", filename))
-            self.picture = os.path.join("article_pics", filename)
-            self.picture_url = ''
-        super(Article, self).save()
+    
     
 class Event(Post):
     #same for both types 
