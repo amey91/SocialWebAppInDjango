@@ -140,13 +140,19 @@
            <div class="row">
               <div class="col-lg-9 col-lg-offset-1">
                 <div class="media">
+                  <a class="pull-left" href="{% url 'visit_user' comm.commentBy.id%}">
                     
+                      <div style="padding:4px">
+                        <img class="media-object" src="{% url 'user-photo' comm.commentBy.id %}" alt="..."width="100px">
+                      </div>
+                      
+                  </a>
                   <div class="media-body">
-                    <h4 class="media-heading"><a href="index.html">{{comm.commentBy}}</a> said</h4>
-                    <p> {{comm.comment}}</p>
+                    <h4 class="media-heading"><a href="{% url 'visit_user' comm.commentBy.id%}">{{comm.commentBy}}</a> said:</h4>
+                    <p style="font-size:150%"> {{comm.comment}}</p>
                   </div>
                   
-                  <p><span class="glyphicon glyphicon-time"></span> Posted on {{comment.datetime}}</p>
+                  <p><span class="glyphicon glyphicon-time"></span> Posted on {{comm.datetime}}</p>
                   
                 </div><!--/media-->
              
