@@ -248,7 +248,8 @@ def article(request,articleID):
     except ObjectDoesNotExist:
         errors.append('Article not found')
 
-
+    comments = article.comment_for_article.all()
+    context['comments'] = comments
     context['article']=article
     context['group'] = group
     context['errors'] = errors
@@ -425,6 +426,12 @@ def add_comment_on_article(request,groupID,articleID):
     #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
     new_entry.save()
+<<<<<<< HEAD
+=======
+    print "new_entry saved"    
+    print new_entry.id
+    print new_entry.datetime
+>>>>>>> 16cce97368f922d018acc078d69b2e93c110016e
     article = Post.objects.get(id=articleID)
     context['comments'] = Comment.objects.filter(articleId=a) 
     print context['comments']
