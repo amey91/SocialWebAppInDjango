@@ -253,7 +253,9 @@ def article(request,articleID):
     context['article']=article
     context['group'] = group
     context['errors'] = errors
-
+    context['upvote'] = len(article.article_upvote.all())
+    context['downvote'] = len(article.article_downvote.all())
+   
     return render(request, 'moneyclub/article.html', context)
 
 
@@ -337,7 +339,6 @@ def start_event(request):
     
     print "start_event"
     if request.method=='GET':
-        print "not post`"
         return render(request, 'moneyclub/post_articles.html', context)
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
@@ -383,23 +384,42 @@ def add_comment_on_article(request,groupID,articleID):
     context = {}
        
     if request.method=='GET':
-        errors.append('Something went wrong.')
+        errors.append('Not a post.')
         context['errors'] = errors
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
     
     #check for missing fields
     if not 'comment' in request.POST or not request.POST['comment']:
-        errors.append('description is required')
+        errors.append('comment is required')
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        return HttpResponse( json.dumps(context), mimetype='application/json')
     
+    try:
+        article = Post.objects.get(id=articleID)
+    except ObjectDoesNotExist:
+        errors.append('article not found')
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        return HttpResponse( json.dumps(context), mimetype='application/json')
     
     #check if poster is a member of the group
-    group1=Group.objects.get(id=groupID)
-    group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+    try:
+        group1=Group.objects.get(id=groupID)
+
+        group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+    except ObjectDoesNotExist:
+        errors.append('group not found')
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        return HttpResponse( json.dumps(context), mimetype='application/json')
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
-        print 'You are not a member of the given group.'
         context['errors'] = errors 
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse( json.dumps(context), mimetype='application/json')
+        
     
     #check if article belongs to that group
     
@@ -412,30 +432,33 @@ def add_comment_on_article(request,groupID,articleID):
         
     except ObjectDoesNotExist:
         errors.append('Article not found')
+        context['stat'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse(json.dumps(context), mimetype='application/json')
 
     if a.groupId != group1:
         errors.append('Error matching article to group')
+        context['stat'] = 'failure'
+        context['errors'] = errors
+        return HttpResponse( json.dumps(context), mimetype='application/json')
         
-    
-    if errors:
-            context['errors'] = errors
-            return render(request, 'moneyclub/errors.html', context)
-    
+   
     comm = request.POST['comment']
     
     #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
     new_entry.save()
-    print "new_entry saved"    
-    print new_entry.id
-    print new_entry.datetime
-    article = Post.objects.get(id=articleID)
-    
-    context['comments'] = Comment.objects.filter(articleId=articleID)    
-    context['article']=article
-    context['errors'] = errors    
+    print "new_entry saved"
 
-    return HttpResponseRedirect(reverse('article',args=(article.id,)),context)
+    
+    #context['comments'] = Comment.objects.filter(articleId=articleID)    
+    #context['article']=article
+    #context['errors'] = errors    
+    print articleID
+    context['stat'] = 'success'
+    context['redirect'] =  "/moneyclub/groups/article/%s" % articleID
+
+    return HttpResponse(json.dumps(context), mimetype='application/json')
 
     
 @login_required

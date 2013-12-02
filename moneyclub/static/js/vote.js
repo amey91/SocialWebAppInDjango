@@ -13,7 +13,7 @@ $(document).ready(function(){
 		var article_id = $(this).parent().attr("id")
 		var e = $(this)
 		var upvoted = function (response){
-			//console.log(response)
+			console.log(response)
 			if (response.status=="success"){
 				if (!e.html()){
 					//console.log('set button')
@@ -22,7 +22,13 @@ $(document).ready(function(){
 					var count = parseInt(e.html())
 					e.html(count+1)
 				}
-					
+
+				if ( response.downvoted){
+					$("#downvote").each(function(){
+						var count = $(this).html()
+						$(this).html(count-1)
+					});	
+				}
 				
 			} else{
 				alert(response.errors)
@@ -39,7 +45,7 @@ $(document).ready(function(){
 		var article_id = $(this).parent().attr("id")
 		var e = $(this)
 		var downvoted = function (response){
-			//console.log(response)
+			console.log(response)
 			if (response.status=="success"){
 				if (!e.html()){
 					//console.log('set button')
@@ -47,6 +53,12 @@ $(document).ready(function(){
 				} else{
 					var count = parseInt(e.html())
 					e.html(count+1)
+				}
+				if ( response.upvoted){
+					$("#upvote").each(function(){
+						var count = $(this).html()
+						$(this).html(count-1)
+					});	
 				}
 			}else{
 				alert("downvote failed!")

@@ -10,6 +10,7 @@
     <link href="/static/css/offcanvas.css" rel="stylesheet">
     <script src="/static/js/jquery-1.10.2.min.js"></script>
     <script src="/static/js/vote.js"></script>
+    <script src="/static/js/comment.js"></script>
   {% endblock headblock %}
   
 
@@ -108,8 +109,8 @@
          
             <div class="btn-sm-group" id="{{article.id}}">
               
-              <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">{{article.article_upvote|length}}</button>
-              <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">{{article.article_downvote|length}}</button>
+              <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">{{upvote}}</button>
+              <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">{{downvote}}</button>
 
            
             </div>
@@ -119,15 +120,18 @@
           <div class=" well">
             <h4>Leave a Comment:</h4>
             <form action="/moneyclub/groups/add_comment_on_article/{{article.groupId.id}}/{{article.id}}/"
-            method="POST">
+            method="POST" id="comment">
                     <div class="input-group">
-                      <input type="text" class="form-control" name = "comment">
+                      <input type="text" class="form-control" name = "comment" id="comment">
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Comment</button>
+                        <button class="btn btn-default comment" type="submit">Comment</button>
                       </span>
                     </div><!-- /input-group -->
                     {%csrf_token%}
                   </form>
+                  {% for error in errors%}
+                    <p style="color:red"> {{error}}</p>
+                  {% endfor %}
           </div>
           
           <hr>

@@ -388,6 +388,13 @@ def upvote(request):
             vote.save()
 
             try:
+                downvote = DownVote.objects.get(user=request.user, article=article_to_vote)
+                downvote.delete()
+                context['downvoted'] = True
+            except ObjectDoesNotExist:
+                context['downvoted'] = False
+            try:
+
                 #print 'reward composer'
                 # reward the composer
                 composer = article_to_vote.user
@@ -437,6 +444,12 @@ def downvote(request):
         except ObjectDoesNotExist:
             vote = DownVote(user=request.user, article=article_to_vote)
             vote.save()
+            try:
+                upvote = UpVote.objects.get(user=request.user, article=article_to_vote)
+                upvote.delete()
+                context['upvoted'] = True
+            except ObjectDoesNotExist:
+                context['upvoted'] = False
             try:
                 # downvote the composer
                 #print 'reward composer'

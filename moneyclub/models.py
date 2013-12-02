@@ -71,7 +71,7 @@ class Event(Post):
     
     
 class Comment(models.Model):
-    articleId=models.ForeignKey(Article, related_name="comment_for_article")
+    articleId=models.ForeignKey(Post, related_name="comment_for_article")
     commentBy=models.ForeignKey(User,related_name="commentbyuser")
     comment=models.CharField(max_length=100)
     datetime=models.DateTimeField(auto_now_add='true')
