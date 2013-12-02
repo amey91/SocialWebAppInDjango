@@ -68,7 +68,7 @@ $(document).ready(function(){
 		var data={'stock_name': stock_name};
         var args = {type:"POST", 
         			url: "/moneyclub/member/add-stock", 
-        			data:data,  
+        			//data:data,  
 
         			success:add_new_stock,
         			error: function (xhr, ajaxOptions, thrownError) {
