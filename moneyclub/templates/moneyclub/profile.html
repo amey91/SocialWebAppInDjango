@@ -41,26 +41,23 @@
                           title="Edit your Profile!"
                           src="/moneyclub/member/userphoto/{{user.id}}" style="width: 100px;height:100px;">
                       </a>
-                      <a class="pull-left" href="#">
-                          <img class="media-object dp img-circle" alt="No uploaded dispaly pic" src="{% url 'user-photo' user.id%}" style="width: 100px;height:100px;">
-                      </a>
+                   
                    {%endif%}
                   
                   
                       
                       <div class="media-body">
-                          <h4 class="media-heading">{{user}} <small> USA/Scotland</small></h4>
-                          <h5>adventurer, explorer and philanthropist at <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">McDuck & Company</a></h5>
+                          <h4 class="media-heading">Username: {{user}} <small> <br/><span class="glyphicon glyphicon-ok"></span>verified</small></h4>
+                          <h5>{%if profile %}
+                          
+                          {{profile.fields.lastname}},{{profile.firstname}}
+                          
+                          
+                          {%endif%}</h5>
                           <hr style="margin:8px auto">
 
-                                  <p>
-                                      <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-comment"></span> Message</a>
-                                      <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-heart"></span> Favorite</a>
-                                      <a href="#" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-ban-circle"></span> Unfollow</a>
-                                  </p>
-                          <span class="label label-default">Finance</span>
-                          <span class="label label-info">Global Trading</span>
-                          <span class="label label-default">Shoe Polishing</span>
+                                 
+                        
                       </div>
                   </div>
 
@@ -68,8 +65,7 @@
 
             </div>
 
-          </div> <!-- jumbotron -->
-          {% endblock jumbotron%}
+          
 
           
       <div class="row marketing ">
@@ -119,7 +115,8 @@
 		</div>
 	</div>
 	
-	
+	</div> <!-- jumbotron -->
+          {% endblock jumbotron%}
       		</div>
          </div>
       </div><!--/.container-->
