@@ -24,7 +24,7 @@ $(document).ready(function(){
 			}
 		}
 
-		var args = {type:"POST", url: "/moneyclub/groups/post_article", 
+		var args = {type:"POST", url: "/moneyclub/groups/post_article/", 
 					//data:data,  
 					enctype: "multipart/form-data",
 					success: post,
@@ -63,7 +63,7 @@ $(document).ready(function(){
 			}
 		}
 
-		var args = {type:"POST", url: "/moneyclub/groups/start_event", 
+		var args = {type:"POST", url: "/moneyclub/groups/start_event/", 
 					data:data,  
 					success:post,
 					always: function (response){
