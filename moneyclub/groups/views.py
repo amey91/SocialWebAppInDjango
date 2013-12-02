@@ -492,6 +492,7 @@ def member_management(request, groupID):
     context = {}
     grp=Group.objects.filter(owner=request.user)
     context['groups'] = grp
+    context['joined_groups'] = GroupMembership.objects.filter(user=request.user) 
 
     return render(request, 'moneyclub/member_management.html',context  );
 
@@ -712,27 +713,82 @@ def join_group(request,id1):
     
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
     
-
+@login_required
 def newsfeed(request):
     context = {}
     errors = []
     articles= [] 
     events = []
     context['errors']= errors
-    u=User.objects.get(username=request.user)
-    try:
-        g=GroupMembership.objects.filter(user=request.user)
-        for grp in g:
-            a = Post.objects.filter(groupId=grp).order_by('-id')[:5]
-            articles.append(a)
-            e = Event.objects.filter(groupId = grp)
-            events.append(e)
     
-    except:
-        return render(request, 'moneyclub/errors.html', context)
-    context['articles'] = articles    
-    context['events'] = events  
+    u=User.objects.get(username=request.user)
+
+    #find the groups the user has joined
+    gm=GroupMembership.objects.filter(user=request.user)
+    a= "yup" 
+    print "YYY"
+    #get all memberships
+    for membership in gm:
+         
+        a = Post.objects.filter(groupId=membership.group).order_by('-datetime')[0:5]
+        
+        #assign type
+        for item in a:
+            if item.articleType==1:
+                item=item.article
+                print " article "
+            else:
+                item=item.event
+                print " event "
+        
+    
+    context['articles'] = a
+    
+    
+    
+    #reused from home
+    memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
+    groups = [membership.group for membership in memberships]
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+    context['groups'] = groups  
+    context['events'] = events
+    try:
+
+        profile = UserProfile.objects.get(user=request.user) 
+
+    except ObjectDoesNotExist:
+        errors.append('Profile not found. Create your profile.')
+        context['no_pic']="T"
+    print request.user.username
+
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    articles = Post.objects.filter(user=request.user)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+        else:
+            article = article.event
+    context['articles'] = articles
+
+    context['events'] = Event.objects.filter(user=request.user)
+    if len(context['articles'])==0:
+        context['no_article'] = "T"
+    context['score'] =score
+    context['member'] = member
+    context['groups'] = groups
+    context['stocks'] = stocks
+    context['errors'] = errors
+
     return render(request, 'moneyclub/newsfeed.html', context)
+
 
 
 def temp(request):
