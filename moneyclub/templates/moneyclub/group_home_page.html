@@ -378,17 +378,20 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li><h4><a href="/moneyclub/groups/only_view_group_members/{{group.id}}/">Members</a></h4></li>
+              <li><h4><a href="/moneyclub/groups/only_view_group_members/{{group.id}}">Members</a></h4></li>
               {%for member in members%}
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}</a></li>
+              <li class="active">
+              <a href="/moneyclub/member/visit-user/{{member.user.id}}/">
+              <span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}
+              </a></li>
               {%endfor%}
               {% if more_members%}<li>
               <a href="{% url 'member_management' group.id%}"> {{more_members_count}} more Members</a></li>
               {%endif%}
             </ul>
-            <div>
+            <div><a href="/moneyclub/member/visit-user/{{group.owner.id}}/">
               <span class="glyphicon glyphicon-user" style="color:red"></span> Group Owner: {{group_owner.username}}
-           
+           </a>
             </div>
 
           </div><!--/.well -->

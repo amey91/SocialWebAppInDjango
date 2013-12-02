@@ -11,3 +11,9 @@ explicitly mention functionality
 no groups in memmbership mamangement
 
 
+create money club not properly mentioned
+
+
+multipple key value error on add member
+
+
