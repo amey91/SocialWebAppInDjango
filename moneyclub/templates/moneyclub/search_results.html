@@ -33,6 +33,9 @@
 	        <hr>
 
 	      {% endfor %}
+	      
+	      {%else%}
+	      <p style="color:red"> No Groups match the given query.</p><a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>
 	    {% endif %}
 
 	    <h4> Users found: </h4>
@@ -54,11 +57,12 @@
 	        <hr>
 
       	{% endfor %}
+      {%else %}
+      <p style="color:red"> No users match the given query</p>
+      
       {% endif %}
+      
    
-      {% for error in errors %}
-        <p style="color:red"> {{error}}</p>
-      {% endfor %}
   </div>
 	
 

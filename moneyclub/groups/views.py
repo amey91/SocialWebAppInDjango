@@ -721,14 +721,14 @@ def newsfeed(request):
     context['errors']= errors
     
     u=User.objects.get(username=request.user)
-<<<<<<< HEAD
+
     #find the groups the user has joined
     gm=GroupMembership.objects.filter(user=request.user)
-    print gm
+    a= "yup" 
     print "YYY"
     #get all memberships
     for membership in gm:
-        
+         
         a = Post.objects.filter(groupId=membership.group).order_by('-datetime')[0:5]
         
         #assign type
@@ -742,7 +742,7 @@ def newsfeed(request):
         
     
     context['articles'] = a
-    print a
+    
     
     
     #reused from home
@@ -755,20 +755,37 @@ def newsfeed(request):
     if len(groups)==0:
         context['no_groups'] = "true"
     context['groups'] = groups  
-=======
+    context['events'] = events
     try:
-        g=GroupMembership.objects.filter(user=request.user)
-        for grp in g:
-            a = Post.objects.filter(groupId=grp).order_by('-id')[:5]
-            articles.append(a)
-            e = Event.objects.filter(groupId = grp)
-            events.append(e)
-    
-    except:
-        return render(request, 'moneyclub/errors.html', context)
-    context['articles'] = articles    
-    context['events'] = events  
->>>>>>> 530bc561609b3ca44c8edb373a8d630087b2aedd
+
+        profile = UserProfile.objects.get(user=request.user) 
+
+    except ObjectDoesNotExist:
+        errors.append('Profile not found. Create your profile.')
+        context['no_pic']="T"
+    print request.user.username
+
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    articles = Post.objects.filter(user=request.user)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+        else:
+            article = article.event
+    context['articles'] = articles
+
+    context['events'] = Event.objects.filter(user=request.user)
+    if len(context['articles'])==0:
+        context['no_article'] = "T"
+    context['score'] =score
+    context['member'] = member
+    context['groups'] = groups
+    context['stocks'] = stocks
+    context['errors'] = errors
+
     return render(request, 'moneyclub/newsfeed.html', context)
 
 

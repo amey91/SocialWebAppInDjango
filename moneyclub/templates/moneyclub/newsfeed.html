@@ -6,10 +6,15 @@
 
     
           {% block articles %}
-   <ol>
-   {%for article in articles%}      
+   {%if not articles%}
+   <h4 class="media-heading">You have not joined any Money Clubs. <a href="/moneyclub/groups/findgroups/">
+   Join a Money Club </a> to gain access to information and make your investments smarter!</h4>
+   {%endif%}
    
-   {%if article.articleType == 1 %}
+   <ol>
+   {%for article in articles%}
+   
+   {%if article.article%}
          <li><h4 class="media-heading">Article : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
           <div class="row">
             
