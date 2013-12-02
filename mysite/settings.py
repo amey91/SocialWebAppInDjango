@@ -1,27 +1,21 @@
 # Django settings for mysite project.
-
 import os
 
 PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__)) + '/'
-
+# python manage.oy dumpdata sample_data.json
+#
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-
-    ('Amey', 'aghadiga@andrew.cmu.edu'),
-    ('Ernest','erzhuow@andrew.cmu.edu'),
-
+    # ('Amey', 'amey@cmu.edu'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'moneyclub',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
@@ -39,7 +33,7 @@ ALLOWED_HOSTS = []
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'US/Eastern'
+TIME_ZONE = 'US\Eastern'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -47,6 +41,10 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
+LOGIN_URL = '/login'
+
+# Default URL to redirect to after a user logs in.
+LOGIN_REDIRECT_URL = '/'
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -71,7 +69,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = PROJECT_ROOT + 'static/'
+STATIC_ROOT = '/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -84,6 +82,9 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+
+
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -93,7 +94,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '-^gkin&m&mv0iintnwgz$x6hv2ovut56%#_71xlr-epnu$#h%e'
+SECRET_KEY = '_wrl56y2c+l*5lrnhtvs%trh0ry^9r(x$673og)cx#i3ec)8_9'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -108,20 +109,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.transaction.TransactionMiddleware',
-
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'moneyclub.webapp637@gmail.com'
-EMAIL_HOST_PASSWORD = 'amey&ernest'
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -132,8 +124,6 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #PROJECT_ROOT + '../moneyclub/templates/',
-    #os.path.join(PROJECT_ROOT, "../moneyclub/templates/moneyclub"),
 )
 
 INSTALLED_APPS = (
@@ -144,18 +134,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-
-    'django.contrib.admin',
-
+     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    "moneyclub",
-   
+     'django.contrib.admindocs',
+	 #'grumblr',
+     'moneyclub',
 )
 
-LOGIN_URL = '/login'
-
-LOGIN_REDIRECT_URL = '/'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -185,30 +171,3 @@ LOGGING = {
         },
     }
 }
-
-DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-STATIC_ROOT = 'staticfiles'
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(DIR_PATH, 'static'),
-)
-# # Allow all host hosts/domain names for this site
-ALLOWED_HOSTS = ['*']
-
-# Parse database configuration from $DATABASE_URL
-import dj_database_url
-
-DATABASES['default']=dj_database_url.config()
-
-# Honor the 'X-Forwarded-Proto' header for request.is_secure()
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# try to load local_settings.py if it exists
-
-try: 
-    from mysite.local_settings import *
-except Exception as e:
-    print e
-    
