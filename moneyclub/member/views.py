@@ -116,10 +116,12 @@ def visit_user(request, user_id):
         return HttpResponseRedirect(reverse('homepage'))
 
     try:
-        profile = UserProfile.objects.get(user=user_id) 
+        profile = UserProfile.objects.get(user=user_id)
+         
         #profile = ProfileForm(instance=profile)
     except ObjectDoesNotExist:
-        pass
+        context['no_pic']="T"
+        
 
     posts = Post.objects.filter(user = user_to_visit)
     for post in posts:
