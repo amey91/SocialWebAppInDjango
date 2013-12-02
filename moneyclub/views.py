@@ -163,7 +163,7 @@ def confirm_registration(request, username, token):
     user.is_active = True
     user.save()
 
-    member = Member(user=user, points=100)
+    member = Member(user=user)
     member.save();
     return render(request, 'moneyclub/confirmed.html', {})
 
