@@ -1,0 +1,95 @@
+{% extends "moneyclub/index.html" %}
+
+    {% block title %}
+    <title>{{user}}'s Newsfeed</title>
+    {% endblock title %}
+
+    
+          {% block articles %}
+   {%if not articles%}
+   <h4 class="media-heading">You have not joined any Money Clubs. <a href="/moneyclub/groups/findgroups/">
+   Join a Money Club </a> to gain access to information and make your investments smarter!</h4>
+   {%endif%}
+   
+   <ol>
+   {%for article in articles%}
+   
+   {%if article.article%}
+         <li><h4 class="media-heading">Article : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+          <div class="row">
+            
+              <div class="media">
+                  <a class="pull-left" href="#">
+                    
+                    
+                  </a>
+                <div class="media-body">
+                  by <a href="/monyclub/member/visit-member/{{article.user.id}}/">{{article.user}}</a>
+                  
+                  <br/>
+                  <span class="label label-info">Article</span>
+                  {{article.content}}
+                </div>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+              </div><!--/media-->
+            
+            
+          </div><!--/row-->
+          </li>
+          <hr/>
+         
+         
+    {% else %}
+    <li><h4 class="media-heading">Event : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+          <div class="row">
+            
+              <div class="media">
+                  
+                  </a>
+                <div class="media-body">
+                  
+                  
+                  <span class="label label-info">Event</span>
+                  <table class="table table-striped table-condensed">
+                  
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Date</a></td>
+                            <td>{{article.eventDate}}{{article.eventTime}}, {{article.eventDate}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Time</a></td>
+                            <td>{{article.eventTime}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Location</a></td>
+                            <td>Uncle Scoorge's Castle</td>
+                            
+                          </tr>
+                  </tbody>
+                </table>
+                </div>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
+                  
+               
+              </div><!--/media-->
+               
+
+            
+          </div><!--/row-->
+	</li>
+        <hr/>
+	{%endif%}
+	
+  {%endfor%}
+  </ol>
+          {% endblock articles %}
+        

@@ -1,0 +1,180 @@
+{% extends "moneyclub/login_template.html" %}
+
+{% block headblock %}
+    {% block title %}
+    <title>Article: {{article.title}}</title>
+    {% endblock title %}
+       <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/vote.js"></script>
+    <script src="/static/js/comment.js"></script>
+  {% endblock headblock %}
+  
+
+     {% block contentsblock %}
+    <div class="container">
+
+      <div class="row ">
+        <div class="col-lg-8">
+          <div class="article">
+            <h1>Title: {{article.title}}</h1>
+            <p class="lead">by <a href="/moneyclub/member/profile/{{user.id}}/">{{article.user}}</a></p>
+
+            
+            <hr>
+              <div class="media">
+              {%if article.picture%}
+                  <div class="pull-left" >
+                    <img class="media-object" 
+                    style="max-width:600px;"
+                    
+                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
+                    
+                    
+                    alt="Image Not Found!" max_width="100px">
+                  </div>
+               
+               
+               {%endif%}
+            
+            
+
+            <div class="media-body">
+            
+            <p class="lead">Description:{{article.description}}</p>
+            	                        
+            </div>
+            
+            </div>
+            <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
+            
+
+            {% if  article.articleType == 1 %}
+            <span class="label label-info">Article</span>
+
+            {% if article.picture %}
+              <img class="media-object" src="/moneyclub/groups/post_article/{{article.id}}" alt="..."width="400px">
+            {% endif %}
+            <p class="lead">{{article.content}}</p>
+
+            {% endif %}
+            
+            <!-- event post -->
+            {% if  article.articleType == 2 %}
+            <span class="label label-info">Event</span>
+            
+            <div class="container">
+              <div class="row-fluid marketing">
+                <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3 col-md-offset-2 text-center"></th>
+                            <th class="col-md-6"></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                            <tr >
+                                <td class="text-center">When: </td>
+                                
+                                <td>{{article.eventTime}}, {{article.eventDate}}</td>
+                            </tr>
+                            <tr class="success">
+                                <td class="text-center">Where: </td>
+                                
+                                <td>{{article.location}}</td>
+                            </tr>
+                            <tr class="warning">
+                                <td class="text-center">Description: </td>
+                                
+                                <td>{{article.description}}</td>
+                            </tr>
+                   
+                    </tbody>
+                </table>
+                {% for error in errors %}
+                  <p style="color:red">{{error}}</p>
+                {% endfor%}
+              </div> <!--/.container -->
+     
+                  
+              </div><!--/.marketing -->
+            </div ><!--/.container -->
+            {% endif %}
+         
+            <div class="btn-sm-group" id="{{article.id}}">
+              
+              <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">{{upvote}}</button>
+              <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">{{downvote}}</button>
+
+           
+            </div>
+            <hr>
+          </div> <!--/article--> 
+          <!-- the comment box -->
+          <div class=" well">
+            <h4>Leave a Comment:</h4>
+            <form action="/moneyclub/groups/add_comment_on_article/{{article.groupId.id}}/{{article.id}}/"
+            method="POST" id="comment">
+                    <div class="input-group">
+                      <input type="text" class="form-control" name = "comment" id="comment">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default comment" type="submit">Comment</button>
+                      </span>
+                    </div><!-- /input-group -->
+                    {%csrf_token%}
+                  </form>
+                  {% for error in errors%}
+                    <p style="color:red"> {{error}}</p>
+                  {% endfor %}
+          </div>
+          
+          <hr>
+
+           
+        
+
+          <h4>Comments:</h4>
+          
+{%for comm in comments %}
+           <div class="row">
+              <div class="col-lg-9 col-lg-offset-1">
+                <div class="media">
+                  <a class="pull-left" href="{% url 'visit_user' comm.commentBy.id%}">
+                    
+                      <div style="padding:4px">
+                        <img class="media-object" src="{% url 'user-photo' comm.commentBy.id %}" alt="..."width="100px">
+                      </div>
+                      
+                  </a>
+                  <div class="media-body">
+                    <h4 class="media-heading"><a href="{% url 'visit_user' comm.commentBy.id%}">{{comm.commentBy}}</a> said:</h4>
+                    <p style="font-size:150%"> {{comm.comment}}</p>
+                  </div>
+                  
+                  <p><span class="glyphicon glyphicon-time"></span> Posted on {{comm.datetime}}</p>
+                  
+                </div><!--/media-->
+             
+              
+            </div><!--/col-lg-8-->
+          </div><!--/row-->
+          <hr/>
+{%endfor%}
+          
+        </div><!--/span-->
+      </div>
+
+       
+
+      <hr>
+
+
+    </div><!--/.container-->
+
+     {% endblock contentsblock %}

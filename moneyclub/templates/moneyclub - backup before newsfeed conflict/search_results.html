@@ -1,0 +1,69 @@
+{% extends "moneyclub/login_template.html" %}
+
+    {% block title %}
+    <title>{{user}}'s Homepage</title>
+    {% endblock title %}
+
+  
+  
+    
+
+    {% block contentsblock %}
+    	
+    	<div class="container">
+    		<h4> Groups found: </h4>
+	   {% if groups_retrieved|length > 0 %}
+	      
+	      {% for group in groups_retrieved %}
+	        <div class="media">
+	           <img data-src="holder.js/50x50" class="img-thumbnail pull-left" 
+	            src="{% url 'group-photo' group.id %}" alt="{{group}} "width="50px">
+	     
+	          
+	          <div class="media-body">
+	            <p style="font-size:175%; color:grey"> 
+	              <a href="{% url 'grouphomepage' group.id%}"> {{group}} </a> 
+	            </p>
+	            <p >{{group.description}}
+	            <div class="btn-group-sm pull-right">
+	                
+	            </div>
+	          </div>
+	        </div>
+	        <hr>
+
+	      {% endfor %}
+	      
+	      {%else%}
+	      <p style="color:red"> No Groups match the given query.</p><a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>
+	    {% endif %}
+
+	    <h4> Users found: </h4>
+	    {% if users_retrieved|length > 0 %}
+	  		
+	      {% for user_ret in users_retrieved %}
+	        <div class="media">
+	          <img data-src="holder.js/50x50" class="img-thumbnail pull-left" 
+	            src="{% url 'user-photo' user_ret.id %}" alt="{{user_ret}}"width="50px">
+	   
+	        
+	          <div class="media-body">
+	            <p style="font-size:175%; color:grey"> 
+	            	<a href="{% url 'visit_user' user_ret.id %}">{{user_ret}}  </a>
+	            </p>
+	           
+	          </div>
+	        </div>
+	        <hr>
+
+      	{% endfor %}
+      {%else %}
+      <p style="color:red"> No users match the given query</p>
+      
+      {% endif %}
+      
+   
+  </div>
+	
+
+    {% endblock contentsblock %}

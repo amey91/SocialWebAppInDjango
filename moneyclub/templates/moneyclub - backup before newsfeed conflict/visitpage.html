@@ -1,0 +1,273 @@
+{% extends "moneyclub/login_template.html" %}
+  
+    {% block headblock %}
+    {% block title %}
+    <title>{{visitee}}'s Homepage</title>
+    {% endblock title %}
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/stock.js"></script>
+    <script src="/static/js/edit_stock.js"></script>
+
+  {% endblock headblock %}
+
+  
+  
+    
+
+    {% block contentsblock %}
+    <div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+         
+         {% block jumbotron%}
+          <div class="jumbotron">
+            <div class="row">
+
+
+              <div class="col-lg-12">
+                  <div class="media">
+                  {%if no_pic %}
+                  
+                  <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" src="/static/image/money.jpg" 
+                          
+                          title="Create a Profile now!"
+                          style="width: 100px;height:100px;">
+                      </a>
+                  
+                  {%else%}
+                  
+                      <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" 
+                          title="Edit your Profile!"
+                          src="/moneyclub/member/userphoto/{{visitee.id}}" style="width: 100px;height:100px;">
+                      </a>
+                      
+                   {%endif%}
+                    <div class="media-body">
+                        <h4 class="media-heading">{{visitee}} <small> {{profile.location}}</small></h4>
+                        <h5>{{occupation}} </h5>
+                        <hr style="margin:8px auto">
+                        <div class="container">
+                          <div class="row">
+                          <div class="col-md-4">
+                              <div class="list-group">
+                                  <a  class="list-group-item visitor">
+                                      <h3 class="pull-right">
+                                          <span class="glyphicon glyphicon-usd"></span>
+                                    </h3>
+                                      <h4 class="list-group-item-heading count">{{score}}</h4>
+                                      <p class="list-group-item-text">
+                                          Total Points</p>
+                                  </a>
+                              </div>
+                        </div>
+                      </div>
+                      </div>
+                            
+                        
+                    </div>
+                  </div>
+
+              </div><!-- col-lg-5 -->
+
+            </div> <!--/.row -->
+
+          </div> <!-- jumbotron -->
+          {% endblock jumbotron%}
+
+          {% block post%}
+
+          {% endblock post%}
+
+  
+          {% block articles %}
+          <div class="container">
+      
+ <div class="row">
+  <h3>Articles Authored:</h3>
+ </div>       
+ <hr/>
+        
+        
+      {%if not articles%}
+            <div class="row">
+            
+              <div class="media">
+                  
+                <div class="media-body">
+                  
+                  <h4 class="media-heading">You have not authored any articles in any Money Club.</h4>
+                  <span class="label label-info">Suggestion</span>
+                  <a href="/moneyclub/groups/findgroups/">Find Money Clubs</a>
+                </div>
+                <hr>                 
+               
+              </div><!--/media-->
+          </div><!--/row-->
+      {%else %}
+    {%for article in articles%}
+    
+    {%if article.articleType = 1 %}
+           <div class="row">
+            
+              <div class="media">
+              {%if article.picture%}
+                  <a class="pull-left" href="#">
+                    <img class="media-object" 
+                    
+                    
+                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
+                    
+                    
+                    alt="Image Not Found!" width="100px">
+                  </a>
+               
+               
+               {%endif%}
+               
+               
+                <div class="media-body">
+                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+                  <span class="label label-info">Article content:</span>
+                  
+                  <br/>
+                  {{article.content}}
+                                    
+                </div>
+                <hr>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+              </div><!--/media-->
+            
+            
+          </div>
+          
+          <!--/row-->
+          
+          <hr/>
+          {% else %}
+          
+          Insert second article here
+          
+          
+          {%endif%}
+          {%endfor%}
+          
+          {%endif%}
+          
+           </div><!--/.container-->
+          {% endblock articles %}
+        </div><!--/span-->
+        
+
+        
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="siderbars" role="navigation">
+          {% block sidebars %}
+          <div class="well sidebar-nav stock" id="{{visitee.id}}">
+            <ul class="nav">
+             
+              <table class="table table-striped table-condensed">
+                  <thead>
+                          <tr>
+                            <td></td>
+                            <td>PRICE</td>
+                            <td>CHG</td>
+                            <td>%CHG</td>
+                          </tr>
+                  </thead>   
+                  <tbody>
+                    {% for stock in stocks %}
+                      <tr id="{{stock.id}}">
+                            <td>{{stock.stock_name}}</td>
+                            <td>{{stock.price}}</td>
+                            <td>{{stock.change}}</td>
+                            <td >{{stock.percent_change}}</td>
+                            <th> <span class="glyphicon glyphicon-minus delete-stock" id="{{stock.id}}" style="color:red;font-size:75%"></span></th>
+                      </tr>
+                    {% endfor %}
+                         
+                  </tbody>
+              </table>
+
+              <div class="input-group add-stock">
+                <input type="text" class="form-control add-stock" placeholder="add stock">
+                <span class="input-group-btn">
+                  <button class="btn btn-success" type="button">
+                    <span class="glyphicon glyphicon-plus">
+                </span>
+                
+              </div><!-- /input-group -->
+              
+
+
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>
+              <h4>My Money Clubs:</h4>
+              </li>
+              <font style="color:grey">
+              {%if no_groups %} 
+                You are not enrolled in any Money Clubs.
+                <br/>
+        <a href="/moneyclub/groups/findgroups/">Find Money Clubs!</a>              
+              {%else%}
+               
+              {% for group in groups%}
+                <li><a href="{% url 'grouphomepage' group.id%}">{{group.name}}</a></li>
+              {% endfor %}
+             
+              {%endif%}
+              </font>
+              
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>Events</li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>Tea Party with Duck Billionare Club</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-calendar"></span>Polishing Gold Coins</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-calendar"></span>Visiting the President</a></li>
+              
+            </ul>
+          </div><!--/.well -->
+          <div class="well sidebar-nav">
+            <ul class="nav">
+              <li>Apps</li>
+              <li class="active"><a href="#">Sharing</a></li>
+              <li><a href="#">Messages</a></li>
+              <li><a href="#">Inviting friends</a></li>
+              
+            </ul>
+          </div><!--/.well -->
+        {% endblock sidebars %}
+        </div><!--/span-->
+        
+      </div><!--/row-->
+      
+      <hr>
+
+
+    </div><!--/.container-->
+    {% endblock contentsblock %}
+
+    {% block endscript %}
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+     
+    <script src="/static/js/offcanvas.js"></script>
+    <script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/static/js/bootstrap-datetimepicker.js"></script>
+
+
+    {% endblock endscript %}
+   
+    
+

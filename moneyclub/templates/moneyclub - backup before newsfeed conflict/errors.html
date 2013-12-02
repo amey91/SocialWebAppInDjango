@@ -1,0 +1,19 @@
+{% extends "moneyclub/index.html" %}
+
+
+ {% block jumbotron%}
+   <div class="jumbotron">
+    	<div class="row">
+    <font style="color:red">ERROR:<ol>
+    	{%for error in errors %}{{error}}{%endfor%}
+    	</font>
+    	</ol>
+    	</div>
+    </div>
+          
+          
+  {% endblock jumbotron%}
+  
+  {% block articles%}
+  {% endblock articles%}
+          
