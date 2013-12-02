@@ -53,7 +53,6 @@ class Post(models.Model):
 class Article(Post):
     #same for both types 
     picture = models.ImageField(upload_to="article_pics", blank=True, null=True)
-
     picture_url = models.URLField(null=True, blank=True)
     content = models.CharField(max_length=2000, blank=True, null=True)
 

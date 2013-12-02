@@ -24,9 +24,30 @@
 
               <div class="col-lg-9">
                   <div class="media">
-                      <a class="pull-left" href="#">
-                          <img class="media-object dp img-circle" src="{% url 'user-photo' user.id%}" style="width: 100px;height:100px;">
+                  
+                  {%if no_pic %}
+                  
+                  <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" src="/static/image/money.jpg" 
+                          
+                          title="Create a Profile now!"
+                          style="width: 100px;height:100px;">
                       </a>
+                  
+                  {%else%}
+                  
+                      <a class="pull-left" href="/moneyclub/member/profile">
+                          <img class="media-object dp img-circle" 
+                          title="Edit your Profile!"
+                          src="/moneyclub/member/userphoto/{{user.id}}" style="width: 100px;height:100px;">
+                      </a>
+                      <a class="pull-left" href="#">
+                          <img class="media-object dp img-circle" alt="No uploaded dispaly pic" src="{% url 'user-photo' user.id%}" style="width: 100px;height:100px;">
+                      </a>
+                   {%endif%}
+                  
+                  
+                      
                       <div class="media-body">
                           <h4 class="media-heading">{{user}} <small> USA/Scotland</small></h4>
                           <h5>adventurer, explorer and philanthropist at <a href="http://disney.wikia.com/wiki/Scrooge_McDuck">McDuck & Company</a></h5>
