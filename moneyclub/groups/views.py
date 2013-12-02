@@ -209,16 +209,35 @@ def view_group_members2(request):
     if not request.POST:
         return render(request, 'moneyclub/view_group_members2.html', {'error':"This "})
     print request.POST['select_group']
+    
+    
+    
+    
     if request.method=="GET":
         view_group_members1(request)
     if not 'select_group' in request.POST or not request.POST['select_group']:
         view_group_members1(request)
-    g=Group.objects.get(name=request.POST['select_group'])
-    members=GroupMembership.objects.filter(group=g).order_by('-points')        
-    return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    try:
+        g=Group.objects.get(name=request.POST['select_group'])
+        #check if user owns this group
+        if not g.owner==request.user:
+            context['errors']="Privilege restriction. You cannot access the page. Sorry."
+            return render(request, 'moneyclub/errors.html', context)
+        
+        members=GroupMembership.objects.filter(group=g).order_by('-points') 
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        context['errors']="Group does not exist"
+        return render(request, 'moneyclub/errors.html', context)
+    
+    
+    
+    
+    
 
 
 def view_group_members1(request):
+    
     grp=Group.objects.filter(owner=request.user)
     #owns no groups
     if grp.count()==0:
@@ -227,7 +246,37 @@ def view_group_members1(request):
         
         
 def only_view_group_members(request,grpId):
-    pass
+    context ={}
+    errors=[]
+    context['errors']=errors
+    try:
+        grp=Group.objects.get(id=grpId)
+    except:
+        errors.append("Group does not exist")
+        return render(request, 'moneyclub/errors.html', context)
+    members=GroupMembership.objects.filter(group=grp).order_by('-points') 
+    context['members']=members
+    
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    
+    
+    context['stocks'] = stocks
+    context['errors'] = errors
+    
+    
+    return render(request, 'moneyclub/only_view_group_members.html', context)
     
             
 def menu(request):
@@ -825,5 +874,28 @@ def temp(request):
     return render(request, 'moneyclub/simplegraph.html', {})
 
 
-
-
+def general_data_to_be_included_in_requests(request):
+    context = {}
+    errors= []
+    
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    
+    
+    context['stocks'] = stocks
+    context['errors'] = errors
+    
+    
+    
+    return context

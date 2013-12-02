@@ -15,9 +15,8 @@ urlpatterns = patterns('',
     url(r'^get_photo_article/(?P<id>\d+)$', 'moneyclub.groups.views.get_photo_article',name='article-photo'),
     url(r'^add_members_generic', 'moneyclub.groups.views.add_members_generic'),
     url(r'^add_members/$', 'moneyclub.groups.views.add_members'),
-    #donnot delete this. I use this for testing
-    url(r'^temp/$', 'moneyclub.groups.views.temp'),
-    
+    #donot delete this. I use this for testing
+    url(r'^temp/$', 'moneyclub.groups.views.temp'),    
     url(r'^view_group_members2/$', 'moneyclub.groups.views.view_group_members2'),
     url(r'^view_group_members1/$', 'moneyclub.groups.views.view_group_members1'),
     url(r'^block_member/(?P<id1>\d+)/(?P<id2>\d+)/$', 'moneyclub.groups.views.block_member'),
