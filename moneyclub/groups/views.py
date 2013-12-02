@@ -492,6 +492,7 @@ def member_management(request, groupID):
     context = {}
     grp=Group.objects.filter(owner=request.user)
     context['groups'] = grp
+    context['joined_groups'] = GroupMembership.objects.filter(user=request.user) 
 
     return render(request, 'moneyclub/member_management.html',context  );
 
