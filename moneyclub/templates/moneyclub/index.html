@@ -232,10 +232,13 @@
           <div class="well sidebar-nav">
             <ul class="nav">
               <li>Events</li>
+             {%if events%}
               {% for event in events %}
                 <li><a href="/moneyclub/groups/article/{{event.id}}"><span class="glyphicon glyphicon-calendar"></span>{{event.title}}</a></li>
               {% endfor %}
-              
+              {%else%}
+              <li>No scheduled events.</li>
+              {%endif%}
               
             </ul>
           </div><!--/.well -->

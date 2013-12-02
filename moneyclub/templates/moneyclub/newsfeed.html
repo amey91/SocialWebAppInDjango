@@ -20,11 +20,16 @@
               <div class="media">
                   
                 <div class="media-body">
+				<span class="label label-info">Article</span>
                   by <a href="/moneyclub/member/visit-user/{{article.user.id}}/">{{article.user}}</a>
                   
                   <br/>
-                  <span class="label label-info">Article</span>
+                  
+                  
+                  {%if article.content%}
+                  <span class="label label-info">Article Description</span>
                   {{article.content}}
+                  {%endif%}
                 </div>
                 
                 <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
