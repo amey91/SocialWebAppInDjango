@@ -503,18 +503,20 @@ def add_comment_on_article(request,groupID,articleID):
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
     
-    #check if poster is a member of the group
+    #check if poster is a member of the group and is not blocked
     try:
         group1=Group.objects.get(id=groupID)
 
-        group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+        group_list=GroupMembership.objects.filter(group=group1, blocked=0).values_list('user', flat=True)
+        
+        
     except ObjectDoesNotExist:
         errors.append('group not found')
         context['errors'] = errors
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
     if request.user.id not in group_list:
-        errors.append('You are not a member of the given group.')
+        errors.append('You are not a member of the given group, or are blocked.')
         context['errors'] = errors 
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
