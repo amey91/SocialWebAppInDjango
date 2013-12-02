@@ -1,0 +1,27 @@
+{% extends "moneyclub/index.html"%}
+
+    {% block headblock %}
+    {% block title %}
+    <title>{{group_name}}</title>
+    {% endblock title %}
+    
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/signin.css" rel="stylesheet">
+  {% endblock headblock %}
+  
+    {% block contentsblock %}
+
+    <div class="container">
+
+      <form class="form-signin"><br/><br/><br/><br/><br/><br/>
+        <h2 class="form-signin-heading"><div class="btn btn-block btn-lg btn-success">
+        <span class="glyphicon glyphicon-ok"></span> {{message}} </div></h2>
+        
+        {%if create_group %}&nbsp &nbsp &nbsp <a href="/moneyclub/groups/home/{{group.id}}">Click here to go to your new Money Club! </a>{%endif%}
+        {%if group_join %}&nbsp &nbsp &nbsp You request was sent to the Group - <br/>&nbsp &nbsp &nbsp Owner. Please wait for confirmation. {%endif%}
+      </form>
+
+    </div> <!-- /container -->
+    {% endblock contentsblock %}

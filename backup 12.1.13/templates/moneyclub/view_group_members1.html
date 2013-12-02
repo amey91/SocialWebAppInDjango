@@ -1,0 +1,90 @@
+{% extends "moneyclub/root_template.html" %}
+
+  {% block headblock %}
+
+    <!-- title and scripts -->
+    {% block title %}
+    <title>Off Canvas Template for Bootstrap</title>
+    {% endblock title %}
+    <!-- Bootstrap core CSS -->
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+  {% endblock headblock %}
+   
+  {% block bodyblock %} 
+    {% block nevbar %}
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="newsfeed.html">Moneyclub</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul  class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left" role="search"
+                  action="#" method="post">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search Moneyclub" name="query">
+                </div>
+                <button type="submit" class="btn btn-default">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+             
+            </form>
+
+            
+            <li ><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li ><a href="welcome.html"><span class="glyphicon glyphicon-log-out"></span></a></li> <!-- link to signin-->
+
+        </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
+    {% endblock nevbar %}
+    {% block contentsblock %}
+      <!-- add your contents of the page here -->
+
+    
+<br/><br/><br/><br/><br/>
+     <div class="container">
+ <form class="form-signin" action="/moneyclub/groups/view_group_members2/" method="post" >
+                
+                Select a group you own:<select name="select_group">
+ {%for item in groups%}
+  <option value="{{item.name}}">{{item.name}}</option>
+  {%endfor%}
+ 
+</select>
+  <button class="btn btn-primary btn-primary"><span class="glyphicon glyphicon-pushpin"></span>
+                    Get Members</button>
+
+                {%csrf_token%}
+                </form>
+    </div> 
+           {% endblock contentsblock %}<br/><br/><br/><br/><br/>
+     <footer>
+        <p>&copy; Company 2013</p>
+      </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% block endscript %}
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+    <script src="/static/css/offcanvas.js"></script>
+    {% endblock endscript %}
+  {% endblock bodyblock %}
+  </body>
+</html>
