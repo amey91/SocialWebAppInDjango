@@ -1,0 +1,96 @@
+{% extends "moneyclub/index.html" %}
+{% block title %}<title>View Members</title>
+{% endblock title %}
+
+ {% block jumbotron%}
+   <div class="jumbotron1">
+    	<div class="row">
+    <div class="container">
+
+                
+                
+
+                <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+		{%if not members %}<div class="alert alert-info">Internal server error. You should be more careful.</div>
+        
+        {%else%}
+        <div class="alert alert-info">
+        Members for group "<a href="/moneyclub/groups/home/{{members.0.group.id}}">{{members.0.group.name}}</a>":             
+        </div>
+             
+            <div class="alert alert-success" style="display:none;">
+                </div>
+            <table class="table">
+                <thead align="center">
+                    <tr align="center"><th>Member</th><th>Points</th><th>Status</th><th>Actions Available</th></tr>
+                </thead>
+                <tbody>
+
+					{% for item in members%}
+					
+					{% if item.blocked == 0%}
+					
+                    <tr class="success">
+                    <td>{{item.user}}</td>
+                    <td>{{item.points}}</td>
+                    <td>
+                       <div class="btn btn-block btn-success">
+                       <span class="glyphicon glyphicon-ok-circle"></span> Active Member</div>          
+                    </td>
+                    <td>
+                    <a href="/moneyclub/groups/block_member/{{item.group.id}}/{{item.user.id}}/"
+                     class="btn btn-block btn-primary btn-primary">Block This Member</a>
+					</td>
+                    </tr>
+                  	{% elif item.blocked == 1 %}
+					<tr class="danger">
+                    <td>{{item.user}}</td>
+                    <td>{{item.points}}</td>
+                    <td>
+                    
+                    <div class="btn btn-block btn-primary btn-danger">
+                    <span class="glyphicon glyphicon-remove-sign"></span> Blocked Member</div>
+                    </td>
+                    <td>
+                    <a href="/moneyclub/groups/unblock_member/{{item.group.id}}/{{item.user.id}}/"
+                     class="btn btn-block btn-primary btn-primary">Unblock This Member</a>
+                    </td>
+                    </tr>
+					{%endif%}                   
+                    
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
+    
+    	{%endif%}
+    </div>
+</div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+    </div> 
+          
+    
+    	</div>
+    </div>
+          
+          
+  {% endblock jumbotron%}
+  
+  
+  {% block articles %}
+  {% endblock articles %}
+          

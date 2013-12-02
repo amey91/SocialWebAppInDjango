@@ -1,0 +1,247 @@
+{% extends "moneyclub/root_template.html" %}
+
+  {% block headblock %}
+
+    <!-- title and scripts -->
+    {% block title %}
+    <title>Off Canvas Template for Bootstrap</title>
+    {% endblock title %}
+    <!-- Bootstrap core CSS -->
+    <link href="/static/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/offcanvas.css" rel="stylesheet">
+  {% endblock headblock %}
+   
+  {% block bodyblock %} 
+    {% block nevbar %}
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="newsfeed.html">Moneyclub</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul  class="nav navbar-nav navbar-right">
+            <form class="navbar-form navbar-left" role="search"
+                  action="#" method="post">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Search Moneyclub" name="query">
+                </div>
+                <button type="submit" class="btn btn-default">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+             
+            </form>
+
+            
+            <li ><a href="#"><span class="glyphicon glyphicon-cog"></span></a></li>
+            <li ><a href="welcome.html"><span class="glyphicon glyphicon-log-out"></span></a></li> <!-- link to signin-->
+
+        </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
+    {% endblock nevbar %}
+    {% block contentsblock %}
+      <!-- add your contents of the page here -->
+
+    
+<br/><br/><br/><br/><br/>
+     <div class="container">
+ <form class="form-signin" action="/moneyclub/groups/view_group_members2/" method="post" >
+                
+                {%if not members %}Internal server error. You should be more careful
+                {%else%}
+                Members for group "{{members.0.group.name}}":
+                <ol>
+ {%for item in members%}<li>
+  {{item.user}} -- {{item.points}} points  ---{%if item.blocked == 0%}<a href="/moneyclub/groups/block_member/{{item.group.id}}/{{item.user.id}}/" class="btn btn-xs btn-danger">
+  <span class="glyphicon glyphicon-remove"></span> Block this Member</a>
+  {%else%}<div  class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-info-sign"></span> Member is blocked!</div>
+  {%endif%}<br/><br/></li>
+  {%endfor%}
+  </ol>
+ 
+
+  
+    </button>
+
+                {%csrf_token%}{%endif%}
+                </form>
+                
+       -------------------------
+       {%if not members %}Internal server error. You should be more careful
+                {%else%}
+                
+                Members for group "{{members.0.group.name}}":         
+                
+                <table class="hovertable">
+                
+                <tr>
+	<th>Member</th><th>Points </th><th>Status</th>
+</tr>
+                {%for item in members%}
+
+<tr onmouseover="this.style.backgroundColor='#ffff66';" onmouseout="this.style.backgroundColor='#d4e3e5';">
+	<td>{{item.user}}</td><td>{{item.points}}</td>
+	
+	<td>
+	{%if item.blocked == 0%}<a href="/moneyclub/groups/block_member/{{item.group.id}}/{{item.user.id}}/" class="btn btn-xs btn-danger">
+  <span class="glyphicon glyphicon-remove"></span> Block this Member</a>
+  {%else%}<div  class="btn btn-xs btn-warning"><span class="glyphicon glyphicon-info-sign"></span> Member is blocked!</div>
+  {%endif%}
+
+	</td>
+</tr>
+
+			{%endfor%}
+</table>
+			{%endif%}
+                
+                
+                
+                
+                -------------------------
+                <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                Please Wait...</div>
+            <div class="alert alert-success" style="display:none;">
+                <span class="glyphicon glyphicon-ok"></span> Drag table row and cange Order</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Column heading
+                        </th>
+                        <th>
+                            Column heading
+                        </th>
+                        <th>
+                            Column heading
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="active">
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr class="warning">
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                    <tr class="danger">
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                        <td>
+                            Column content
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+    </div> 
+           {% endblock contentsblock %}<br/><br/><br/><br/><br/>
+     <footer>
+        <p>&copy; Company 2013</p>
+      </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% block endscript %}
+    <script src="/static/assets/js/jquery.js"></script>
+    <script src="/static/dist/js/bootstrap.min.js"></script>
+    <script src="/static/css/offcanvas.js"></script>
+    {% endblock endscript %}
+  {% endblock bodyblock %}
+  </body>
+</html>

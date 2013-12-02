@@ -39,18 +39,21 @@ import ystockquote
 @transaction.commit_on_success
 def view_profile(request):
     errors = []
-    context = []
+    context = {}
     profile = []
     try:
         profile_to_edit = UserProfile.objects.get(user=request.user) 
+        if not profile_to_edit.profilepicture:
+            context['no_pic']="T"
         profile = ProfileForm(instance=profile_to_edit)
 
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         profile = ProfileForm()
+        context['no_pic']= 1
 
-    
-    context = {'profile': profile, 'errors': errors}
+    context['profile'] = profile
+    context['errors'] = errors
 
     return render(request, 'moneyclub/profile.html',context)
 
@@ -469,3 +472,4 @@ def downvote(request):
     
 
     return HttpResponse(json.dumps(context), mimetype='application/json')
+

@@ -657,5 +657,28 @@ def join_group(request,id1):
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
     
 
+def newsfeed(request):
+    context = {}
+    errors = []
+    articles= [] 
+    context['errors']= errors
+    u=User.objects.get(username=request.user)
+    try:
+        g=GroupMembership.objects.filter(user=request.user)
+        for grp in g:
+            a = Post.objects.filter(groupId=grp).order_by('-id')[:5]
+            articles.append(a)
+        
+    
+    except:
+        return render(request, 'moneyclub/errors.html', context)
+    context['articles'] = articles    
+    return render(request, 'moneyclub/newsfeed.html', context)
+
+
 def temp(request):
     return render(request, 'moneyclub/simplegraph.html', {})
+
+
+
+

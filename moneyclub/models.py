@@ -88,9 +88,9 @@ class GroupMembership(models.Model):
     points = models.IntegerField(default=0)   
     # 0 == member is NOT blocked
     # 1 == member IS blocked
-    blocked = models.IntegerField(default=0)    
+    blocked = models.IntegerField(default=0)
 
-    points = models.IntegerField(default=0)    
+    points = models.IntegerField(default=0) 
     # type of the member:
     #   False : normal member,
     #   True : admin
