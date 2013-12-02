@@ -421,19 +421,19 @@ def add_comment_on_article(request,groupID,articleID):
             return render(request, 'moneyclub/errors.html', context)
     
     comm = request.POST['comment']
-    
+    print a
     #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
-    new_entry.save()    
+    new_entry.save()
     article = Post.objects.get(id=articleID)
-    
-    context['comments'] = Comment.objects.filter(articleId=articleID)    
+    context['comments'] = Comment.objects.filter(articleId=a) 
+    print context['comments']
     context['article']=article
-    context['errors'] = errors    
+    context['errors'] = errors
 
     return HttpResponseRedirect(reverse('article',args=(article.id,)),context)
 
-    
+
 @login_required
 def get_all_articles(request):
     a=Article.objects.all()
