@@ -692,24 +692,49 @@ def join_group(request,id1):
     
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
     
-
+@login_required
 def newsfeed(request):
     context = {}
     errors = []
     articles= [] 
     context['errors']= errors
+    
     u=User.objects.get(username=request.user)
-    try:
-        g=GroupMembership.objects.filter(user=request.user)
-        for grp in g:
-            a = Post.objects.filter(groupId=grp).order_by('-id')[:5]
-            articles.append(a)
+    #find the groups the user has joined
+    gm=GroupMembership.objects.filter(user=request.user)
+    print gm
+    print "YYY"
+    #get all memberships
+    for membership in gm:
+        
+        a = Post.objects.filter(groupId=membership.group).order_by('-datetime')[0:5]
+        
+        #assign type
+        for item in a:
+            if item.articleType==1:
+                item=item.article
+                print " article "
+            else:
+                item=item.event
+                print " event "
         
     
-    except:
-        return render(request, 'moneyclub/errors.html', context)
-    context['articles'] = articles    
+    context['articles'] = a
+    print a
+    
+    
+    #reused from home
+    memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
+    groups = [membership.group for membership in memberships]
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+    context['groups'] = groups  
     return render(request, 'moneyclub/newsfeed.html', context)
+
 
 
 def temp(request):

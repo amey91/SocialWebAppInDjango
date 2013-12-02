@@ -56,7 +56,7 @@
             <span class="label label-info">Article</span>
 
             {% if article.picture %}
-              <img class="media-object" src="{% url 'post-photo' article.id %}" alt="..."width="400px">
+              <img class="media-object" src="/moneyclub/groups/post_article/{{article.id}}" alt="..."width="400px">
             {% endif %}
             <p class="lead">{{article.content}}</p>
 
