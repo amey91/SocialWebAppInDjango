@@ -14,6 +14,16 @@ no groups in memmbership mamangement
 create money club not properly mentioned
 
 
-multipple key value error on add member
+multipple key value error on add members
+
+
+
+
+blocked members cannot commnet add this text to block users
+
+
+
+incorrect uname/pwd on signin page feedback not clear
+
 
 

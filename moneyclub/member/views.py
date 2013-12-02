@@ -138,6 +138,13 @@ def visit_user(request, user_id):
     for membership in memberships:
         score = score + membership.points
     groups = [membership.group for membership in memberships]
+    
+    
+     #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    context['stocks'] = stocks
+    
 
     context['visitee'] = user_to_visit
     context['articles'] = posts

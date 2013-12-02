@@ -45,7 +45,7 @@
                   <button type="submit" class="btn btn-success">Sign in</button>
                   {% csrf_token %}
                   {% if form.errors %}
-                  <p> Incorrect user name or password.  </p>  
+                  <p style="color:red"> Incorrect user name or password.  </p>  
                   
                   {% endif %} 
                 </form>
