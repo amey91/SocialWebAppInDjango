@@ -66,7 +66,16 @@ $(document).ready(function(){
 			}
 		}
 		var data={'stock_name': stock_name};
-        var args = {type:"POST", url: "/moneyclub/member/add-stock", data:data,  success:add_new_stock};
+        var args = {type:"POST", 
+        			url: "/moneyclub/member/add-stock", 
+        			data:data,  
+
+        			success:add_new_stock,
+        			error: function (xhr, ajaxOptions, thrownError) {
+				           alert(xhr.status);
+				           alert(xhr.responseText);
+				           alert(thrownError);
+				       }};
         $.ajax(args);
         return false;
 	}
