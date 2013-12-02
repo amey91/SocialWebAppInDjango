@@ -121,9 +121,9 @@
 									<div class="col-md-6 ">
 
 										<input type="text" class="form-control"
-											placeholder="Email of new user" required autofocus
-											name="email"> Select a group you own: <select
-											name="select_group"> {%for item in groups%}
+											placeholder="Email or username of new user" required autofocus name="email"> 
+											Select a group you own: 
+											<select name="select_group"> {%for item in groups%}
 											<option value="{{item.name}}">{{item.name}}</option>
 											{%endfor%}
 

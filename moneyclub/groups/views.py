@@ -155,9 +155,31 @@ def add_members(request):
     if not 'email' in request.POST or not request.POST['email'] or request.method=="GET":
         add_members_generic(request)
         
-    #get group name from group id
-    grp_name=Group.objects.get(name=request.POST['select_group'])
- 
+    grp_name = Group.objects.get(name=request.POST['select_group'])
+    
+    
+    #see if a username is entered and user exists
+    try:
+            u=User.objects.get(username=request.POST['email'])
+            
+            #check if already invited
+            try:
+                i = Invite.objects.get(groupId=grp_name,theInvitedOne=u)
+                context['message']= "user already invited"
+                return render(request, 'moneyclub/adduser_success.html', {'message':'User already invited to money club!'})
+            except:
+                pass               
+            
+            #if not invited
+            i=Invite(groupId=grp_name,invitedBy=request.user,theInvitedOne=u)
+            context['message'] = "User invited"
+            i.save()
+            return render(request, 'moneyclub/adduser_success.html', {'message':'User invited to money club!'})
+        
+    except:
+            pass
+        
+    ###if email entered
     #User already joined money club       
     if len(User.objects.filter(email=request.POST['email'])) > 0:   
         U=User.objects.get(email=request.POST['email'])
@@ -166,6 +188,8 @@ def add_members(request):
         g.save()
         i.save()    
     else:
+        
+        
         email_body = """
 You have been invited to Money Club!! :)
 You have an invite from the group " """ +grp_name.name +""""
@@ -174,6 +198,8 @@ You have an invite from the group " """ +grp_name.name +""""
             message=email_body,
               from_email="invites@grumblr.com",
               recipient_list=[request.POST['email']])
+        
+        
         
     return render(request, 'moneyclub/adduser_success.html', {})
  
@@ -199,6 +225,10 @@ def view_group_members1(request):
         return render(request, 'moneyclub/create_moneyclub.html', {})
     return render(request, 'moneyclub/view_group_members1.html', {'groups':grp})
         
+        
+def only_view_group_members(request,grpId):
+    pass
+    
             
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})

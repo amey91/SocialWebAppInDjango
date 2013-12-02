@@ -5,3 +5,9 @@ diff betn home/moneyclub links
 
 
 
+explicitly mention functionality
+
+
+no groups in memmbership mamangement
+
+
