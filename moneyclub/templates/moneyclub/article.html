@@ -135,24 +135,27 @@
            
         
 
-          
-
+          <h4>Comments:</h4>
+{%for comm in comments %}
            <div class="row">
               <div class="col-lg-9 col-lg-offset-1">
                 <div class="media">
                     
                   <div class="media-body">
-                    <h4 class="media-heading"><a href="index.html">Scrooge Mcduck</a> said</h4>
-                    <p> Told you ! </p>
+                    <h4 class="media-heading"><a href="index.html">{{comm.commentBy}}</a> said</h4>
+                    <p> {{comm.comment}}</p>
                   </div>
-                  <hr>
-                  <p><span class="glyphicon glyphicon-time"></span> Posted on August 24, 2013 at 8:00 PM</p>
+                  
+                  <p><span class="glyphicon glyphicon-time"></span> Posted on {{comment.datetime}}</p>
                   
                 </div><!--/media-->
              
               
             </div><!--/col-lg-8-->
           </div><!--/row-->
+          <hr/>
+{%endfor%}
+          
         </div><!--/span-->
       </div>
 

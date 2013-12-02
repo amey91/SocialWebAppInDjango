@@ -400,8 +400,17 @@ def add_comment_on_article(request,groupID,articleID):
         context['errors'] = errors 
         return render(request, 'moneyclub/errors.html', context)
     
-    #check if article belongs to that grou[
-    a=Post.objects.get(id=articleID)
+    #check if article belongs to that group
+    
+    try:
+        a=Post.objects.get(id=articleID)
+        if a.articleType==1:
+            a = a.article
+        else :
+            a = a.event
+        
+    except ObjectDoesNotExist:
+        errors.append('Article not found')
 
     if a.groupId != group1:
         errors.append('Error matching article to group')
@@ -409,20 +418,20 @@ def add_comment_on_article(request,groupID,articleID):
     
     if errors:
             context['errors'] = errors
-            return render(request, 'moneyclub/errors.html', context) 
+            return render(request, 'moneyclub/errors.html', context)
     
     comm = request.POST['comment']
     
     #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
     new_entry.save()    
-    article = Article.objects.get(id=articleID)
-    context['comments'] = Comment.objects.filter(articleId=articleID)
+    article = Post.objects.get(id=articleID)
     
+    context['comments'] = Comment.objects.filter(articleId=articleID)    
     context['article']=article
     context['errors'] = errors    
 
-    return HttpResponseRedirect('/article.html', context)
+    return HttpResponseRedirect(reverse('article',args=(article.id,)),context)
 
     
 @login_required
