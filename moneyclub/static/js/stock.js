@@ -8,7 +8,7 @@ function sendRequest() {
         req = new ActiveXObject("Microsoft.XMLHTTP");
     }
     req.onreadystatechange = handleResponse;
-    req.open("GET", "/moneyclub/member/get-stock-info/", true);
+    req.open("GET", "/moneyclub/member/get-stock-info", true);
     req.send();
 }
 

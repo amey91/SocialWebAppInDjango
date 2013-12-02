@@ -66,7 +66,7 @@ $(document).ready(function(){
 			}
 		}
 		var data={'stock_name': stock_name};
-        var args = {type:"POST", url: "/moneyclub/member/add-stock/", data:data,  success:add_new_stock};
+        var args = {type:"POST", url: "/moneyclub/member/add-stock", data:data,  success:add_new_stock};
         $.ajax(args);
         return false;
 	}
@@ -88,7 +88,7 @@ $(document).ready(function(){
 		}
 		
 		var data={'stock_id': id};
-        var args = {type:"POST", url: "moneyclub/member/delete-stock/", data:data,  success:deleted};
+        var args = {type:"POST", url: "moneyclub/member/delete-stock", data:data,  success:deleted};
         $.ajax(args);
         
         return false;
