@@ -444,11 +444,10 @@ def add_comment_on_article(request,groupID,articleID):
         
    
     comm = request.POST['comment']
-    
+    print a
     #save article
     new_entry = Comment(articleId=a, commentBy=request.user,comment=comm)
     new_entry.save()
-    print "new_entry saved"
 
     
     #context['comments'] = Comment.objects.filter(articleId=articleID)    
@@ -458,9 +457,10 @@ def add_comment_on_article(request,groupID,articleID):
     context['stat'] = 'success'
     context['redirect'] =  "/moneyclub/groups/article/%s" % articleID
 
+
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
-    
+
 @login_required
 def get_all_articles(request):
     a=Article.objects.all()
