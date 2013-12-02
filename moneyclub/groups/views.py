@@ -39,8 +39,15 @@ def get_photo_article(request, id):
 def club_home(request,id):
     context = {}    
 
-    
-    g=Group.objects.get(id=id);
+    try:
+        g=Group.objects.get(id=id);
+    except ObjectDoesNotExist:
+        HttpResponseRedirect(reverse('homepage'))
+
+    memberships = GroupMembership.objects.filter(group = id)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
     
     #all the keywords for the group to be display4ed in separate blocks.
     str1= g.keywords
@@ -52,9 +59,20 @@ def club_home(request,id):
     
     stocks= g.group_stock.all()
 
+    events = Event.objects.filter(groupId = g)
+    context['events'] = events
     context['articles']=articles
     context['stocks']=stocks
+    context['score'] = score
     context['group_owner'] = g.owner
+    is_member = False
+    try:
+        member = GroupMembership.objects.get(user=request.user, group = g)
+        is_member = True
+    except:
+        pass
+
+    context['is_member'] = is_member
     #all members of the group arranged by decreasing number of points
     m = GroupMembership.objects.filter(group=g).order_by('-points').exclude(user=g.owner)
     context['members'] = m[:5]
@@ -312,10 +330,12 @@ def post_article(request):
 
    
     article = form.save()
-    
-    print article.content
-    print article.articleType
-    print article.picture
+    try:
+        member = GroupMembership.objects.get(user = request.user, group = group1)
+        member.points = member.points + 10
+        member.save()
+    except:
+        pass
     #context['article'] = article
     context['article_id'] = article.id
     #context['group'] = group1
@@ -697,9 +717,11 @@ def newsfeed(request):
     context = {}
     errors = []
     articles= [] 
+    events = []
     context['errors']= errors
     
     u=User.objects.get(username=request.user)
+<<<<<<< HEAD
     #find the groups the user has joined
     gm=GroupMembership.objects.filter(user=request.user)
     print gm
@@ -733,6 +755,20 @@ def newsfeed(request):
     if len(groups)==0:
         context['no_groups'] = "true"
     context['groups'] = groups  
+=======
+    try:
+        g=GroupMembership.objects.filter(user=request.user)
+        for grp in g:
+            a = Post.objects.filter(groupId=grp).order_by('-id')[:5]
+            articles.append(a)
+            e = Event.objects.filter(groupId = grp)
+            events.append(e)
+    
+    except:
+        return render(request, 'moneyclub/errors.html', context)
+    context['articles'] = articles    
+    context['events'] = events  
+>>>>>>> 530bc561609b3ca44c8edb373a8d630087b2aedd
     return render(request, 'moneyclub/newsfeed.html', context)
 
 

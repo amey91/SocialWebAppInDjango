@@ -12,7 +12,7 @@
     <script src="/static/js/jquery-1.10.2.min.js"></script>
     <script src="/static/js/stock.js"></script>
     <script src="/static/js/edit_stock.js"></script>
-
+    <script src="/static/js/animate.js"></script>
   {% endblock headblock %}
 
   
@@ -54,7 +54,7 @@
                         <h4 class="media-heading">{{user}} <small> {{profile.location}}</small></h4>
                         <h5>{{occupation}} </h5>
                         <hr style="margin:8px auto">
-                        <div class="container">
+                        <div class="container ">
                           <div class="row">
                           <div class="col-md-4">
                               <div class="list-group">
@@ -67,9 +67,9 @@
                                           Total Points</p>
                                   </a>
                               </div>
+                          </div>
                         </div>
-                      </div>
-                      </div>
+                      </div> <!-- /.container -->
                             
                         
                     </div>
@@ -232,21 +232,14 @@
           <div class="well sidebar-nav">
             <ul class="nav">
               <li>Events</li>
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-calendar"></span>Tea Party with Duck Billionare Club</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-calendar"></span>Polishing Gold Coins</a></li>
-              <li><a href="#"><span class="glyphicon glyphicon-calendar"></span>Visiting the President</a></li>
+              {% for event in events %}
+                <li><a href="/moneyclub/groups/article/{{event.id}}"><span class="glyphicon glyphicon-calendar"></span>{{event.title}}</a></li>
+              {% endfor %}
+              
               
             </ul>
           </div><!--/.well -->
-          <div class="well sidebar-nav">
-            <ul class="nav">
-              <li>Apps</li>
-              <li class="active"><a href="#">Sharing</a></li>
-              <li><a href="#">Messages</a></li>
-              <li><a href="#">Inviting friends</a></li>
-              
-            </ul>
-          </div><!--/.well -->
+          
         {% endblock sidebars %}
         </div><!--/span-->
         

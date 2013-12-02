@@ -9,7 +9,9 @@
     
 
     {% block contentsblock %}
-    	<h4> Groups found: </h4>
+    	
+    	<div class="container">
+    		<h4> Groups found: </h4>
 	   {% if groups_retrieved|length > 0 %}
 	      
 	      {% for group in groups_retrieved %}
@@ -43,7 +45,7 @@
 	   
 	        
 	          <div class="media-body">
-	            <p style="font-size:75%; color:grey"> 
+	            <p style="font-size:175%; color:grey"> 
 	            	<a href="{% url 'visit_user' user_ret.id %}">{{user_ret}}  </a>
 	            </p>
 	           
@@ -57,6 +59,7 @@
       {% for error in errors %}
         <p style="color:red"> {{error}}</p>
       {% endfor %}
+  </div>
 	
 
     {% endblock contentsblock %}

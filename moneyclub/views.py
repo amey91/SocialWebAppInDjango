@@ -21,12 +21,7 @@ from django.contrib.auth.hashers import *
 def group_home(request):
     context = {}
     keywords = {}
-    """name = "group 1"
-    owner = request.user
-    description = "desc"
-    keywords = "key11,key2,key3"
-    g = Group(name=name,owner=owner,description=description,keywords=keywords)
-    g.save()"""
+    
     
     g=Group.objects.get(id=1);
     context['group_name'] = g.name
@@ -81,7 +76,15 @@ def home(request):
     if len(groups)==0:
         context['no_groups'] = "true"
     stocks = UserStockOfInterest.objects.filter(user=request.user)
-    context['articles'] = Article.objects.filter(user=request.user)
+    articles = Post.objects.filter(user=request.user)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+        else:
+            article = article.event
+    context['articles'] = articles
+
+    context['events'] = Event.objects.filter(user=request.user)
     if len(context['articles'])==0:
         context['no_article'] = "T"
     context['score'] =score
@@ -160,7 +163,7 @@ def confirm_registration(request, username, token):
     user.is_active = True
     user.save()
 
-    member = Member(user=user)
+    member = Member(user=user, points=100)
     member.save();
     return render(request, 'moneyclub/confirmed.html', {})
 
