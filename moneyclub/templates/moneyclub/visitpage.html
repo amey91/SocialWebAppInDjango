@@ -77,34 +77,16 @@
 
   
           {% block articles %}
-          <div class="container">
-      
- <div class="row">
-  <h3>Articles Authored:</h3>
- </div>       
- <hr/>
-        
-        
-      {%if not articles%}
-            <div class="row">
-            
-              <div class="media">
-                  
-                <div class="media-body">
-                  
-                  <h4 class="media-heading">No articles by this user.</h4>
-                  <span class="label label-info">Suggestion</span>
-                  <a href="/moneyclub/groups/findgroups/">Find Money Clubs</a>
-                </div>
-                <hr>                 
-               
-              </div><!--/media-->
-          </div><!--/row-->
-      {%else %}
-    {%for article in articles%}
-    
-    {%if article.articleType = 1 %}
-          <div class="row">
+    {%if not articles%}
+   <h4 class="media-heading">Sorry, no articles from this user.</h4>
+   {%endif%}
+   
+   <ol>
+   {%for article in articles%}
+   
+   {%if article.articleType == 1 %}
+         <li> <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+         <div class="row">
             
               <div class="media">
               {%if article.picture%}
@@ -123,11 +105,17 @@
                
                
                 <div class="media-body">
-                  <h4 class="media-heading">Title of Article: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
-                  <span class="label label-info">Article content:</span>
+                  
+                  <span class="label label-info">Article posted in :</span>
+                  <a href="/moneyclub/groups/home/{{article.groupId.id}}/">
+                  <span class="label label-danger">{{article.groupId.name|truncatechars:30}}
+                  
+                  {%if article.groupId.name.length > 30%}..{%endif%}</span>
+                  
+                  </a>
                   
                   <br/>
-                  {{article.content}}
+                  {{article.content|truncatechars:100}}..
                                     
                 </div><br/>
                 <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
@@ -136,12 +124,13 @@
             
           </div><!--/row-->
           
-          <hr/> 
           
-          
-          
-          
-     {% else %}
+          </li>
+          <hr/>
+         
+         
+    {% elif article.articleType == 2 %}
+    <li><h4 class="media-heading">Event : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
           <div class="row">
             
               <div class="media">
@@ -150,7 +139,13 @@
                 <div class="media-body">
                   
                   
-                  <span class="label label-info">Event</span>
+                  <span class="label label-info">Event posted in :</span>
+                  <a href="/moneyclub/groups/home/{{article.groupId.id}}/">
+                  <span class="label label-danger">{{article.groupId.name|truncatechars:30}}
+                  
+                  {%if article.groupId.name.length > 30%}..{%endif%}</span>
+                  
+                  </a>
                   <table class="table table-striped table-condensed">
                   
                   <tbody>
@@ -185,19 +180,12 @@
 
             
           </div><!--/row-->
-          <hr/>
-          
-          
-          
-          
-      {%endif%}
-          
-          
-          {%endfor%}
-          
-          {%endif%}
-          
-           </div><!--/.container-->
+	</li>
+        <hr/>
+	{%endif%}
+	
+  {%endfor%}
+  </ol>
           {% endblock articles %}
         </div><!--/span-->
         
@@ -247,7 +235,7 @@
           <div class="well sidebar-nav">
             <ul class="nav">
               <li>
-              <h4>My Money Clubs:</h4>
+              My Money Clubs:
               </li>
               <font style="color:grey">
               {%if no_groups %} 
@@ -267,7 +255,7 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li>Events</li>
+              <li>My Events</li>
              {%if events%}
               {% for event in events %}
                 <li><a href="/moneyclub/groups/article/{{event.id}}"><span class="glyphicon glyphicon-calendar"></span>{{event.title}}</a></li>
