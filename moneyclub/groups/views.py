@@ -20,6 +20,7 @@ from django.contrib.auth.hashers import *
 
 from moneyclub.ystockquote import *
 
+@login_required
 
 def get_photo_group(request, id):
     entry = get_object_or_404(Group, id=id)
@@ -28,6 +29,8 @@ def get_photo_group(request, id):
     content_type = guess_type(entry.picture.name)
     return HttpResponse(entry.picture, mimetype=content_type)
 
+@login_required
+
 def get_photo_article(request, id):
     entry = get_object_or_404(Article, id=id)
     if not entry.picture:
@@ -35,6 +38,7 @@ def get_photo_article(request, id):
     content_type = guess_type(entry.picture.name)
     return HttpResponse(entry.picture, mimetype=content_type)
 
+@login_required
 
 def club_home(request,id):
     context = {}    
@@ -89,10 +93,12 @@ def club_home(request,id):
         context['more_members_count'] = len(m) - 5
         context['more_members'] = "yup"
     return render(request, 'moneyclub/group_home_page.html', context) 
-   
+
+@login_required   
 def club_create(request):
     return render(request, 'moneyclub/create_moneyclub.html',{})
     
+@login_required
 @transaction.commit_on_success
 def club_create_submit(request):
     print "club_create called"
@@ -140,8 +146,9 @@ def club_create_submit(request):
     context['message'] = "Group Created Successfully!"
     context['create_group'] = "true"
     return render(request, 'moneyclub/success.html', context)
-    
-@transaction.commit_on_success
+
+
+@login_required
 def add_members_generic(request):
     context={}
     grp = Group.objects.filter(owner=request.user)
@@ -156,7 +163,8 @@ def add_members_generic(request):
         club_create(request)
         
 
-@transaction.commit_on_success   
+@login_required
+@transaction.commit_on_success  
 def add_members(request):
     context={}
     if request.method=="GET":
@@ -215,6 +223,7 @@ You have an invite from the group " """ +grp_name.name +""""
     return render(request, 'moneyclub/adduser_success.html', {})
  
 
+@login_required
 def view_group_members2(request):
     context={}
     if not request.POST:
@@ -246,7 +255,7 @@ def view_group_members2(request):
     
     
 
-
+@login_required
 def view_group_members1(request):
     
     grp=Group.objects.filter(owner=request.user)
@@ -255,7 +264,9 @@ def view_group_members1(request):
         return render(request, 'moneyclub/create_moneyclub.html', {})
     return render(request, 'moneyclub/view_group_members1.html', {'groups':grp})
         
-        
+
+@login_required
+@transaction.commit_on_success
 def only_view_group_members(request,grpId):
     context ={}
     errors=[]
@@ -342,6 +353,7 @@ def get_group_description(request,id1):
     return g.description
 
 @login_required
+@transaction.commit_on_success
 def article(request,articleID):
     errors=[]
     context = {}
