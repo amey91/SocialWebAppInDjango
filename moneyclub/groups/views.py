@@ -38,7 +38,7 @@ def get_photo_article(request, id):
 
 def club_home(request,id):
     context = {}    
-    all_articles=[]
+
     try:
         g=Group.objects.get(id=id);
     except ObjectDoesNotExist:
@@ -55,26 +55,7 @@ def club_home(request,id):
     context['group'] = g
     
     #all the articles of the group
-    
-    member = Member.objects.get(user=request.user)
-    memberships = GroupMembership.objects.filter(user=request.user)
-    score = 0
-    for membership in memberships:
-        score = score + membership.points
-    groups = [membership.group for membership in memberships]
-    # no groups as of now.
-    if len(groups)==0:
-        context['no_groups'] = "true"
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
-    articles = Post.objects.filter(user=request.user)
-    for article in articles:
-        if article.articleType == 1:
-            article = article.article
-            all_articles.append(article)
-        else:
-            article = article.event
-            all_articles.append(article)
-    context['articles'] = all_articles
+    articles = Article.objects.filter(groupId=g)
     
     stocks= g.group_stock.all()
 
@@ -397,7 +378,7 @@ def post_article(request):
         context['status'] = 'failure'
 
         #return render(reverse('homepage'), context)
-        return HttpResponse(request, context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
@@ -407,7 +388,7 @@ def post_article(request):
         context['errors'] = errors
         context['status'] = 'failure'
         #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
    
     
     new_entry = Article(groupId =group1,user=request.user,articleType=1)
@@ -424,7 +405,7 @@ def post_article(request):
         context['stat'] = 'failure'
         context['form'] = form
         #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
    
     article = form.save()
@@ -457,14 +438,15 @@ def start_event(request):
     
     print "start_event"
     if request.method=='GET':
-        return render(request, 'moneyclub/post_articles.html', context)
+        errors.append('this is not a post request')
+        return render(request, 'moneyclub/errors.html', context)
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
         print 'Not a group specified'
         errors.append('Not a group specified')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse(context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
@@ -473,7 +455,7 @@ def start_event(request):
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
@@ -484,7 +466,7 @@ def start_event(request):
         errors.append('Invalid form')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
     print "event saved"
@@ -853,6 +835,8 @@ def newsfeed(request):
     score = 0
     for membership in memberships:
         score = score + membership.points
+        
+    
     groups = [membership.group for membership in memberships]
     # no groups as of now.
     if len(groups)==0:
@@ -870,7 +854,6 @@ def newsfeed(request):
 
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=request.user)
-    score = 0
     stocks = UserStockOfInterest.objects.filter(user=request.user)
 
 
@@ -891,6 +874,16 @@ def temp(request):
     return render(request, 'moneyclub/simplegraph.html', {})
 
 
+def findgroups(request):
+    grps= Group.objects.all().order_by('id')
+    for grp in grps:
+        memberships = GroupMembership.objects.filter(group=grp)
+        score = 0
+        for membership in memberships:
+            score = score + membership.points
+        groups = [membership.group for membership in memberships]
+
+
 def general_data_to_be_included_in_requests(request):
     context = {}
     errors= []
@@ -904,15 +897,12 @@ def general_data_to_be_included_in_requests(request):
     if len(groups)==0:
         context['no_groups'] = "true"
         
-    
     #get stock data
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
-    
-    
-    
+    stocks = UserStockOfInterest.objects.filter(user=request.user)   
     context['stocks'] = stocks
+    
     context['errors'] = errors
-    
-    
-    
     return context
+
+
+

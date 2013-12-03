@@ -114,20 +114,14 @@
                                   <div class="row">
               
                                                 
-                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article/" method="POST" id="post-article"  enctype="multipart/form-data">
+                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article" method="POST" id="post-article"  enctype="multipart/form-data">
                                         <input type="hidden" name="group_id" value="{{group.id}}">
-                                        <input type="text" class="form-control" placeholder="Title of the article" name="title">
+                                        <input type="text" class="form-control" placeholder="Title of the article (*)" name="title">
                                       
                                       <input type="text" id="article type" name="article_type" value="1" hidden ></input>
                                           <textarea class="form-control counted" name="content" placeholder="Describe the article." 
                                           rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
-                                          <!--
-                                          <div class="input-group ">
-                                      
-                                            <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
-                                            <input type="text" name="picture_url" class="form-control" placeholder="External URL of the article">
-                                          </div>
-                                          -->
+                                
                                      <p> Upload image for the article</p>
                                      <input id="id_picture" name="picture" type="file" /></input>
                                                                      
@@ -138,6 +132,7 @@
 
                                         {%csrf_token%}
                                       </form>
+                                      <p> (*) fields are required </p>
                                     {% for error in form.errors %}
                                     {{error}}
                                     {% endfor %}
@@ -159,7 +154,7 @@
                                             
                                               <input type="hidden" name="group_id" value="{{group.id}}">
                                               <div class="form-group">
-                                                <label for="loc_input" class="col-md-3 control-label">Event </label>
+                                                <label for="loc_input" class="col-md-3 control-label">Event (*)</label>
                                                 <div class="input-group  col-md-7" >
                                                     <input class="form-control" size="16" type="text" value="" name="title" >
                                                     
@@ -167,7 +162,7 @@
                                                 </div>
                                             </div> <!--/.form-group -->
                                               <div class="form-group">
-                                              <label for="dtp_input2" class="col-md-3 control-label">Date </label>
+                                              <label for="dtp_input2" class="col-md-3 control-label">Date (*)</label>
                                                 <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                                                     <input class="form-control" size="16" type="text" value="" readonly name="eventDate">
                                                     
@@ -178,7 +173,7 @@
                                        
                                             </div> <!--/.form-group -->
                                             <div class="form-group">
-                                                <label for="dtp_input3" class="col-md-3 control-label">Time </label>
+                                                <label for="dtp_input3" class="col-md-3 control-label">Time (*)</label>
                                                 <div class="input-group date form_time col-md-7" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
                                                     <input class="form-control" size="16" type="text" value="" readonly name="eventTime">
                                                     
@@ -188,7 +183,7 @@
                                                 </div>
                                             </div> <!--/.form-group -->
                                             <div class="form-group">
-                                                <label for="loc_input" class="col-md-3 control-label">Location </label>
+                                                <label for="loc_input" class="col-md-3 control-label">Location (*)</label>
                                                 <div class="input-group  col-md-7" >
                                                     <input class="form-control" size="16" type="text" name="location" value="" >
                                                     
@@ -208,6 +203,7 @@
                                           </div>
                                              {%csrf_token%}
                                             </form>
+                                             <p> (*) fields are required </p>
                                         </div>
                                     </div>
                                 </div>
@@ -230,110 +226,115 @@
           {% endblock post%}
           
           {% block articles %}
-          <div class="container">
-            <div class="row"> 
-                <div class="media">
-                  <a class="pull-left" href="#" doubt="">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p>{{ post.user}}</p>
-                      </div>
-                    </div>
-                  </a>
-                <div class="media-body">
-                  
-                  <h4 class="media-heading"><a href="#">{{post.title}}</a></h4>
-                  
-                  <span class="label label-info">Event</span> <br>
-                  
-                    <div class="span4">
-                      <table class="table table-condensed table-responsive table-user-information">
-                                    <tbody>
-                                    <tr>
-                                        <td>Date Time</td>
-                                        <td>{{post.datetime}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Location</td>
-                                        <td>{{post.location}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Event</td>
-                                        <td>{{post.description}}</td>
-                                    </tr>
-                                    
-                                    </tbody>
-                                </table>
-                    </div>
-                
-                </div>
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{post.datetime}}</p>
-              </div><!--/media-->
-              </div> <!--./row-->
-            {% for post in articles %}
-              <div class="row"> 
-                <div class="media">
+         {%if not articles%}
+   <h4 class="media-heading">Sorry, no recent news from your joined Money Clubs.</h4>
+   {%endif%}
+   
+   <ol>
+   {%for article in articles%}
+   
+   {%if article.articleType == 1 %}
+         <li> <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+         <div class="row">
+            
+              <div class="media">
+              {%if article.picture%}
                   <a class="pull-left" href="#">
-                    <div class="thumbnail" style="padding: 0">
-                      <div style="padding:4px">
-                        <img class="media-object" src="{% url 'user-photo' post.user.id %}" alt="..."width="100px">
-                      </div>
-                      <div class="caption">
-                        <p> {{post.user}}</p>
-                      </div>
-                    </div>
+                    <img class="media-object" 
+                    
+                    
+                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
+                    
+                    
+                    alt="Image Not Found!" width="100px">
+                  </a>
+               
+               
+               {%endif%}
+               
+               
+                <div class="media-body">
+                  
+                  <span class="label label-info">Article posted in :</span>
+                  <a href="/moneyclub/groups/home/{{article.groupId.id}}/">
+                  <span class="label label-danger">{{article.groupId.name|truncatechars:30}}
+                  
+                  {%if article.groupId.name.length > 30%}..{%endif%}</span>
+                  
+                  </a>
+                  
+                  <br/>
+                  {{article.content|truncatechars:100}}..
+                                    
+                </div><br/>
+                <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+              </div><!--/media-->
+            
+            
+          </div><!--/row-->
+          
+          
+          </li>
+          <hr/>
+         
+         
+    {% elif article.articleType == 2 %}
+    <li><h4 class="media-heading">Event : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+          <div class="row">
+            
+              <div class="media">
+                  
                   </a>
                 <div class="media-body">
                   
-                  <h4 class="media-heading"><a href="/moneyclub/groups/article/{{post.id}}">{{post.title}}</a></h4>
-                  {% if post.articleType == 1 %}
-                  <!-- text post -->
-                  <span class="label label-info">Article</span>
-                  {{post.content|truncatechars:100}}...
-                  {% endif%}
-                   
-                   {% if post.articleType == 2 %}
-                  <!-- image post -->
-                  <span class="label label-info">Image</span>
-                  <img class="media-object" src="{% url 'article-photo' post.id %}" alt="..."width="100px">
-                  <p> {{post.description}} </p>
-                  {% endif%}
-                  <!-- {% if post.articleType == 3 %} -->
-                  <!-- event post to do-->
-                  <span class="label label-info">Event</span>
-                  <strong>Cyruxx</strong><br>
-                                <table class="table table-condensed table-responsive table-user-information">
-                                    <tbody>
-                                    <tr>
-                                        <td>User level:</td>
-                                        <td>Administrator</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Registered since:</td>
-                                        <td>11/12/2013</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Topics</td>
-                                        <td>15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Warnings</td>
-                                        <td>0</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                <!--  {% endif%} -->
+                  
+                  <span class="label label-info">Event posted in :</span>
+                  <a href="/moneyclub/groups/home/{{article.groupId.id}}/">
+                  <span class="label label-danger">{{article.groupId.name|truncatechars:30}}
+                  
+                  {%if article.groupId.name.length > 30%}..{%endif%}</span>
+                  
+                  </a>
+                  <table class="table table-striped table-condensed">
+                  
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Date</a></td>
+                            <td>{{article.eventDate}} {{article.eventTime}}, {{article.eventDate}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Time</a></td>
+                            <td>{{article.eventTime}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Location</a></td>
+                            <td>Uncle Scoorge's Castle</td>
+                            
+                          </tr>
+                  </tbody>
+                </table>
                 </div>
-                <hr>
-                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{post.datetime}}</p>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
+                  
+               
               </div><!--/media-->
-              </div> <!--./row-->
-            {% endfor %}
-          </div>
+               
+
+            
+          </div><!--/row-->
+        </li>
+        <hr/>
+        {%endif%}
+        
+  {%endfor%}
+  </ol>
           {% endblock articles %}
 
           {% block sidebars %}
