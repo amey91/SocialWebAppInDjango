@@ -140,20 +140,59 @@
                   <br/>
                   {{article.content}}
                                     
-                </div>
-                <hr>
+                </div><br/>
                 <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
               </div><!--/media-->
             
             
-          </div>
-          
-          <!--/row-->
+          </div><!--/row-->
           
           <hr/>
           {% else %}
           
-          Insert second article here
+          <div class="row">
+            
+              <div class="media">
+                  
+                  </a>
+                <div class="media-body">
+                  
+                  
+                  <span class="label label-info">Event</span>
+                  <table class="table table-striped table-condensed">
+                  
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Date</a></td>
+                            <td>{{article.eventDate}}{{article.eventTime}}, {{article.eventDate}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Time</a></td>
+                            <td>{{article.eventTime}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="#">Location</a></td>
+                            <td>Uncle Scoorge's Castle</td>
+                            
+                          </tr>
+                  </tbody>
+                </table>
+                </div>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
+                  
+               
+              </div><!--/media-->
+               
+
+            
+          </div><!--/row-->
           
           
           {%endif%}
