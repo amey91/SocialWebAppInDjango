@@ -47,8 +47,14 @@ event/articl content on newsfeed
 
 userprofile on newsfeed
 
+find money clubs
+
+add member by username adding user through invite
+
+blocked user cannot view group articles
 
 
+root url not displaying user points but displaying group points
 
 
 

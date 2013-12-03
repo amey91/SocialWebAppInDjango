@@ -154,9 +154,11 @@ def add_members(request):
         add_members_generic(request)
     if not 'email' in request.POST or not request.POST['email'] or request.method=="GET":
         add_members_generic(request)
-        
-    grp_name = Group.objects.get(name=request.POST['select_group'])
     
+    try:
+        grp_name = Group.objects.get(name=request.POST['select_group'])
+    except:
+        grp_name="!none"
     
     #see if a username is entered and user exists
     try:
@@ -180,7 +182,7 @@ def add_members(request):
             pass
         
     ###if email entered
-    #User already joined money club       
+    #User already joined money club 
     if len(User.objects.filter(email=request.POST['email'])) > 0:   
         U=User.objects.get(email=request.POST['email'])
         i=Invite(groupId=grp_name,invitedBy=request.user,theInvitedOne=U)
@@ -324,8 +326,11 @@ def unblock_member(request,id1,id2):
 
 
 def get_group_description(request,id1):
-    g=Group.objects.get(id=id1)
-    return render(request, 'moneyclub/group_home_page.html', {'group':g})
+    try:
+        g=Group.objects.get(id=id1)
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"No group found."})
+    return g.description
 
 @login_required
 def article(request,articleID):
@@ -380,7 +385,12 @@ def post_article(request):
         #return render(reverse('homepage'), context)
         return render(request, 'moneyclub/errors.html', context)
     groupID = request.POST['group_id']
-    group1=Group.objects.get(id=groupID)
+    
+    try:
+        group1=Group.objects.get(id=groupID)
+        
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"error finding Group."})
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
         
@@ -449,7 +459,10 @@ def start_event(request):
         return render(request, 'moneyclub/errors.html', context)
 
     groupID = request.POST['group_id']
-    group1=Group.objects.get(id=groupID)
+    try:
+        group1=Group.objects.get(id=groupID)
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Error handling groups"})
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
@@ -773,11 +786,15 @@ def delete_stock(request):
 
 def is_admin(user, group):
     # check whether the user is an admin, who has the authority
-    membership = user.groupmembername.get(group=group)
+    try:
+        membership = user.groupmembername.get(group=group)
+    except:
+        return render('moneyclub/errors.html', {'errors':"Error resolving admininstrator status. Is_Admin?"})
     return membership.is_admin
     
 
 def join_group(request,id1):
+  try:
     g=Group.objects.get(id=id1)
     
     #check if user is already part of the given group
@@ -794,6 +811,8 @@ def join_group(request,id1):
     
     
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
+  except:
+      return render(request, 'moneyclub/errors.html', {'errors':"Joining group action not allowed for this group."})
     
 @login_required
 def newsfeed(request):
@@ -851,22 +870,24 @@ def newsfeed(request):
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"
     print request.user.username
+    try:
+        member = Member.objects.get(user=request.user)
+        memberships = GroupMembership.objects.filter(user=request.user)
+        stocks = UserStockOfInterest.objects.filter(user=request.user)
 
-    member = Member.objects.get(user=request.user)
-    memberships = GroupMembership.objects.filter(user=request.user)
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
 
+        context['events'] = Event.objects.filter(user=request.user)
+        if len(context['articles'])==0:
+          context['no_article'] = "T"
+          context['score'] =score
+          context['member'] = member
+          context['groups'] = groups
+          context['stocks'] = stocks
+          context['errors'] = errors
 
-    context['events'] = Event.objects.filter(user=request.user)
-    if len(context['articles'])==0:
-        context['no_article'] = "T"
-    context['score'] =score
-    context['member'] = member
-    context['groups'] = groups
-    context['stocks'] = stocks
-    context['errors'] = errors
-
-    return render(request, 'moneyclub/newsfeed.html', context)
+          return render(request, 'moneyclub/newsfeed.html', context)
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Error while resolving database query.."})
 
 
 
