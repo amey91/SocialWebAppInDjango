@@ -834,6 +834,8 @@ def newsfeed(request):
     score = 0
     for membership in memberships:
         score = score + membership.points
+        
+    
     groups = [membership.group for membership in memberships]
     # no groups as of now.
     if len(groups)==0:
@@ -851,7 +853,6 @@ def newsfeed(request):
 
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=request.user)
-    score = 0
     stocks = UserStockOfInterest.objects.filter(user=request.user)
 
 
@@ -872,6 +873,16 @@ def temp(request):
     return render(request, 'moneyclub/simplegraph.html', {})
 
 
+def findgroups(request):
+    grps= Group.objects.all().order_by('id')
+    for grp in grps:
+        memberships = GroupMembership.objects.filter(group=grp)
+        score = 0
+        for membership in memberships:
+            score = score + membership.points
+        groups = [membership.group for membership in memberships]
+
+
 def general_data_to_be_included_in_requests(request):
     context = {}
     errors= []
@@ -885,15 +896,13 @@ def general_data_to_be_included_in_requests(request):
     if len(groups)==0:
         context['no_groups'] = "true"
         
-    
     #get stock data
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
-    
-    
-    
+    stocks = UserStockOfInterest.objects.filter(user=request.user)   
     context['stocks'] = stocks
+    
     context['errors'] = errors
-    
-    
-    
     return context
+
+
+
+
