@@ -17,7 +17,7 @@ from django.contrib.auth.hashers import *
 
 #from mysite import settings
 
-
+@login_required
 def group_home(request):
     context = {}
     keywords = {}
@@ -29,7 +29,8 @@ def group_home(request):
     context['keywords'] = g.keywords
     
     return render(request, 'moneyclub/group_home_page.html', context)
-    
+
+@login_required   
 def create_group(request):
     #setup variables
     errors = []

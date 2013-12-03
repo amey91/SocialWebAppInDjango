@@ -308,11 +308,11 @@ def only_view_group_members(request,grpId):
     
     return render(request, 'moneyclub/only_view_group_members.html', context)
     
-            
+@login_required           
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})
 
-
+@login_required
 @transaction.commit_on_success   
 def block_member(request,id1,id2):
     try:
@@ -332,7 +332,7 @@ def block_member(request,id1,id2):
     except:
         return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
 
-
+@login_required
 @transaction.commit_on_success   
 def unblock_member(request,id1,id2):
     try:
@@ -503,61 +503,54 @@ def start_event(request):
     errors = []
     context = {}
     
-    
+    print "start_event"
     if request.method=='GET':
         errors.append('this is not a post request')
-        context[errors] = errors
-        context['stat'] = 'failure'
-        return HttpResponse(json.dumps(context), mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
-        
+        print 'Not a group specified'
         errors.append('Not a group specified')
         context['errors'] = errors
-        context['stat'] = 'failure'
-        return HttpResponse(json.dumps(context), mimetype='application/json')
+        context['status'] = 'failure'
+        return render(request, 'moneyclub/errors.html', context)
 
     groupID = request.POST['group_id']
     try:
         group1=Group.objects.get(id=groupID)
     except:
-        errors.append('group not found.')
-        context['errors'] = errors
-        context['stat'] = 'failure'
-        return HttpResponse(json.dumps(context), mimetype='application/json')
-
+        return render(request, 'moneyclub/errors.html', {'errors':"Error handling groups"})
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
-        context['stat'] = 'failure'
-        return HttpResponse(json.dumps(context), mimetype='application/json')
+        context['status'] = 'failure'
+        return render(request, 'moneyclub/errors.html', context)
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
     #new_entry.save()
-    form = CreateEventForm(request.POST, instance=new_entry)
+    form = CreateEventForm(request.POST, instance=new_entry   )
     if not form.is_valid():
        
         errors.append('Invalid form')
         context['errors'] = errors
-        context['stat'] = 'failure'
-        return HttpResponse(json.dumps(context), mimetype='application/json')
-        #return render(request, 'moneyclub/errors.html', context)
+        context['status'] = 'failure'
+        return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
-    
     try:
         member = GroupMembership.objects.get(user = request.user, group = group1)
         member.points = member.points + 10
         member.save()
     except:
         pass
-    
-    context['stat'] = 'success'
-    context['redirect'] = "/moneyclub/groups/article/%s" % event.id
-    #return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
-    return HttpResponse(json.dumps(context), mimetype='application/json')
+    context['article'] = event
+    context['group'] = group1
+    context['errors']=errors
+
+    return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
+
 
 @login_required
 @transaction.commit_on_success  
