@@ -24,7 +24,6 @@ from django.contrib.auth.hashers import *
 from moneyclub.ystockquote import *
 
 @login_required
-
 def get_photo_group(request, id):
     entry = get_object_or_404(Group, id=id)
     if not entry.picture:
@@ -33,7 +32,6 @@ def get_photo_group(request, id):
     return HttpResponse(entry.picture, mimetype=content_type)
 
 @login_required
-
 def get_photo_article(request, id):
     entry = get_object_or_404(Article, id=id)
     if not entry.picture:
@@ -42,7 +40,6 @@ def get_photo_article(request, id):
     return HttpResponse(entry.picture, mimetype=content_type)
 
 @login_required
-
 def club_home(request,id):
     context = {}    
 
@@ -274,7 +271,6 @@ def view_group_members1(request):
         
 
 @login_required
-@transaction.commit_on_success
 def only_view_group_members(request,grpId):
     context ={}
     errors=[]
@@ -308,11 +304,12 @@ def only_view_group_members(request,grpId):
     
     return render(request, 'moneyclub/only_view_group_members.html', context)
     
-            
+@login_required
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})
 
 
+@login_required
 @transaction.commit_on_success   
 def block_member(request,id1,id2):
     try:
@@ -333,6 +330,7 @@ def block_member(request,id1,id2):
         return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
 
 
+@login_required
 @transaction.commit_on_success   
 def unblock_member(request,id1,id2):
     try:
@@ -352,7 +350,8 @@ def unblock_member(request,id1,id2):
     except:
         return render(request, 'moneyclub/errors.html', {'errors':"Object not found"})
 
-
+@login_required
+@transaction.commit_on_success
 def get_group_description(request,id1):
     try:
         g=Group.objects.get(id=id1)
@@ -552,7 +551,8 @@ def start_event(request):
     return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
     
 
-    
+@login_required
+@transaction.commit_on_success
 def add_comment_on_article(request,groupID,articleID):
     errors = []
     context = {}
@@ -964,7 +964,6 @@ def temp(request):
     return render(request, 'moneyclub/temp.html', {})
 
 @login_required
-@transaction.commit_on_success
 def findgroups(request):
     context ={}
     sorted_groups= []
