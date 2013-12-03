@@ -6874,3 +6874,17 @@ td.visible-print {
         -webkit-transform:rotate(360deg);  
         /*-webkit-font-smoothing:antialiased;*/
     }
+#footer {
+  z-index: 10;
+ display:block;
+ 
+   position:fixed;
+    bottom:0;
+}
+.footer {
+ z-index: 10;
+display:block;
+ 
+   position:fixed;
+    bottom:0;
+}

@@ -1,0 +1,74 @@
+{% extends "moneyclub/login_template.html" %}
+{% block title %}<title>View Members</title>
+{% endblock title %}
+
+ {% block contentsblock%}
+   <div class="jumbotron1">
+    	<div class="row">
+    <div class="container">
+
+                
+                
+
+                <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+		{%if not invites %}<div class="alert alert-info">You do not have any invites.</div>
+        
+        {%else%}
+        <div class="bs-callout bs-callout-info">
+        Your invites:             
+        </div>
+             
+            
+            <table class="table">
+                <thead align="center">
+                    <tr align="center"><th>Group</th><th>Invited by</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+
+					{% for item in invites %}
+					
+					
+					
+                    <tr class="">
+                    <td>{{item.groupId}}</td>
+                    <td>{{item.invitedBy}}</td>
+                    <td><a href="/moneyclub/groups/accept_invites/{{item.id}}/">Accept invite!</a></td>
+                                       
+                    </tr>
+                    
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
+    
+    	{%endif%}
+    </div>
+</div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+    </div> 
+          
+    
+    	</div>
+    </div>
+          
+          
+  {% endblock contentsblock%}
+  
+  
+  {% block articles %}
+  {% endblock articles %}
+          
