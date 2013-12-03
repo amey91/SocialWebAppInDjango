@@ -28,8 +28,13 @@
                   <div class="media">
                     
                       <div class="pull-left" >
+                        {% if group.picture %}
                           <img id="ameyy" class="media-object dp img-circle" src="/moneyclub/groups/get_photo_group/{{group.id}}/" 
                           style="width: 100px;height:100px;">
+                        {% else %}
+                          <img id="ameyy" class="media-object dp img-circle" src="/static/image/money.jpg" 
+                          style="width: 100px;height:100px;">
+                        {% endif %}
                       </div>
 
                     
@@ -44,7 +49,7 @@
                           <hr style="margin:4px auto">
                         <div class="container ">
                           <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                               <div class="list-group">
                                   <a  class="list-group-item visitor">
                                       <h3 class="pull-right">

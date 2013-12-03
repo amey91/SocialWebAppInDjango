@@ -55,13 +55,22 @@ def club_home(request,id):
     context['group'] = g
     
     #all the articles of the group
-    articles = Article.objects.filter(groupId=g)
+    all_articles = []
+    articles = Post.objects.filter(groupId=g)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+            all_articles.append(article)
+        else:
+            article = article.event
+            all_articles.append(article)
+    context['articles'] = all_articles
     
     stocks= g.group_stock.all()
 
     events = Event.objects.filter(groupId = g)
     context['events'] = events
-    context['articles']=articles
+    
     context['stocks']=stocks
     context['score'] = score
     context['group_owner'] = g.owner
@@ -475,15 +484,19 @@ def start_event(request):
     #new_entry.save()
     form = CreateEventForm(request.POST, instance=new_entry   )
     if not form.is_valid():
-        print "form not valid"
+       
         errors.append('Invalid form')
         context['errors'] = errors
         context['status'] = 'failure'
         return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
-    print "event saved"
-    print "event type" + str(event.articleType)
+    try:
+        member = GroupMembership.objects.get(user = request.user, group = group1)
+        member.points = member.points + 10
+        member.save()
+    except:
+        pass
     context['article'] = event
     context['group'] = group1
     context['errors']=errors
@@ -865,7 +878,8 @@ def newsfeed(request):
     try:
 
         profile = UserProfile.objects.get(user=request.user) 
-
+        if not profile.profilepicture:
+            context['no_pic']="T"
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"
