@@ -92,7 +92,7 @@
                   
                 <div class="media-body">
                   
-                  <h4 class="media-heading">You have not authored any articles in any Money Club.</h4>
+                  <h4 class="media-heading">No articles by this user.</h4>
                   <span class="label label-info">Suggestion</span>
                   <a href="/moneyclub/groups/findgroups/">Find Money Clubs</a>
                 </div>
@@ -104,7 +104,7 @@
     {%for article in articles%}
     
     {%if article.articleType = 1 %}
-           <div class="row">
+          <div class="row">
             
               <div class="media">
               {%if article.picture%}
@@ -123,29 +123,76 @@
                
                
                 <div class="media-body">
-                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+                  <h4 class="media-heading">Title of Article: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
                   <span class="label label-info">Article content:</span>
                   
                   <br/>
                   {{article.content}}
                                     
-                </div>
-                <hr>
+                </div><br/>
                 <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
               </div><!--/media-->
             
             
-          </div>
+          </div><!--/row-->
           
-          <!--/row-->
+          <hr/> 
           
+          
+          
+          
+     {% else %}
+          <div class="row">
+            
+              <div class="media">
+                  
+                  </a>
+                <div class="media-body">
+                  
+                  
+                  <span class="label label-info">Event</span>
+                  <table class="table table-striped table-condensed">
+                  
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Date</a></td>
+                            <td>{{article.eventDate}} {{article.eventTime}}, {{article.eventDate}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Time</a></td>
+                            <td>{{article.eventTime}}</td>
+                            
+                          </tr>
+                  </tbody>
+                  <tbody>
+                          <tr>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Location</a></td>
+                            <td>Uncle Scoorge's Castle</td>
+                            
+                          </tr>
+                  </tbody>
+                </table>
+                </div>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on August 27, 2013 at 9:00 PM</p>
+                  
+               
+              </div><!--/media-->
+               
+
+            
+          </div><!--/row-->
           <hr/>
-          {% else %}
-          
-          Insert second article here
           
           
-          {%endif%}
+          
+          
+      {%endif%}
+          
+          
           {%endfor%}
           
           {%endif%}

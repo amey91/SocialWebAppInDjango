@@ -798,11 +798,12 @@ def join_group(request,id1):
 def newsfeed(request):
     context = {}
     errors = []
-    articles= [] 
+    
+    all_articles= [] 
     events = []
     context['errors']= errors
     
-    u=User.objects.get(username=request.user)
+    
 
     #find the groups the user has joined
     gm=GroupMembership.objects.filter(user=request.user)
@@ -817,15 +818,16 @@ def newsfeed(request):
         for item in a:
             if item.articleType==1:
                 item=item.article
+                all_articles.append(item)
                 print " article "
             else:
                 item=item.event
+                all_articles.append(item)
                 print " event "
         
     
-    context['articles'] = a
-    
-    
+    context['articles'] = all_articles
+      
     
     #reused from home
     memberships = GroupMembership.objects.filter(user=request.user)
@@ -851,13 +853,7 @@ def newsfeed(request):
     memberships = GroupMembership.objects.filter(user=request.user)
     score = 0
     stocks = UserStockOfInterest.objects.filter(user=request.user)
-    articles = Post.objects.filter(user=request.user)
-    for article in articles:
-        if article.articleType == 1:
-            article = article.article
-        else:
-            article = article.event
-    context['articles'] = articles
+
 
     context['events'] = Event.objects.filter(user=request.user)
     if len(context['articles'])==0:

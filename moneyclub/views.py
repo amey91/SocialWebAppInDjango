@@ -54,7 +54,7 @@ def create_group(request):
 def home(request):
     errors = []
     context = {}
-
+    all_articles=[]
     profile = []
 
     try:
@@ -80,9 +80,11 @@ def home(request):
     for article in articles:
         if article.articleType == 1:
             article = article.article
+            all_articles.append(article)
         else:
             article = article.event
-    context['articles'] = articles
+            all_articles.append(article)
+    context['articles'] = all_articles
 
     context['events'] = Event.objects.filter(user=request.user)
     if len(context['articles'])==0:

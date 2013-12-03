@@ -91,7 +91,7 @@
           <div class="container">
       
  <div class="row">
- 	<h3>Articles Authored:</h3>
+ 	<h3>Articles/Events created:</h3>
  </div>       
  <hr/>
         
@@ -134,7 +134,7 @@
                
                
                 <div class="media-body">
-                  <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+                  <h4 class="media-heading">Title of Article: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
                   <span class="label label-info">Article content:</span>
                   
                   <br/>
@@ -163,21 +163,21 @@
                   
                   <tbody>
                           <tr>
-                            <td><a href="#">Date</a></td>
-                            <td>{{article.eventDate}}{{article.eventTime}}, {{article.eventDate}}</td>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Date</a></td>
+                            <td>{{article.eventDate}} {{article.eventTime}}, {{article.eventDate}}</td>
                             
                           </tr>
                   </tbody>
                   <tbody>
                           <tr>
-                            <td><a href="#">Time</a></td>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Time</a></td>
                             <td>{{article.eventTime}}</td>
                             
                           </tr>
                   </tbody>
                   <tbody>
                           <tr>
-                            <td><a href="#">Location</a></td>
+                            <td><a href="/moneyclub/groups/article/{{article.id}}">Location</a></td>
                             <td>Uncle Scoorge's Castle</td>
                             
                           </tr>
@@ -193,6 +193,7 @@
 
             
           </div><!--/row-->
+          <hr/>
           
           
           {%endif%}
