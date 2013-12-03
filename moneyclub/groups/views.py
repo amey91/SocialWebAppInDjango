@@ -880,7 +880,7 @@ def findgroups(request):
         score = 0
         for membership in memberships:
             score = score + membership.points
-        groups = [membership.group for membership in memberships]
+        
 
 
 def general_data_to_be_included_in_requests(request):
