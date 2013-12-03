@@ -1,0 +1,129 @@
+{% extends "moneyclub/login_template.html" %}
+{% block title %}<title>Fing groups</title>
+{% endblock title %}
+
+ {% block contentsblock%}
+   <div class="jumbotron1">
+    	<div class="row">
+    <div class="container">
+
+                
+                
+
+                <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+		<div class="col-md-3"  >
+                </div>
+                
+        <div class="alert alert-success col-md-6" >
+          {%if groups %}
+          	<div class="bs-callout bs-callout-info">
+        		             
+        		<div class="alert alert-danger" >
+        		Top Money Clubs:
+                </div>
+        	</div>
+        	
+        	<table class="table">
+                <thead align="center">
+                    <tr align="center"><th>Group</th><th>Points</th></tr>
+                </thead>
+                <tbody>
+            
+            {%for group in groups %}
+            
+            
+
+					
+					
+                    <tr class="">
+                    <td>{{group.0|truncatechars:15}}</td>
+                    <td>{{group.1}}</td>
+					                                       
+                    </tr>
+                
+			{%endfor%}	
+                    
+                </tbody>
+            </table>
+            
+            
+          {%else%}
+          Server is busy 
+          {%endif%}
+          
+          
+          {%if new_groups %}
+          	<div class="bs-callout bs-callout-info">
+        		             
+        		<div class="alert alert-danger" >
+        		Newest Money Clubs:
+                </div>
+        	</div>
+        	
+        	<table class="table">
+                <thead align="center">
+                    <tr align="center"><th>Group</th><th>Owner</th></tr>
+                </thead>
+                <tbody>
+            
+            {%for group in new_groups %}
+            
+            
+
+					
+					
+                    <tr class="">
+                    <td>{{group.name|truncatechars:15}}</td>
+                    <td>{{group.owner}}</td>
+					                                       
+                    </tr>
+                
+			{%endfor%}	
+                    
+                </tbody>
+            </table>
+            
+            
+          {%else%}
+          Server is busy 
+          {%endif%}
+          
+          
+          
+       </div><!-- end of col 6 -->
+            
+            <div class="col-md-2" >
+                </div>
+           
+        </div>
+    
+    	
+    </div>
+</div>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+    </div> 
+          
+    
+    	</div>
+    </div>
+          
+          
+  {% endblock contentsblock%}
+  
+  
+  {% block articles %}
+  {% endblock articles %}
+          

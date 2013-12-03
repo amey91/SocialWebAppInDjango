@@ -895,12 +895,12 @@ def findgroups(request):
         sorted_groups.append(sorted_x[len(sorted_x)-i])
         i+=1   
     
-    print sorted_groups
+    
     context['groups'] = sorted_groups
     
     context['new_groups'] = Group.objects.all().order_by('-id')[0:5]
-    
-    return render(request, 'moneyclub/success.html', context)
+    print context['new_groups']
+    return render(request, 'moneyclub/findgroups.html', context)
         
 
 
