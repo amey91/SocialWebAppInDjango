@@ -503,56 +503,64 @@ def start_event(request):
     errors = []
     context = {}
     
-    print "start_event"
+    
     if request.method=='GET':
         errors.append('this is not a post request')
-        return render(request, 'moneyclub/errors.html', context)
+        context[errors] = errors
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
-        print 'Not a group specified'
+        
         errors.append('Not a group specified')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
 
     groupID = request.POST['group_id']
     try:
         group1=Group.objects.get(id=groupID)
     except:
-        return render(request, 'moneyclub/errors.html', {'errors':"Error handling groups"})
+        errors.append('group not found.')
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
     #new_entry.save()
-    form = CreateEventForm(request.POST, instance=new_entry   )
+    form = CreateEventForm(request.POST, instance=new_entry)
     if not form.is_valid():
        
         errors.append('Invalid form')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
+        #return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
+    
     try:
         member = GroupMembership.objects.get(user = request.user, group = group1)
         member.points = member.points + 10
         member.save()
     except:
         pass
-    context['article'] = event
-    context['group'] = group1
-    context['errors']=errors
-
-    return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
     
+    context['stat'] = 'success'
+    context['redirect'] = "/moneyclub/groups/article/%s" % event.id
+    #return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
+    return HttpResponse(json.dumps(context), mimetype='application/json')
 
-    
+@login_required
+@transaction.commit_on_success  
 def add_comment_on_article(request,groupID,articleID):
     errors = []
     context = {}

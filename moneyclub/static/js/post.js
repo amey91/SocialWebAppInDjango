@@ -47,11 +47,11 @@ $(document).ready(function(){
 
 	var start_event = function(){
 		event.preventDefault();
-		console.log('start-event')
+		
 		var form = $("#start-event");
 		var group_id = $(this).attr("id")
-		var data = form.serializeArray()};
-		console.log(form)
+		var data = form.serializeArray();
+		
 		var post = function (response){
 			if (response.stat=="success"){
 				if(response.redirect){
