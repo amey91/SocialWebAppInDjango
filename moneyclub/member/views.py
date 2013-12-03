@@ -44,6 +44,7 @@ def view_profile(request):
     try:
         profile_to_edit = UserProfile.objects.get(user=request.user) 
         if not profile_to_edit.profilepicture:
+            print "no_pic"
             context['no_pic']="T"
         profile = ProfileForm(instance=profile_to_edit)
 
@@ -95,6 +96,7 @@ def save_profile(request):
     
     if  not profileform.is_valid():
         context['profile'] = profileform
+        context['no_pic'] = True
         return render(request, 'moneyclub/profile.html',context)
     
     profileform.save();
