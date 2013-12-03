@@ -845,15 +845,18 @@ def delete_stock(request):
     
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
+@login_required
 def is_admin(user, group):
     # check whether the user is an admin, who has the authority
     try:
         membership = user.groupmembername.get(group=group)
+        return membership.is_admin
     except:
         return render('moneyclub/errors.html', {'errors':"Error resolving admininstrator status. Is_Admin?"})
-    return membership.is_admin
     
-
+    
+@login_required
+@transaction.commit_on_success
 def join_group(request,id1):
   try:
     g=Group.objects.get(id=id1)
@@ -934,29 +937,34 @@ def newsfeed(request):
     print request.user.username
     try:
         member = Member.objects.get(user=request.user)
+        
         memberships = GroupMembership.objects.filter(user=request.user)
+        
         stocks = UserStockOfInterest.objects.filter(user=request.user)
 
-
+        print "amey"
         context['events'] = Event.objects.filter(user=request.user)
+        print "amey2"
         if len(context['articles'])==0:
-          context['no_article'] = "T"
-          context['score'] =score
-          context['member'] = member
-          context['groups'] = groups
-          context['stocks'] = stocks
-          context['errors'] = errors
-
-          return render(request, 'moneyclub/newsfeed.html', context)
+            context['no_article'] = "T"
+        context['score'] =score
+        context['member'] = member
+        context['groups'] = groups
+        context['stocks'] = stocks
+        context['errors'] = errors
+        print "amey3"
+        return render(request, 'moneyclub/newsfeed.html', context)
     except:
+        print "amey4"
         return render(request, 'moneyclub/errors.html', {'errors':"Error while resolving database query.."})
 
 
-
+@login_required
 def temp(request):
     return render(request, 'moneyclub/temp.html', {})
 
-
+@login_required
+@transaction.commit_on_success
 def findgroups(request):
     context ={}
     sorted_groups= []
@@ -987,7 +995,8 @@ def findgroups(request):
         
 
 
-
+@login_required
+@transaction.commit_on_success
 def general_data_to_be_included_in_requests(request):
     context = {}
     errors= []
@@ -1008,6 +1017,67 @@ def general_data_to_be_included_in_requests(request):
     context['errors'] = errors
     return context
 
+@login_required
+def view_invites(request):
+    try:
+        i=Invite.objects.filter(theInvitedOne=request.user)
+        return render(request, 'moneyclub/view_invites.html', {'invites':i})
+    except:
+        return render(request, 'moneyclub/errors.html', {'errors':"Error while returning invites"})
 
-
-
+@login_required
+@transaction.commit_on_success
+def accept_invites(request,id1):
+    context = {}
+    errors= []
+    
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)   
+    context['stocks'] = stocks
+    
+    context['errors'] = errors
+    try:
+        #check if user is actually invited
+        g=Group.objects.get(id=id1)
+        print "a"
+        i=Invite.objects.filter(theInvitedOne=request.user,groupId=g)
+        print "b"
+        if not i:
+            return render(request, 'moneyclub/errors.html', {'errors':"You are not invited to the group"})
+            print "c"
+        
+        #check if already a member
+        print "k"
+        member= GroupMembership.objects.filter(user=request.user,group=g)
+        print "m"
+        if GroupMembership.objects.filter(user=request.user,group=g).count() >1:
+            return render(request, 'moneyclub/errors.html', {'errors':"Error in Db"})
+            
+            
+        print "d"
+        if member:
+            i.delete()
+            print "e"
+            return render(request, 'moneyclub/errors.html', {'errors':"You are already a member"})
+        
+        
+        else:
+            gm=GroupMembership(user=request.user,group=g)
+            print "f"
+            gm.save()
+            return club_home(request,id1)
+    except:
+        print "g"
+        return render(request, 'moneyclub/errors.html', {'errors':"Cannot accept invites at this time"})
+    
+    
+    
