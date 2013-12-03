@@ -76,6 +76,17 @@ class RegistrationForm(forms.Form):
         # We must return the cleaned data we got from the cleaned_data
         # dictionary
         return username
+    # Customizes form validation for the username field.
+    def clean_email(self):
+        # Confirms that the username is not already present in the
+        # User model database.
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email__exact=email):
+            raise forms.ValidationError("Email is already taken.")
+
+        # We must return the cleaned data we got from the cleaned_data
+        # dictionary
+        return email
 
 class ResetPasswordForm(forms.Form):
     old_password = forms.CharField(max_length = 200, 

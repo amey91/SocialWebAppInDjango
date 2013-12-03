@@ -15,6 +15,9 @@ from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.core.mail import send_mail
+
+
+from django.core.mail import EmailMessage
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
 
@@ -211,14 +214,19 @@ def add_members(request):
         
         email_body = """
 You have been invited to Money Club!! :)
-You have an invite from the group " """ +grp_name.name +""""
-""" 
-        send_mail(subject="Invite to a Money Club!",
-            message=email_body,
-              from_email="invites@grumblr.com",
-              recipient_list=[request.POST['email']])
+You have an invite from the group %s 
+Please click the link below to
+verify your email address and complete the registration of your account:
+
+  http://%s
+""" % (grp_name.name, request.get_host())
+
+        email = EmailMessage(subject="Invite to a Money Club!",
+              body= email_body,
+              from_email=settings.EMAIL_HOST_USER,
+              to=[request.POST['email']])
         
-        
+        email.send()
         
     return render(request, 'moneyclub/adduser_success.html', {})
  
