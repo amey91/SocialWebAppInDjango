@@ -304,6 +304,7 @@ def only_view_group_members(request,grpId):
     
     return render(request, 'moneyclub/only_view_group_members.html', context)
     
+
 @login_required
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})
@@ -549,10 +550,11 @@ def start_event(request):
     context['errors']=errors
 
     return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
-    
+
 
 @login_required
 @transaction.commit_on_success
+
 def add_comment_on_article(request,groupID,articleID):
     errors = []
     context = {}

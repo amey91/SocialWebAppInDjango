@@ -30,8 +30,10 @@ def group_home(request):
     
     return render(request, 'moneyclub/group_home_page.html', context)
 
+
 @login_required
 @transaction.commit_on_success
+
 def create_group(request):
     #setup variables
     errors = []
