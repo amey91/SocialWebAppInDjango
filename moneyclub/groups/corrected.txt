@@ -26,4 +26,32 @@ blocked members cannot commnet add this text to block users
 incorrect uname/pwd on signin page feedback not clear
 
 
+default article on group home page
+
+
+profile icon on every page
+
+
+profile icon on every page
+
+
+"no events" on group home page
+
+
+footer
+
+
+link to user profile on group home page
+
+event/articl content on newsfeed
+
+userprofile on newsfeed
+
+
+
+
+
+
+
+
 

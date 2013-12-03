@@ -164,8 +164,10 @@ def confirm_registration(request, username, token):
     # Otherwise token was valid, activate the user.
     user.is_active = True
     user.save()
-
-    member = Member(user=user)
-    member.save();
+    try:
+        member = Member.objects.get(user=user)
+    except ObjectDoesNotExist:
+        member = Member(user=user)
+        member.save()
     return render(request, 'moneyclub/confirmed.html', {})
 
