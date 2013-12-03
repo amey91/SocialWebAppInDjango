@@ -18,7 +18,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
 
-import ystockquote
+from moneyclub.ystockquote import *
 
 
 def get_photo_group(request, id):
@@ -644,7 +644,7 @@ def get_group_stock(request,group_id):
     stocks = group.group_stock.all()
     
     for stock in stocks:
-        allinfo = ystockquote.get_all(stock.stock_name)
+        allinfo = get_all(stock.stock_name)
 
         price = allinfo['last_trade_realtime_time']
         stock.price=price if len(price)<6 else price[0:5]
@@ -695,7 +695,7 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
-    stockinfo = ystockquote.get_all(stock_name)
+    stockinfo = get_all(stock_name)
 
     #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
     if group.group_stock.filter(stock_name=stock_name):

@@ -28,11 +28,11 @@ from django.utils import simplejson
 
 from moneyclub.models import *
 from moneyclub.forms import *
+from moneyclub.ystockquote import *
 
 from mysite.settings import *
 
 
-import ystockquote
 
 
 @login_required
@@ -286,7 +286,7 @@ def get_user_stock(request):
     stocks = UserStockOfInterest.objects.filter(user=request.user)
     
     for stock in stocks:
-        allinfo = ystockquote.get_all(stock.stock_name)
+        allinfo = get_all(stock.stock_name)
         price = allinfo['last_trade_realtime_time']
         stock.price=price if len(price)<6 else price[0:5]
 
@@ -311,7 +311,7 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
-    stockinfo = ystockquote.get_all(stock_name)
+    stockinfo = get_all(stock_name)
 
     #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
     if user.user_stock.filter(stock_name=stock_name):
@@ -327,7 +327,15 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(json.dumps(context), mimetype='application/json')
 
-    
+    stock = UserStockOfInterest(group=group, stock_name=stock_name)
+    stock.price=stockinfo['ask_realtime']
+    stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
+    stock.percent_change=stockinfo['change_percent'].strip("\"")
+    stock.save()
+    context['stock_name']=stock_name
+    context['price'] = stock.price
+    context['change'] = stock.change
+    context['pctchange'] = stock.percent_change
     context['stat'] = 'success'
     context['redirect'] = '/'
     #return HttpResponseRedirect(reverse('homepage'),context)
