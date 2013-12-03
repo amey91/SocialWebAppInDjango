@@ -121,7 +121,6 @@ class ResetPasswordForm(forms.Form):
         cleaned_data = super(ResetPasswordForm, self).clean()
 
         password = self._user.password
-        print "old password: "+password 
         
         email = self._user.email
 
@@ -129,7 +128,7 @@ class ResetPasswordForm(forms.Form):
         old_password = cleaned_data.get('old_password')
         new_password = cleaned_data.get('new_password')
         con_password = cleaned_data.get('con_password')
-        print "input password: "+ str(old_password)
+        
         if not self._user.check_password(old_password):
             raise forms.ValidationError("Password does not match old password.")
         
@@ -140,6 +139,39 @@ class ResetPasswordForm(forms.Form):
         # We must return the cleaned data we got from our parent.
         return cleaned_data
 
+class RetrievePasswordForm(forms.Form):
+    username = forms.CharField(max_length = 20,
+                                widget = forms.TextInput(attrs={'class':'form-control',\
+                                    'placeholder':'Username', 'autofocus':'on'}))
+    email = forms.EmailField(max_length=200,
+                                widget = forms.TextInput(attrs={'class':'form-control',\
+                                    'placeholder':'Email', 'autofocus':'on'}))
+    
+
+
+
+    # Customizes form validation for the username field.
+    def clean_username(self):
+        # Confirms that the username is not already present in the
+        # User model database.
+        username = self.cleaned_data.get('username')
+        if not User.objects.filter(username__exact=username):
+            raise forms.ValidationError("Username not found.")
+
+        # We must return the cleaned data we got from the cleaned_data
+        # dictionary
+        return username
+    # Customizes form validation for the username field.
+    def clean_email(self):
+        # Confirms that the username is not already present in the
+        # User model database.
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email__exact=email):
+            raise forms.ValidationError("Email not found.")
+
+        # We must return the cleaned data we got from the cleaned_data
+        # dictionary
+        return email
 
 
 class ProfileForm(forms.ModelForm):

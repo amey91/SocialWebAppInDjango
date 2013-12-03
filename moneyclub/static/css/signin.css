@@ -50,7 +50,7 @@ body {
   z-index: 2;
 }
 .form-signin input[type="text"] {
-  margin-bottom: -1px;
+  margin-bottom: 5px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -58,4 +58,16 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+.form-signin input[type="email"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.errorlist li{
+  color: red;
+}
+
+.message {
+  margin-top: 100px;
 }

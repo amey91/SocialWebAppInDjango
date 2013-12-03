@@ -162,7 +162,60 @@ def get_photo(request, id):
     content_type = guess_type(profile.profilepicture.name)
     return HttpResponse(profile.profilepicture, mimetype=content_type)
 
-@login_required
+@transaction.commit_on_success
+def retrieve_password(request):
+    context = {}
+    errors = []
+    if request.method == 'GET':
+        context ['form'] = RetrievePasswordForm()
+        return render(request, 'moneyclub/retrieve_password.html', context)
+
+    form = RetrievePasswordForm(data=request.POST)
+    context ['form'] = form
+
+    if not form.is_valid():
+        return render(request, 'moneyclub/retrieve_password.html', context)
+
+    email = form.cleaned_data['email']
+    username = form.cleaned_data['username']
+    try:
+        user = User.objects.get(username=username)
+    except ObjectDoesNotExist:
+        errors.append("user not found")
+        context[errors] = errors
+        return render(request, 'moneyclub/retrieve_password.html', context)
+    
+    new_password = hash_password(user.password)
+    user.set_password(new_password)
+    user.save()
+
+    token = default_token_generator.make_token(user)
+
+
+    email_body = """
+Your password has been reset: 
+    %s
+
+Please click the link below to verify your email address and complete 
+the retrieving process with the new password given. Reset your password
+as soon as possible:
+
+  http://%s%s
+""" % (new_password, request.get_host(), 
+       reverse('confirm_reset_password', args=(user.username, token)))
+
+    email = EmailMessage(subject="Verify your email address",
+              body= email_body,
+              from_email=settings.EMAIL_HOST_USER,
+              to=[user.email])
+    
+    email.send()
+    context['email'] = user.email
+    
+    return render(request, 'moneyclub/retrieve_password_waits_confirmation.html', context)
+    
+    
+
 @transaction.commit_on_success
 def reset_password(request):
     context = {}
@@ -183,19 +236,16 @@ def reset_password(request):
     user.set_password(password)
     user.save()
     
-    return HttpResponseRedirect(reverse('reset_password'),context)
+    return HttpResponseRedirect(reverse('homepage'),context)
     
 
-@login_required
+
 @transaction.commit_on_success
 def reset_password_by_email(request):
     user = get_object_or_404(User, id=request.user.id)
 
-    hash_pwd = hashlib.sha256(user.password.split('$')[2])
-    salt = str(random.random())
-    hash_pwd.update(salt)
-    new_password = hash_pwd.hexdigest()[:8]
-    print (new_password)
+    
+    new_password = hash_password(user.password)
     user.set_password(new_password)
     user.save()
 
@@ -207,7 +257,7 @@ Your password has been reset:
     %s
 
 Please click the link below to verify your email address and complete 
-the resetting process with the new_password given, and reset your password
+the resetting process with the new password given, and reset your password
 as soon as possible:
 
   http://%s%s
@@ -235,6 +285,14 @@ def confirm_reset_password_by_email(request, username, token):
 
     # Otherwise token was valid, activate the user.
     return reset_password(request)
+
+def hash_password(password):
+    hash_pwd = hashlib.sha256(password.split('$')[2])
+    salt = str(random.random())
+    hash_pwd.update(salt)
+    new_password = hash_pwd.hexdigest()[:8]
+    
+    return new_password
 
 @login_required
 def search(request):

@@ -118,6 +118,11 @@ footer {
   margin-top: 28px;
 }
 
+.message {
+  margin-top: 200px;
+}
+
+
 a { transition: all .3s ease;-webkit-transition: all .3s ease;-moz-transition: all .3s ease;-o-transition: all .3s ease; }
 /* Visitor */
 a.visitor span,.visitor h4.list-group-item-heading { color:#E48A07; }
