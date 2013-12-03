@@ -200,9 +200,9 @@ Please click the link below to verify your email address and complete
 the retrieving process with the new password given. Reset your password
 as soon as possible:
 
-  http://%s%s
-""" % (new_password, request.get_host(), 
-       reverse('confirm_reset_password', args=(user.username, token)))
+  http://%s
+""" % (new_password, request.get_host())
+    
 
     email = EmailMessage(subject="Verify your email address",
               body= email_body,
@@ -215,7 +215,7 @@ as soon as possible:
     return render(request, 'moneyclub/retrieve_password_waits_confirmation.html', context)
     
     
-
+@login_required
 @transaction.commit_on_success
 def reset_password(request):
     context = {}
