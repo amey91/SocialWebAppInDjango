@@ -55,13 +55,22 @@ def club_home(request,id):
     context['group'] = g
     
     #all the articles of the group
-    articles = Article.objects.filter(groupId=g)
+    all_articles = []
+    articles = Post.objects.filter(groupId=g)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+            all_articles.append(article)
+        else:
+            article = article.event
+            all_articles.append(article)
+    context['articles'] = all_articles
     
     stocks= g.group_stock.all()
 
     events = Event.objects.filter(groupId = g)
     context['events'] = events
-    context['articles']=articles
+    
     context['stocks']=stocks
     context['score'] = score
     context['group_owner'] = g.owner
@@ -846,7 +855,8 @@ def newsfeed(request):
     try:
 
         profile = UserProfile.objects.get(user=request.user) 
-
+        if not profile.profilepicture:
+            context['no_pic']="T"
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"
