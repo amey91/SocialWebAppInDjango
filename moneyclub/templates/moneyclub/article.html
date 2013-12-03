@@ -18,12 +18,18 @@
     <div class="container">
 
       <div class="row ">
-        <div class="col-lg-12">
+        <div class="col-lg-9">
           <div class="article">
             <h1>Title: {{article.title}}</h1>
             <p class="lead">by <a href="/moneyclub/member/visit-user/{{user.id}}/">{{article.user}}</a></p>
 
-            <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
+            <span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}
+            {% if deletable %}
+            <span class="pull-right">
+                            
+                  <a href="/moneyclub/groups/delete_post/{{article.id}}" class="btn btn-sm btn-danger pull-right"> delete</a>
+            </span>
+            {% endif %}
             <hr>
               <div class="media">
               {%if article.picture%}
@@ -45,7 +51,7 @@
  		<div class="col-lg-4">
             <div class="media-body">
             
-            <p class="lead">Description:<br/>{{article.content}}</p>
+            <p class="lead">{{article.content}}</p>
             	                        
             </div>
         </div>
@@ -107,13 +113,14 @@
             </div ><!--/.container -->
             {% endif %}
          
-            <div class="btn-sm-group" id="{{article.id}}">
+            <div class="btn-group btn-group-sm" id="{{article.id}}">
               
               <button  id="upvote" type="button" class="btn btn-success glyphicon glyphicon-thumbs-up">{{upvote}}</button>
               <button  id="downvote" type="button"class="btn btn-danger glyphicon glyphicon-thumbs-down">{{downvote}}</button>
 
            
             </div>
+          
             <hr>
           </div> <!--/article--> 
           <!-- the comment box -->

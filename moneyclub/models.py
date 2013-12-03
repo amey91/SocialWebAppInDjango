@@ -90,7 +90,7 @@ class GroupMembership(models.Model):
     # 1 == member IS blocked
     blocked = models.IntegerField(default=0)
 
-    points = models.IntegerField(default=0) 
+    
     # type of the member:
     #   False : normal member,
     #   True : admin

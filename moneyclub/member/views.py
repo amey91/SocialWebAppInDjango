@@ -492,7 +492,7 @@ def downvote(request):
                 errors.append('DownVote failed')
         
     context['status']='failure' 
-    
+    context['errors'] = errors
 
     return HttpResponse(json.dumps(context), mimetype='application/json')
 

@@ -365,7 +365,7 @@ def get_group_description(request,id1):
 def article(request,articleID):
     errors=[]
     context = {}
-
+    deletable = []
     try:
         article = Post.objects.get(id=articleID)
         if article.articleType==1:
@@ -378,6 +378,10 @@ def article(request,articleID):
         
     except ObjectDoesNotExist:
         errors.append('Article not found')
+        context['errors'] = errors
+        return render(request, '/moneyclub/errors.html',context)
+    if article.user == request.user or is_admin(request.user, group):
+        deletable=True
 
     comments = article.comment_for_article.all()
     context['comments'] = comments
@@ -386,10 +390,34 @@ def article(request,articleID):
     context['errors'] = errors
     context['upvote'] = len(article.article_upvote.all())
     context['downvote'] = len(article.article_downvote.all())
+    context['deletable'] = deletable
    
     return render(request, 'moneyclub/article.html', context)
 
 
+@login_required
+@transaction.commit_on_success
+def delete_post(request, article_id):
+    errors = []
+    context = {}
+    group = []
+    try:
+        article_to_delete = Post.objects.get(id=article_id)
+        group = article_to_delete.groupId
+        composer = article_to_delete.user
+        membership = GroupMembership.objects.get(user=composer, group = group)
+        membership.points = membership.points-10
+        membership.save()
+        article_to_delete.delete()
+    except ObjectDoesNotExist:
+        errors.append('delete failed')
+        context['errors']= errors
+        return render(request, '/moneyclub/errors.html',context)
+    if not group:
+        errors.append('group not found')
+        context['errors']= errors
+        return render(request, '/moneyclub/errors.html',context)
+    return HttpResponseRedirect(reverse('grouphomepage', args=(group.id,)), context)
 
 
 @login_required

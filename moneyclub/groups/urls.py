@@ -24,6 +24,8 @@ urlpatterns = patterns('',
     url(r'^get_group_description/(?P<id1>\d+)/$', 'moneyclub.groups.views.get_group_description'),
     url(r'^post_article$', 'moneyclub.groups.views.post_article', name='post_article'),
     url(r'^start_event$', 'moneyclub.groups.views.start_event', name='start_event'),
+    url(r'^delete_post/(?P<article_id>\d+)$', 'moneyclub.groups.views.delete_post', name='delete_post'),
+
     url(r'^article/(?P<articleID>\d+)/$', 'moneyclub.groups.views.article', name='article'),
     url(r'^join_group/(?P<id1>\d+)/$', 'moneyclub.groups.views.join_group'),
     url(r'^add_comment_on_article/(?P<groupID>\d+)/(?P<articleID>\d+)/$', 'moneyclub.groups.views.add_comment_on_article'),

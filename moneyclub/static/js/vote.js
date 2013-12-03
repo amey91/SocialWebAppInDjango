@@ -61,7 +61,7 @@ $(document).ready(function(){
 					});	
 				}
 			}else{
-				alert("downvote failed!")
+				alert(response.errors)
 			}
 		}
 		var data={'article_id': article_id};
