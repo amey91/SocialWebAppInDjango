@@ -7,7 +7,7 @@ from moneyclub.models import *
 from moneyclub.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-
+import operator
 import json
 from django.utils import simplejson
 
@@ -870,16 +870,35 @@ def newsfeed(request):
 
 
 def temp(request):
-    return render(request, 'moneyclub/simplegraph.html', {})
+    return render(request, 'moneyclub/temp.html', {})
 
 
 def findgroups(request):
+    context ={}
+    sorted_groups= []
+    
     grps= Group.objects.all().order_by('id')
+    
     for grp in grps:
         memberships = GroupMembership.objects.filter(group=grp)
-        score = 0
+        score = 0.0
         for membership in memberships:
             score = score + membership.points
+        
+        context[grp] = score
+    
+    sorted_x = sorted(context.iteritems(), key=operator.itemgetter(1))
+    i=1
+    for item in sorted_x:
+        sorted_groups.append(sorted_x[len(sorted_x)-i])
+        i+=1   
+    
+    print sorted_groups
+    context['groups'] = sorted_groups
+    
+    context['new_groups'] = Group.objects.all().order_by('-id')[0:5]
+    
+    return render(request, 'moneyclub/success.html', context)
         
 
 
