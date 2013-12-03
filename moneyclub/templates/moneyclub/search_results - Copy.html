@@ -48,15 +48,14 @@
 	  		
 	      {% for user_ret in users_retrieved %}
 	        <div class="media">
-
-	        {%if user_ret.profile and user_ret.profile.profilepicture %}
+	        {%if user.profile and user.profile.profilepicture %}
 	          <img data-src="holder.js/20x20" class="img-thumbnail pull-left" 
 	            src="{% url 'user-photo' user_ret.id %}" alt="{{user_ret}}"width="160px">
 	   		{% else %}
 	   		<img data-src="holder.js/20x20" class="img-thumbnail pull-left" 
 	            src="/static/image/money.jpg" alt="fuck" width="160px">
 	   		{%endif%}
-
+	        
 	          <div class="media-body">
 	            <p style="font-size:175%; color:grey"> 
 	            	<a href="{% url 'visit_user' user_ret.id %}">{{user_ret}}  </a>

@@ -21,9 +21,9 @@
         <div class="col-lg-12">
           <div class="article">
             <h1>Title: {{article.title}}</h1>
-            <p class="lead">by <a href="/moneyclub/member/profile/{{user.id}}/">{{article.user}}</a></p>
+            <p class="lead">by <a href="/moneyclub/member/visit-user/{{user.id}}/">{{article.user}}</a></p>
 
-            
+            <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
             <hr>
               <div class="media">
               {%if article.picture%}
@@ -41,7 +41,7 @@
                
                {%endif%}
             
-            
+            {% if  article.articleType == 1 %}
  		<div class="col-lg-4">
             <div class="media-body">
             
@@ -51,10 +51,10 @@
         </div>
             
             </div>
-            <p><span class="glyphicon glyphicon-time"></span> Post at {{article.datetime}}</p>
+            
             
 
-            {% if  article.articleType == 1 %}
+            
             
 
 

@@ -7,7 +7,7 @@ from moneyclub.models import *
 from moneyclub.forms import *
 from django.db import transaction 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-
+import operator
 import json
 from django.utils import simplejson
 
@@ -471,15 +471,19 @@ def start_event(request):
     #new_entry.save()
     form = CreateEventForm(request.POST, instance=new_entry   )
     if not form.is_valid():
-        print "form not valid"
+       
         errors.append('Invalid form')
         context['errors'] = errors
         context['status'] = 'failure'
         return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
-    print "event saved"
-    print "event type" + str(event.articleType)
+    try:
+        member = GroupMembership.objects.get(user = request.user, group = group1)
+        member.points = member.points + 10
+        member.save()
+    except:
+        pass
     context['article'] = event
     context['group'] = group1
     context['errors']=errors
@@ -881,18 +885,37 @@ def newsfeed(request):
 
 
 def temp(request):
-    return render(request, 'moneyclub/simplegraph.html', {})
+    return render(request, 'moneyclub/temp.html', {})
 
 
 def findgroups(request):
+    context ={}
+    sorted_groups= []
+    
     grps= Group.objects.all().order_by('id')
+    
     for grp in grps:
         memberships = GroupMembership.objects.filter(group=grp)
-        score = 0
+        score = 0.0
         for membership in memberships:
             score = score + membership.points
 
-        groups = [membership.group for membership in memberships]
+        
+        context[grp] = score
+    
+    sorted_x = sorted(context.iteritems(), key=operator.itemgetter(1))
+    i=1
+    for item in sorted_x:
+        sorted_groups.append(sorted_x[len(sorted_x)-i])
+        i+=1   
+    
+    
+    context['groups'] = sorted_groups
+    
+    context['new_groups'] = Group.objects.all().order_by('-id')[0:5]
+    print context['new_groups']
+    return render(request, 'moneyclub/findgroups.html', context)
+        
 
 
 

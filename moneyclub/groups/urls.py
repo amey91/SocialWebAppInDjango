@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     url(r'^group-settings/(?P<groupID>\d+)/$', 'moneyclub.groups.views.group_settings', name='group_settings'),
     
     url(r'^get-stock-info/(?P<group_id>\d+)$', 'moneyclub.groups.views.get_group_stock'),
-    url(r'^findgroups/(?P<group_id>\d+)$', 'moneyclub.groups.views.findgroups'),
+    url(r'^findgroups/$', 'moneyclub.groups.views.findgroups'),
     url(r'^add-stock$','moneyclub.groups.views.add_stock'),
     url(r'^delete-stock$','moneyclub.groups.views.delete_stock'),  
 
