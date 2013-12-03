@@ -27,3 +27,18 @@
         -webkit-transform:rotate(360deg);  
         /*-webkit-font-smoothing:antialiased;*/
     }
+    
+ #footer {
+  z-index: 10;
+ height: 3em;
+ margin-top: -3em;
+   position:fixed;
+    bottom:0;
+}
+.footer {
+ z-index: 10;
+ height: 3em;
+ margin-top: -3em;
+   position:fixed;
+    bottom:0;
+}
