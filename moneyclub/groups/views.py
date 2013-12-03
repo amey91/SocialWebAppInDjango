@@ -18,7 +18,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.hashers import *
 
-import ystockquote
+from moneyclub.ystockquote import *
 
 
 def get_photo_group(request, id):
@@ -378,7 +378,7 @@ def post_article(request):
         context['status'] = 'failure'
 
         #return render(reverse('homepage'), context)
-        return HttpResponse(request, context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
     group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
@@ -388,7 +388,7 @@ def post_article(request):
         context['errors'] = errors
         context['status'] = 'failure'
         #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
    
     
     new_entry = Article(groupId =group1,user=request.user,articleType=1)
@@ -405,7 +405,7 @@ def post_article(request):
         context['stat'] = 'failure'
         context['form'] = form
         #return HttpResponseRedirect(reverse('grouphomepage', args=(group1.id,)), context)
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
    
     article = form.save()
@@ -438,14 +438,15 @@ def start_event(request):
     
     print "start_event"
     if request.method=='GET':
-        return render(request, 'moneyclub/post_articles.html', context)
+        errors.append('this is not a post request')
+        return render(request, 'moneyclub/errors.html', context)
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
         print 'Not a group specified'
         errors.append('Not a group specified')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse(context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
     groupID = request.POST['group_id']
     group1=Group.objects.get(id=groupID)
@@ -454,7 +455,7 @@ def start_event(request):
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
@@ -465,7 +466,7 @@ def start_event(request):
         errors.append('Invalid form')
         context['errors'] = errors
         context['status'] = 'failure'
-        return HttpResponse( context, mimetype='application/json')
+        return render(request, 'moneyclub/errors.html', context)
 
     event = form.save()
     print "event saved"
@@ -643,7 +644,7 @@ def get_group_stock(request,group_id):
     stocks = group.group_stock.all()
     
     for stock in stocks:
-        allinfo = ystockquote.get_all(stock.stock_name)
+        allinfo = get_all(stock.stock_name)
 
         price = allinfo['last_trade_realtime_time']
         stock.price=price if len(price)<6 else price[0:5]
@@ -694,7 +695,7 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
-    stockinfo = ystockquote.get_all(stock_name)
+    stockinfo = get_all(stock_name)
 
     #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
     if group.group_stock.filter(stock_name=stock_name):
@@ -884,6 +885,7 @@ def findgroups(request):
         score = 0.0
         for membership in memberships:
             score = score + membership.points
+
         
         context[grp] = score
     
@@ -900,6 +902,7 @@ def findgroups(request):
     
     return render(request, 'moneyclub/success.html', context)
         
+
 
 
 def general_data_to_be_included_in_requests(request):

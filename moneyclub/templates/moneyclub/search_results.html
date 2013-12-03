@@ -48,7 +48,7 @@
 	  		
 	      {% for user_ret in users_retrieved %}
 	        <div class="media">
-	        {%if user.profile and user.profile.profilepicture %}
+	        {%if user_ret.profile and user_ret.profile.profilepicture %}
 	          <img data-src="holder.js/20x20" class="img-thumbnail pull-left" 
 	            src="{% url 'user-photo' user_ret.id %}" alt="{{user_ret}}"width="160px">
 	   		{% else %}

@@ -28,11 +28,11 @@ from django.utils import simplejson
 
 from moneyclub.models import *
 from moneyclub.forms import *
+from moneyclub.ystockquote import *
 
 from mysite.settings import *
 
 
-import ystockquote
 
 
 @login_required
@@ -44,6 +44,7 @@ def view_profile(request):
     try:
         profile_to_edit = UserProfile.objects.get(user=request.user) 
         if not profile_to_edit.profilepicture:
+            print "no_pic"
             context['no_pic']="T"
         profile = ProfileForm(instance=profile_to_edit)
 
@@ -95,6 +96,7 @@ def save_profile(request):
     
     if  not profileform.is_valid():
         context['profile'] = profileform
+        context['no_pic'] = True
         return render(request, 'moneyclub/profile.html',context)
     
     profileform.save();
@@ -107,7 +109,7 @@ def save_profile(request):
 def visit_user(request, user_id):
     errors = []
     context = {}
-    all_articles = []
+
     profile = []
     try:
         user_to_visit = User.objects.get(id=user_id)
@@ -121,36 +123,27 @@ def visit_user(request, user_id):
         #profile = ProfileForm(instance=profile)
     except ObjectDoesNotExist:
         context['no_pic']="T"
-
-    articles = Post.objects.filter(user=user_to_visit)
-    for article in articles:
-        if article.articleType == 1:
-            article = article.article
-            all_articles.append(article)
-        else:
-            article = article.event
-            all_articles.append(article)
-    context['articles'] = all_articles
-
-    context['events'] = Event.objects.filter(user=request.user)
-    if len(context['articles'])==0:
-        context['no_article'] = "T"
         
+
+    posts = Post.objects.filter(user = user_to_visit)
+    for post in posts:
+        if post.articleType ==1:
+            post = post.article
+        else:
+            post = post.event
+    events = Event.objects.filter(user = user_to_visit)
+
+
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=user_to_visit)
     score = 0
     for membership in memberships:
         score = score + membership.points
     groups = [membership.group for membership in memberships]
-    #get stock data
-    stocks = UserStockOfInterest.objects.filter(user=request.user)
-    
-    context['stocks'] = stocks
-    
 
     context['visitee'] = user_to_visit
-    
-    
+    context['articles'] = posts
+    context['events'] = events
     context['score'] = score
     context['member'] = member
     context['groups'] = groups
@@ -293,7 +286,7 @@ def get_user_stock(request):
     stocks = UserStockOfInterest.objects.filter(user=request.user)
     
     for stock in stocks:
-        allinfo = ystockquote.get_all(stock.stock_name)
+        allinfo = get_all(stock.stock_name)
         price = allinfo['last_trade_realtime_time']
         stock.price=price if len(price)<6 else price[0:5]
 
@@ -318,7 +311,7 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     stock_name = request.POST['stock_name']
-    stockinfo = ystockquote.get_all(stock_name)
+    stockinfo = get_all(stock_name)
 
     #if UserStockOfInterest.objects.filter(stock_name=stock_name and user==request.user):
     if user.user_stock.filter(stock_name=stock_name):
@@ -328,14 +321,14 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(json.dumps(context), mimetype='application/json')
     
-    if stockinfo['shares_owned'] =="\"-\"" or stockinfo['shares_owned'] =="N/A":
+    if 'shares_owned' not in stockinfo or stockinfo['shares_owned'] =="\"-\"" or stockinfo['shares_owned'] =="N/A":
         errors.append('No matching stock found')
         context['status'] = 'failure'
         context['errors'] = errors
         return HttpResponse(json.dumps(context), mimetype='application/json')
-    print "stock found"
+
     stock = UserStockOfInterest(user=request.user, stock_name=stock_name)
-    stock.price=stockinfo['last_trade_realtime_time']
+    stock.price=stockinfo['ask_realtime']
     stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
     stock.percent_change=stockinfo['change_percent'].strip("\"")
     stock.save()
@@ -344,8 +337,9 @@ def add_stock(request):
     context['change'] = stock.change
     context['pctchange'] = stock.percent_change
     context['stock_id'] = stock.id
-    context['status'] = 'success'
-
+    context['stat'] = 'success'
+    
+    #return HttpResponseRedirect(reverse('homepage'),context)
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 @login_required
@@ -353,8 +347,11 @@ def add_stock(request):
 def delete_stock(request):
     context={}
     errors=[]
+
     if 'stock_id' in request.POST and request.POST['stock_id']:
         stock_id = request.POST['stock_id']
+        print 'stock id:'
+        print stock_id
 
         try:
             stock_to_delete = UserStockOfInterest.objects.get(id=stock_id)
@@ -364,10 +361,12 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
 
         except ObjectDoesNotExist:
+            print 'stock not found'
             errors.append('delete error!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
     errors.append('delete error!')
+    context['errors'] = errors
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 

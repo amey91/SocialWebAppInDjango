@@ -56,22 +56,27 @@ def home(request):
     context = {}
     all_articles=[]
     profile = []
-
+    member = []
+    groups = []
     try:
 
         profile = UserProfile.objects.get(user=request.user) 
-
+        if not profile.profilepicture:
+            context['no_pic']="T"
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"
     print request.user.username
-
-    member = Member.objects.get(user=request.user)
-    memberships = GroupMembership.objects.filter(user=request.user)
     score = 0
-    for membership in memberships:
-        score = score + membership.points
-    groups = [membership.group for membership in memberships]
+    try:
+        member = Member.objects.get(user=request.user)
+        memberships = GroupMembership.objects.filter(user=request.user)
+        
+        for membership in memberships:
+            score = score + membership.points
+        groups = [membership.group for membership in memberships]
+    except ObjectDoesNotExist:
+        pass
     # no groups as of now.
     if len(groups)==0:
         context['no_groups'] = "true"

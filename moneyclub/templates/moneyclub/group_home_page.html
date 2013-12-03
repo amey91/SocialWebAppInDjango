@@ -114,20 +114,14 @@
                                   <div class="row">
               
                                                 
-                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article/" method="POST" id="post-article"  enctype="multipart/form-data">
+                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article" method="POST" id="post-article"  enctype="multipart/form-data">
                                         <input type="hidden" name="group_id" value="{{group.id}}">
-                                        <input type="text" class="form-control" placeholder="Title of the article" name="title">
+                                        <input type="text" class="form-control" placeholder="Title of the article (*)" name="title">
                                       
                                       <input type="text" id="article type" name="article_type" value="1" hidden ></input>
                                           <textarea class="form-control counted" name="content" placeholder="Describe the article." 
                                           rows="10" style="margin-top:10px; margin-bottom:10px;resize: none"></textarea>
-                                          <!--
-                                          <div class="input-group ">
-                                      
-                                            <span class="input-group-addon "><span class="glyphicon glyphicon-link"></span></span>
-                                            <input type="text" name="picture_url" class="form-control" placeholder="External URL of the article">
-                                          </div>
-                                          -->
+                                
                                      <p> Upload image for the article</p>
                                      <input id="id_picture" name="picture" type="file" /></input>
                                                                      
@@ -138,6 +132,7 @@
 
                                         {%csrf_token%}
                                       </form>
+                                      <p> (*) fields are required </p>
                                     {% for error in form.errors %}
                                     {{error}}
                                     {% endfor %}
@@ -159,7 +154,7 @@
                                             
                                               <input type="hidden" name="group_id" value="{{group.id}}">
                                               <div class="form-group">
-                                                <label for="loc_input" class="col-md-3 control-label">Event </label>
+                                                <label for="loc_input" class="col-md-3 control-label">Event (*)</label>
                                                 <div class="input-group  col-md-7" >
                                                     <input class="form-control" size="16" type="text" value="" name="title" >
                                                     
@@ -167,7 +162,7 @@
                                                 </div>
                                             </div> <!--/.form-group -->
                                               <div class="form-group">
-                                              <label for="dtp_input2" class="col-md-3 control-label">Date </label>
+                                              <label for="dtp_input2" class="col-md-3 control-label">Date (*)</label>
                                                 <div class="input-group date form_date col-md-7" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                                                     <input class="form-control" size="16" type="text" value="" readonly name="eventDate">
                                                     
@@ -178,7 +173,7 @@
                                        
                                             </div> <!--/.form-group -->
                                             <div class="form-group">
-                                                <label for="dtp_input3" class="col-md-3 control-label">Time </label>
+                                                <label for="dtp_input3" class="col-md-3 control-label">Time (*)</label>
                                                 <div class="input-group date form_time col-md-7" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
                                                     <input class="form-control" size="16" type="text" value="" readonly name="eventTime">
                                                     
@@ -188,7 +183,7 @@
                                                 </div>
                                             </div> <!--/.form-group -->
                                             <div class="form-group">
-                                                <label for="loc_input" class="col-md-3 control-label">Location </label>
+                                                <label for="loc_input" class="col-md-3 control-label">Location (*)</label>
                                                 <div class="input-group  col-md-7" >
                                                     <input class="form-control" size="16" type="text" name="location" value="" >
                                                     
@@ -208,6 +203,7 @@
                                           </div>
                                              {%csrf_token%}
                                             </form>
+                                             <p> (*) fields are required </p>
                                         </div>
                                     </div>
                                 </div>
@@ -333,10 +329,10 @@
 
             
           </div><!--/row-->
-	</li>
+        </li>
         <hr/>
-	{%endif%}
-	
+        {%endif%}
+        
   {%endfor%}
   </ol>
           {% endblock articles %}
@@ -413,4 +409,3 @@
         
         
         {% endblock sidebars %}
-     
