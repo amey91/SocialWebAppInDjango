@@ -16,11 +16,23 @@
     <div class="container">
 
       <form class="form-signin"><br/><br/><br/><br/><br/><br/>
-        <h2 class="form-signin-heading"><div class="btn btn-block btn-lg btn-success">
-        <span class="glyphicon glyphicon-ok"></span> {{message}} </div></h2>
         
-        {%if create_group %}&nbsp &nbsp &nbsp <a href="/moneyclub/groups/home/{{group.id}}">Click here to go to your new Money Club! </a>{%endif%}
-        {%if group_join %}&nbsp &nbsp &nbsp You request was sent to the Group - <br/>&nbsp &nbsp &nbsp Owner. Please wait for confirmation. {%endif%}
+        
+        {%if create_group %}
+        <h2 class="form-signin-heading"><a href="/moneyclub/groups/home/{{group.id}}"><div class="btn btn-block btn-lg btn-success">
+        <span class="glyphicon glyphicon-ok"></span> {{message}} <br/>Click here to go to <br/>your new Money Club </div></a></h2>
+        {%endif%}
+        
+        {%if group_join %}
+        	 
+        <h2 class="form-signin-heading"><div class="btn btn-block btn-lg btn-success">
+        <span class="glyphicon glyphicon-ok"></span> 
+        You request was sent to the Group - <br/>Owner. Please wait for confirmation.
+        </div>
+        </h2>
+        	
+        	
+        	{%endif%}
       </form>
 
     </div> <!-- /container -->

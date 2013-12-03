@@ -45,7 +45,7 @@
                   <button type="submit" class="btn btn-success">Sign in</button>
                   {% csrf_token %}
                   {% if form.errors %}
-                  <p style="color:red"> Incorrect user name or password.  </p>  
+                  <p> Incorrect user name or password.  </p>  
                   
                   {% endif %} 
                 </form>
@@ -68,12 +68,6 @@
     {% endblock contentsblock %}
 
     {% block footerblock %}
-    <hr/>
-    <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2013, Money Club  | CMU | <a href="#">Terms</a></p>
-      </footer>
-    
     {% endblock footerblock %}
 
     {% block endscript %}

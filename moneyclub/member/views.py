@@ -107,7 +107,7 @@ def save_profile(request):
 def visit_user(request, user_id):
     errors = []
     context = {}
-
+    all_articles = []
     profile = []
     try:
         user_to_visit = User.objects.get(id=user_id)
@@ -121,27 +121,36 @@ def visit_user(request, user_id):
         #profile = ProfileForm(instance=profile)
     except ObjectDoesNotExist:
         context['no_pic']="T"
-        
 
-    posts = Post.objects.filter(user = user_to_visit)
-    for post in posts:
-        if post.articleType ==1:
-            post = post.article
+    articles = Post.objects.filter(user=user_to_visit)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+            all_articles.append(article)
         else:
-            post = post.event
-    events = Event.objects.filter(user = user_to_visit)
+            article = article.event
+            all_articles.append(article)
+    context['articles'] = all_articles
 
-
+    context['events'] = Event.objects.filter(user=request.user)
+    if len(context['articles'])==0:
+        context['no_article'] = "T"
+        
     member = Member.objects.get(user=request.user)
     memberships = GroupMembership.objects.filter(user=user_to_visit)
     score = 0
     for membership in memberships:
         score = score + membership.points
     groups = [membership.group for membership in memberships]
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    context['stocks'] = stocks
+    
 
     context['visitee'] = user_to_visit
-    context['articles'] = posts
-    context['events'] = events
+    
+    
     context['score'] = score
     context['member'] = member
     context['groups'] = groups

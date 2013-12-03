@@ -38,7 +38,7 @@ def get_photo_article(request, id):
 
 def club_home(request,id):
     context = {}    
-
+    all_articles=[]
     try:
         g=Group.objects.get(id=id);
     except ObjectDoesNotExist:
@@ -55,7 +55,26 @@ def club_home(request,id):
     context['group'] = g
     
     #all the articles of the group
-    articles = Article.objects.filter(groupId=g)
+    
+    member = Member.objects.get(user=request.user)
+    memberships = GroupMembership.objects.filter(user=request.user)
+    score = 0
+    for membership in memberships:
+        score = score + membership.points
+    groups = [membership.group for membership in memberships]
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    articles = Post.objects.filter(user=request.user)
+    for article in articles:
+        if article.articleType == 1:
+            article = article.article
+            all_articles.append(article)
+        else:
+            article = article.event
+            all_articles.append(article)
+    context['articles'] = all_articles
     
     stocks= g.group_stock.all()
 
@@ -155,9 +174,31 @@ def add_members(request):
     if not 'email' in request.POST or not request.POST['email'] or request.method=="GET":
         add_members_generic(request)
         
-    #get group name from group id
-    grp_name=Group.objects.get(name=request.POST['select_group'])
- 
+    grp_name = Group.objects.get(name=request.POST['select_group'])
+    
+    
+    #see if a username is entered and user exists
+    try:
+            u=User.objects.get(username=request.POST['email'])
+            
+            #check if already invited
+            try:
+                i = Invite.objects.get(groupId=grp_name,theInvitedOne=u)
+                context['message']= "user already invited"
+                return render(request, 'moneyclub/adduser_success.html', {'message':'User already invited to money club!'})
+            except:
+                pass               
+            
+            #if not invited
+            i=Invite(groupId=grp_name,invitedBy=request.user,theInvitedOne=u)
+            context['message'] = "User invited"
+            i.save()
+            return render(request, 'moneyclub/adduser_success.html', {'message':'User invited to money club!'})
+        
+    except:
+            pass
+        
+    ###if email entered
     #User already joined money club       
     if len(User.objects.filter(email=request.POST['email'])) > 0:   
         U=User.objects.get(email=request.POST['email'])
@@ -166,6 +207,8 @@ def add_members(request):
         g.save()
         i.save()    
     else:
+        
+        
         email_body = """
 You have been invited to Money Club!! :)
 You have an invite from the group " """ +grp_name.name +""""
@@ -175,6 +218,8 @@ You have an invite from the group " """ +grp_name.name +""""
               from_email="invites@grumblr.com",
               recipient_list=[request.POST['email']])
         
+        
+        
     return render(request, 'moneyclub/adduser_success.html', {})
  
 
@@ -183,22 +228,75 @@ def view_group_members2(request):
     if not request.POST:
         return render(request, 'moneyclub/view_group_members2.html', {'error':"This "})
     print request.POST['select_group']
+    
+    
+    
+    
     if request.method=="GET":
         view_group_members1(request)
     if not 'select_group' in request.POST or not request.POST['select_group']:
         view_group_members1(request)
-    g=Group.objects.get(name=request.POST['select_group'])
-    members=GroupMembership.objects.filter(group=g).order_by('-points')        
-    return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    try:
+        g=Group.objects.get(name=request.POST['select_group'])
+        #check if user owns this group
+        if not g.owner==request.user:
+            context['errors']="Privilege restriction. You cannot access the page. Sorry."
+            return render(request, 'moneyclub/errors.html', context)
+        
+        members=GroupMembership.objects.filter(group=g).order_by('-points') 
+        return render(request, 'moneyclub/view_group_members2.html', {'members':members})
+    except:
+        context['errors']="Group does not exist"
+        return render(request, 'moneyclub/errors.html', context)
+    
+    
+    
+    
+    
 
 
 def view_group_members1(request):
+    
     grp=Group.objects.filter(owner=request.user)
     #owns no groups
     if grp.count()==0:
         return render(request, 'moneyclub/create_moneyclub.html', {})
     return render(request, 'moneyclub/view_group_members1.html', {'groups':grp})
         
+        
+def only_view_group_members(request,grpId):
+    context ={}
+    errors=[]
+    context['errors']=errors
+    try:
+        grp=Group.objects.get(id=grpId)
+    except:
+        errors.append("Group does not exist")
+        return render(request, 'moneyclub/errors.html', context)
+    members=GroupMembership.objects.filter(group=grp).order_by('-points') 
+    context['members']=members
+    
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    
+    
+    context['stocks'] = stocks
+    context['errors'] = errors
+    
+    
+    return render(request, 'moneyclub/only_view_group_members.html', context)
+    
             
 def menu(request):
     return render(request, 'moneyclub/Menu.html', {})
@@ -424,18 +522,20 @@ def add_comment_on_article(request,groupID,articleID):
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
     
-    #check if poster is a member of the group
+    #check if poster is a member of the group and is not blocked
     try:
         group1=Group.objects.get(id=groupID)
 
-        group_list=GroupMembership.objects.filter(group=group1).values_list('user', flat=True)
+        group_list=GroupMembership.objects.filter(group=group1, blocked=0).values_list('user', flat=True)
+        
+        
     except ObjectDoesNotExist:
         errors.append('group not found')
         context['errors'] = errors
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
     if request.user.id not in group_list:
-        errors.append('You are not a member of the given group.')
+        errors.append('You are not a member of the given group, or are blocked.')
         context['errors'] = errors 
         context['stat'] = 'failure'
         return HttpResponse( json.dumps(context), mimetype='application/json')
@@ -717,11 +817,12 @@ def join_group(request,id1):
 def newsfeed(request):
     context = {}
     errors = []
-    articles= [] 
+    
+    all_articles= [] 
     events = []
     context['errors']= errors
     
-    u=User.objects.get(username=request.user)
+    
 
     #find the groups the user has joined
     gm=GroupMembership.objects.filter(user=request.user)
@@ -736,15 +837,16 @@ def newsfeed(request):
         for item in a:
             if item.articleType==1:
                 item=item.article
+                all_articles.append(item)
                 print " article "
             else:
                 item=item.event
+                all_articles.append(item)
                 print " event "
         
     
-    context['articles'] = a
-    
-    
+    context['articles'] = all_articles
+      
     
     #reused from home
     memberships = GroupMembership.objects.filter(user=request.user)
@@ -770,13 +872,7 @@ def newsfeed(request):
     memberships = GroupMembership.objects.filter(user=request.user)
     score = 0
     stocks = UserStockOfInterest.objects.filter(user=request.user)
-    articles = Post.objects.filter(user=request.user)
-    for article in articles:
-        if article.articleType == 1:
-            article = article.article
-        else:
-            article = article.event
-    context['articles'] = articles
+
 
     context['events'] = Event.objects.filter(user=request.user)
     if len(context['articles'])==0:
@@ -795,5 +891,28 @@ def temp(request):
     return render(request, 'moneyclub/simplegraph.html', {})
 
 
-
-
+def general_data_to_be_included_in_requests(request):
+    context = {}
+    errors= []
+    
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)
+    
+    
+    
+    context['stocks'] = stocks
+    context['errors'] = errors
+    
+    
+    
+    return context

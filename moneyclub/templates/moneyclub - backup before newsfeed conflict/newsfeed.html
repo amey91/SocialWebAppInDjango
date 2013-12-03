@@ -7,52 +7,40 @@
     
           {% block articles %}
    {%if not articles%}
-   <h4 class="media-heading">Sorry, no recent news from your joined Money Clubs.</h4>
+   <h4 class="media-heading">You have not joined any Money Clubs. <a href="/moneyclub/groups/findgroups/">
+   Join a Money Club </a> to gain access to information and make your investments smarter!</h4>
    {%endif%}
    
    <ol>
    {%for article in articles%}
    
-   {%if article.articleType == 1 %}
-         <li> <h4 class="media-heading">Title: <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
-         <div class="row">
+   {%if article.article%}
+         <li><h4 class="media-heading">Article : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
+          <div class="row">
             
               <div class="media">
-              {%if article.picture%}
                   <a class="pull-left" href="#">
-                    <img class="media-object" 
                     
                     
-                    src="/moneyclub/groups/get_photo_article/{{article.id}}" 
-                    
-                    
-                    alt="Image Not Found!" width="100px">
                   </a>
-               
-               
-               {%endif%}
-               
-               
                 <div class="media-body">
-                  
-                  <span class="label label-info">Article content:</span>
+                  by <a href="/monyclub/member/visit-member/{{article.user.id}}/">{{article.user}}</a>
                   
                   <br/>
+                  <span class="label label-info">Article</span>
                   {{article.content}}
-                                    
-                </div><br/>
-                <p><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
+                </div>
+                
+                <p class="pull-right"><span class="glyphicon glyphicon-time"></span> Posted on {{article.datetime}}</p>
               </div><!--/media-->
             
             
           </div><!--/row-->
-          
-          <hr/>
           </li>
           <hr/>
          
          
-    {% elif article.articleType == 2 %}
+    {% else %}
     <li><h4 class="media-heading">Event : <a href="/moneyclub/groups/article/{{article.id}}">{{article.title}}</a></h4>
           <div class="row">
             
@@ -67,21 +55,21 @@
                   
                   <tbody>
                           <tr>
-                            <td><a href="/moneyclub/groups/article/{{article.id}}">Date</a></td>
-                            <td>{{article.eventDate}} {{article.eventTime}}, {{article.eventDate}}</td>
+                            <td><a href="#">Date</a></td>
+                            <td>{{article.eventDate}}{{article.eventTime}}, {{article.eventDate}}</td>
                             
                           </tr>
                   </tbody>
                   <tbody>
                           <tr>
-                            <td><a href="/moneyclub/groups/article/{{article.id}}">Time</a></td>
+                            <td><a href="#">Time</a></td>
                             <td>{{article.eventTime}}</td>
                             
                           </tr>
                   </tbody>
                   <tbody>
                           <tr>
-                            <td><a href="/moneyclub/groups/article/{{article.id}}">Location</a></td>
+                            <td><a href="#">Location</a></td>
                             <td>Uncle Scoorge's Castle</td>
                             
                           </tr>

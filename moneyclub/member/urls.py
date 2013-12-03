@@ -19,9 +19,7 @@ urlpatterns = patterns('',
     url(r'^delete-stock$','moneyclub.member.views.delete_stock'),
     url(r'^upvote$', 'moneyclub.member.views.upvote', name='upvote'),
     url(r'^downvote$', 'moneyclub.member.views.downvote', name='downvote'),
-    
-    
-
-    url(r'^visit-user/(?P<user_id>\d+)$', 'moneyclub.member.views.visit_user', name='visit_user')
+    url(r'^visit-user/(?P<user_id>\d+)$', 'moneyclub.member.views.visit_user', name='visit_user'),
+    url(r'^visit-user/(?P<user_id>\d+)/$', 'moneyclub.member.views.visit_user', name='visit_user_amey')
 
 )

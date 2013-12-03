@@ -114,7 +114,7 @@
                                   <div class="row">
               
                                                 
-                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article/" method="POST" id="post-article"  enctype="multipart/form-data">
+                                      <form accept-charset="UTF-8" action="/moneyclub/groups/post_article" method="POST" id="post-article"  enctype="multipart/form-data">
                                         <input type="hidden" name="group_id" value="{{group.id}}">
                                         <input type="text" class="form-control" placeholder="Title of the article" name="title">
                                       
@@ -299,7 +299,7 @@
                    {% if post.articleType == 2 %}
                   <!-- image post -->
                   <span class="label label-info">Image</span>
-                  <img class="media-object" src="{% url 'article-photo' post.id %}" alt="..."width="100px">
+                  <img class="media-object" src="{% url 'post-photo' post.id %}" alt="..."width="400px">
                   <p> {{post.description}} </p>
                   {% endif%}
                   <!-- {% if post.articleType == 3 %} -->
@@ -378,20 +378,17 @@
           </div><!--/.well -->
           <div class="well sidebar-nav">
             <ul class="nav">
-              <li><h4><a href="/moneyclub/groups/only_view_group_members/{{group.id}}">Members</a></h4></li>
+              <li><h4><a href="/moneyclub/groups/member-management/1/">Members</a></h4></li>
               {%for member in members%}
-              <li class="active">
-              <a href="/moneyclub/member/visit-user/{{member.user.id}}/">
-              <span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}
-              </a></li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-user" style="color:green"></span>{{member.user.username}}</a></li>
               {%endfor%}
               {% if more_members%}<li>
               <a href="{% url 'member_management' group.id%}"> {{more_members_count}} more Members</a></li>
               {%endif%}
             </ul>
-            <div><a href="/moneyclub/member/visit-user/{{group.owner.id}}/">
+            <div>
               <span class="glyphicon glyphicon-user" style="color:red"></span> Group Owner: {{group_owner.username}}
-           </a>
+           
             </div>
 
           </div><!--/.well -->
@@ -408,3 +405,4 @@
         
         
         {% endblock sidebars %}
+     
