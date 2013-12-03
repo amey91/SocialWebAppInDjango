@@ -61,7 +61,8 @@ def home(request):
     try:
 
         profile = UserProfile.objects.get(user=request.user) 
-
+        if not profile.profilepicture:
+            context['no_pic']="T"
     except ObjectDoesNotExist:
         errors.append('Profile not found. Create your profile.')
         context['no_pic']="T"

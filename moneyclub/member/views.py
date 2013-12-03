@@ -327,7 +327,7 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(json.dumps(context), mimetype='application/json')
 
-    stock = UserStockOfInterest(group=group, stock_name=stock_name)
+    stock = UserStockOfInterest(user=request.user, stock_name=stock_name)
     stock.price=stockinfo['ask_realtime']
     stock.change=stockinfo['change'] if len(stockinfo['change'])<6 else stockinfo['change'][0:5]
     stock.percent_change=stockinfo['change_percent'].strip("\"")
@@ -336,8 +336,9 @@ def add_stock(request):
     context['price'] = stock.price
     context['change'] = stock.change
     context['pctchange'] = stock.percent_change
+    context['stock_id'] = stock.id
     context['stat'] = 'success'
-    context['redirect'] = '/'
+    
     #return HttpResponseRedirect(reverse('homepage'),context)
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
@@ -346,8 +347,11 @@ def add_stock(request):
 def delete_stock(request):
     context={}
     errors=[]
+
     if 'stock_id' in request.POST and request.POST['stock_id']:
         stock_id = request.POST['stock_id']
+        print 'stock id:'
+        print stock_id
 
         try:
             stock_to_delete = UserStockOfInterest.objects.get(id=stock_id)
@@ -357,10 +361,12 @@ def delete_stock(request):
             return HttpResponse(json.dumps(context), mimetype='application/json')
 
         except ObjectDoesNotExist:
+            print 'stock not found'
             errors.append('delete error!')
             context['status']='failure'
             return HttpResponse(json.dumps(context), mimetype='application/json')
     errors.append('delete error!')
+    context['errors'] = errors
     context['status']='failure'
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
