@@ -157,7 +157,7 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 well well-sm">
-                                            <form accept-charset="UTF-8" action="/moneyclub/groups/start_event" method="POST" id="start-event"  enctype="multipart/form-data">
+                                            <form accept-charset="UTF-8"  method="POST" id="start-event"  >
                                             
                                               <input type="hidden" name="group_id" value="{{group.id}}">
                                               <div class="form-group">
@@ -206,7 +206,7 @@
                                             </div> <!--/.form-group -->
                                             
                                            <div class="modal-footer">
-                                                <button class="btn btn-info start-event" id="{{group.id}}" type="submit">Start Event</button>
+                                                <button class="btn btn-info start-event" id="{{group.id}}" >Start Event</button>
                                           </div>
                                              {%csrf_token%}
                                             </form>

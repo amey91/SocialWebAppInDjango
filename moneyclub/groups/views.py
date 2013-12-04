@@ -506,14 +506,16 @@ def start_event(request):
     print "start_event"
     if request.method=='GET':
         errors.append('this is not a post request')
-        return render(request, 'moneyclub/errors.html', context)
+        context['errors'] = errors
+        context['stat'] = 'failure'
+        HttpResponse(json.dumps(context), mimetype='application/json')
 
     if not 'group_id' in request.POST or not request.POST['group_id']:
         print 'Not a group specified'
         errors.append('Not a group specified')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        HttpResponse(json.dumps(context), mimetype='application/json')
 
     groupID = request.POST['group_id']
     try:
@@ -524,8 +526,8 @@ def start_event(request):
     if request.user.id not in group_list:
         errors.append('You are not a member of the given group.')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
    
     
     new_entry = Event(groupId =group1,user=request.user,articleType=2)
@@ -535,8 +537,8 @@ def start_event(request):
        
         errors.append('Invalid form')
         context['errors'] = errors
-        context['status'] = 'failure'
-        return render(request, 'moneyclub/errors.html', context)
+        context['stat'] = 'failure'
+        return HttpResponse(json.dumps(context), mimetype='application/json')
 
     event = form.save()
     try:
@@ -545,11 +547,10 @@ def start_event(request):
         member.save()
     except:
         pass
-    context['article'] = event
-    context['group'] = group1
-    context['errors']=errors
+    context['stat'] = 'success'
+    context['redirect'] =  "/moneyclub/groups/article/%s" % event.id
 
-    return HttpResponseRedirect(reverse('article', args=(event.id,)), context)
+    return HttpResponse(json.dumps(context), mimetype='application/json')
 
 
 @login_required
