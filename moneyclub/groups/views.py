@@ -817,11 +817,6 @@ def delete_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     # check if the user is admin
-    if not is_admin(request.user, group):
-        errors.append('You donnot have the authority')
-        context['status'] = 'failure'
-        context['errors'] = errors
-        return HttpResponse(request, context, mimetype='application/json')
     
     if 'stock_id' in request.POST and request.POST['stock_id']:
         stock_id = request.POST['stock_id']
