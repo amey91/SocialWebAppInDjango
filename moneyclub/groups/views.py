@@ -879,7 +879,7 @@ def join_group(request,id1):
     
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
   except:
-      return render(request, 'moneyclub/errors.html', {'errors':"Joining group action not allowed for this group."})
+    return render(request, 'moneyclub/errors.html', {'errors':"Joining group action not allowed for this group."})
     
 @login_required
 def newsfeed(request):

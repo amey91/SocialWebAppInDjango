@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.db import transaction 
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -320,6 +319,13 @@ def search(request):
     for group in groups:
         groupname = group.name.lower()
         if query in groupname :
+            groups_retrieved.append(group) 
+        groupdescription = group.description.lower()
+        if query in groupdescription :
+            groups_retrieved.append(group)
+        keywords = group.keywords.lower()
+        
+        if keywords and query in keywords :
             groups_retrieved.append(group) 
     if len(groups_retrieved)==0:
         errors.append('No groups match the query.')

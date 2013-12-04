@@ -179,5 +179,6 @@ def confirm_registration(request, username, token):
     except ObjectDoesNotExist:
         member = Member(user=user)
         member.save()
+    
     return render(request, 'moneyclub/confirmed.html', {})
 
