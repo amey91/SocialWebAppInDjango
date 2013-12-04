@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
-
-
+        
         var start_event = function(){
                 event.preventDefault();
                 console.log('start-event')
@@ -43,8 +42,6 @@ $(document).ready(function(){
 
         }
 
-        //$("#post-article").submit();
-        //$("button.post-article").on('click', post_article);
         $("button.start-event").on('click',start_event);
 
 });
