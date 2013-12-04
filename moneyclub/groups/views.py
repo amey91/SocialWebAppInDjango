@@ -868,14 +868,9 @@ def join_group(request,id1):
     if GroupMembership.objects.filter(user=request.user,group=g).count()>0:
         return render(request, 'moneyclub/errors.html', {'errors':"You are already a member."})
     
-    #check if already sent the join request
-    if Invite.objects.filter(theInvitedOne = request.user, groupId = g).count() > 0:
-        return render(request, 'moneyclub/errors.html', {'errors':"You have already sent  join request to this group."})
-    
-    #send the join request
-    i=Invite(groupId = g, invitedBy=request.user, theInvitedOne=request.user)
-    i.save()
-    
+    gm = GroupMembership(user=request.user,group=g)
+    gm.save()
+        
     
     return render(request, 'moneyclub/success.html', {'message':"Request sent to group owner!",'group_join':"TRUE"})
   except:
