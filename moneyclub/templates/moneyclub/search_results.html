@@ -18,7 +18,7 @@
 	        <div class="media">
 	        {%if group.picture%}
 	           <img data-src="holder.js/20x20" class="img-thumbnail dp pull-left" 
-	            src="{% url 'group-photo' group.id %}" alt="{{group}} "width="160px">
+	            src="get_photo_group/{{group.id}}/" alt="{{group}} "width="160px">
 	     	{%else%}
 	     		<img data-src="holder.js/20x20" class="img-thumbnail dp pull-left" 
 	            src="/static/image/money_group.png" alt="{{group}} "width="160px">
