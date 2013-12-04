@@ -9,7 +9,6 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 from mimetypes import guess_type
 from django.core.urlresolvers import reverse
-from django.core.files import File
 from django.core.mail import send_mail
 
 from django.core.mail import EmailMessage
