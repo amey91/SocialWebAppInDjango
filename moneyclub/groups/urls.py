@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^add-stock$','moneyclub.groups.views.add_stock'),
     url(r'^view_invites$','moneyclub.groups.views.view_invites'),
     url(r'^delete-stock$','moneyclub.groups.views.delete_stock'),
-    url(r'^accept_invites/(?P<id1>\d+)/$', 'moneyclub.groups.views.accept_invites'),  
+    url(r'^accept_invites/(?P<id1>\d+)/$', 'moneyclub.groups.views.accept_invites'),
+    url(r'^accept_user/(?P<id1>\d+)/$', 'moneyclub.groups.views.accept_user'),  
 
 )

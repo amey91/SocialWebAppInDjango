@@ -34,7 +34,40 @@
                     <tr class="">
                     <td>{{item.groupId}}</td>
                     <td>{{item.invitedBy}}</td>
-                    <td><a href="/moneyclub/groups/accept_invites/{{item.id}}/">Accept invite!</a></td>
+                    <td><a href="/moneyclub/groups/accept_user/{{item.id}}/">Accept invite!</a></td>
+                                       
+                    </tr>
+                    
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
+    
+    	{%endif%}
+    	
+    	{%if not grp_inv %}<div class="alert alert-info">Your groups donot have any requests.</div>
+        
+        {%else%}
+        <div class="bs-callout bs-callout-info">
+        Your invites:             
+        </div>
+             
+            
+            <table class="table">
+                <thead align="center">
+                    <tr align="center"><th>Group</th><th>Request by </th><th>Action</th></tr>
+                </thead>
+                <tbody>
+
+					{% for item in grp_inv %}
+					
+					
+					
+                    <tr class="">
+                    <td>{{item.groupId}}</td>
+                    <td>{{item.theInvitedOne}}</td>
+                    <td><a href="/moneyclub/groups/allow_user/{{item.id}}/">Allow User!</a></td>
                                        
                     </tr>
                     
