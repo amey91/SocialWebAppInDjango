@@ -758,12 +758,6 @@ def add_stock(request):
         context['errors'] = errors
         return HttpResponse(request, context, mimetype='application/json')
     # check if the user is admin
-    if not is_admin(request.user, group):
-
-        errors.append('You donnot have the authority')
-        context['status'] = 'failure'
-        context['errors'] = errors
-        return HttpResponse(request, context, mimetype='application/json')
     
 
     if not 'stock_name' in request.POST or not request.POST['stock_name']:
@@ -851,8 +845,10 @@ def delete_stock(request):
 @login_required
 def is_admin(user, group):
     # check whether the user is an admin, who has the authority
+
     try:
-        membership = user.groupmembername.get(group=group)
+        #membership = user.groupmembername.get(group=group)
+        membership = GroupMembership.get(user=user, group=group)
         return membership.is_admin
     except:
         return render('moneyclub/errors.html', {'errors':"Error resolving admininstrator status. Is_Admin?"})
