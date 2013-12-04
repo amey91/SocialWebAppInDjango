@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
         //var post_article = function(){
-        $("#post-article").submit(fucntion(e){
+        $("#post-article").submit(function(e){
                 event.preventDefault();
                 var form = $("#post-article");
                 
@@ -89,4 +89,4 @@ $(document).ready(function(){
         //$("button.post-article").on('click', post_article);
         $("button.start-event").on('click',start_event);
 
-})
+});
