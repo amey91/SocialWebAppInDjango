@@ -1007,9 +1007,16 @@ def general_data_to_be_included_in_requests(request):
 
 @login_required
 def view_invites(request):
+    context = {}
     try:
         i=Invite.objects.filter(theInvitedOne=request.user)
-        return render(request, 'moneyclub/view_invites.html', {'invites':i})
+        group = Group.objects.filter(owner=request.user)
+        context['invites']=i
+        for grp in group:
+            grp_inv = Invite.objects.filter(groupId=grp)
+            context['grp_inv'] = grp_inv
+        
+        return render(request, 'moneyclub/view_invites.html', context)    
     except:
         return render(request, 'moneyclub/errors.html', {'errors':"Error while returning invites"})
 
@@ -1034,8 +1041,9 @@ def accept_invites(request,id1):
     
     context['errors'] = errors
     try:
+        i12=Invite.objects.get(id=id1)
         #check if user is actually invited
-        g=Group.objects.get(id=id1)
+        g=Group.objects.get(id=i12.groupId.id)
         print "a"
         i=Invite.objects.filter(theInvitedOne=request.user,groupId=g)
         print "b"
@@ -1062,10 +1070,49 @@ def accept_invites(request,id1):
             gm=GroupMembership(user=request.user,group=g)
             print "f"
             gm.save()
-            return club_home(request,id1)
+            return club_home(request,g.id)
     except:
         print "g"
         return render(request, 'moneyclub/errors.html', {'errors':"Cannot accept invites at this time"})
+
+
+@login_required
+@transaction.commit_on_success
+def accept_user(request,id1):
+    context = {}
+    errors= []
     
+    #get group data
+    memberships = GroupMembership.objects.filter(user=request.user)    
+    groups = [membership.group for membership in memberships]
+    context['groups'] = groups
+    
+    # no groups as of now.
+    if len(groups)==0:
+        context['no_groups'] = "true"
+        
+    #get stock data
+    stocks = UserStockOfInterest.objects.filter(user=request.user)   
+    context['stocks'] = stocks
+    
+    context['errors'] = errors
+    try:
+        i12=Invite.objects.get(id=id1)
+        g=Group.objects.get(id=i12.groupId.id)
+        member= GroupMembership.objects.get(user=i12.theInvitedOne,group=g)
+        if member:
+            i12.delete()
+            print "e"
+            return render(request, 'moneyclub/errors.html', {'errors':"You are already a member"})
+        else:
+            gm=GroupMembership(user=i12.theInvitedOne,group=g)
+            
+            gm.save()
+            i12.delete()
+            return club_home(request,i12.groupId.id)
+        
+    except:
+        print "g"
+        return render(request, 'moneyclub/errors.html', {'errors':"Cannot accept invites at this time"})
     
     
